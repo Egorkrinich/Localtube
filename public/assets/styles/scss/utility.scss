@@ -1,0 +1,30 @@
+// Base
+.f-row {
+    display: flex;
+    align-items: center;
+}
+.f-column {
+    display: flex;
+    flex-direction: column;
+}
+
+// Combined
+
+.f-row-center {
+    @extend .f-row;
+    justify-content: center;
+}
+.f-row-between {
+    @extend .f-row;
+    justify-content: space-between;
+}
+
+.f-column-center {
+    @extend .f-column;
+    align-items: center;
+    justify-content: center;
+}
+.f-column-between {
+    @extend .f-column;
+    justify-content: space-between;
+}
