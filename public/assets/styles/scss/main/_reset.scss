@@ -14,7 +14,8 @@ html {
 body {
     font-family: "Roboto", "Arial", sans-serif;
     font-size: 1.6rem;
-    color: var(--text-primary);
+    color: var(--text-main);
+    background: var(--bg-first);
 }
 ul, ol { 
     list-style: none; 

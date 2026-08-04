@@ -1,8 +1,16 @@
 :root {
-    --main-container: #0f0f0f;
-    --text-primary: #fff;
-    --search-input: #151515;
-    --border: #424242;
-    --button-bg: #222;
-    --text-gray: #888;
+    --bg-first: #0f0f0f;
+    --bg-second: #2b2b2b;
+    --bg-third: #151515;
+    --bg-button: #222;
+
+    --bg-effect: rgba(255, 255, 255, 0.1);
+    --bg-hover-effect: rgba(255, 255, 255, 0.2);
+
+    --text-main: #f1f1f1;
+    --text-second: #888;
+    --text-link: #1572fc;
+
+    --border: #505050;
+    --border-colored: #0084ff;
 }

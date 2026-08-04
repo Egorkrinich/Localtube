@@ -1,0 +1,9 @@
+.content {
+    margin-left: 250px;
+
+    &__wrapper {
+        padding: 50px 15px 0;
+        gap: 20px;
+        flex-wrap: wrap;
+    }
+}
