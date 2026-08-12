@@ -1,47 +1,20 @@
 .header {
+    position: fixed;
     align-items: stretch;
-    padding-inline: 16px;
-    height: 60px;
+    padding-inline: 15px;
+    height: var(--header-height);
+    top: 0;
+    left: 0;
     width: 100%;
     background: var(--bg-first);
-    z-index: 100;
+    z-index: var(--over-content);
 
     // Left side
     &__left {
         flex: 0 0 180px;
+        
     }
 
-    &__burger-btn {
-        position: relative;
-        width: 40px;
-        height: 40px;
-        padding: 12px;
-        cursor: pointer;
-        z-index: 101;
-
-        span {
-            display: block;
-            width: 100%;
-            height: 2px;
-            border-radius: 3px;
-            background: var(--text-main);
-            transition: all 0.3s;
-        }
-        &::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            opacity: 0;
-            border-radius: 50%;
-            background: var(--bg-hover-effect);
-            transition: transform 0.3s, opacity 0.2s;
-            transform: scale(0);
-        }
-        &:hover::before {
-            transform: scale(1);
-            opacity: 1;
-        }
-    }
     &__logo {
         width: 60%;
         color: var(--text-main);
@@ -84,6 +57,7 @@
             border-radius: 50%;
             background: var(--bg-button);
             position: relative;
+            z-index: calc(var(--over-content) + 1);
 
             svg {
                 opacity: 0.9;
@@ -93,12 +67,12 @@
                 content: '';
                 position: absolute;
                 inset: 0;
-                transform: scale(0);
-                background-color: var(--bg-hover-effect);
-                border-radius: 50%;
-                pointer-events: none;
-                transition: transform 0.2s, opacity 0.2s;
                 opacity: 0;
+                border-radius: 50%;
+                transition: transform 0.3s, opacity 0.3s;
+                background: var(--bg-hover-effect);
+                transform: scale(0);
+                z-index: -1;
             }
             &:hover::before {
                 transform: scale(1);
@@ -121,6 +95,7 @@
         background-color: var(--bg-button);
         position: relative;
         transition: fill 0.3s;
+        z-index: calc(var(--over-content) + 1);
 
         svg {
             opacity: 0.9;
@@ -130,12 +105,12 @@
             content: '';
             position: absolute;
             inset: 0;
-            transform: scale(0);
-            background: var(--bg-hover-effect);
-            border-radius: 50%;
-            pointer-events: none;
-            transition: transform 0.2s, opacity 0.2s;
             opacity: 0;
+            border-radius: 50%;
+            transition: transform 0.3s, opacity 0.3s;
+            background: var(--bg-hover-effect);
+            transform: scale(0);
+            z-index: -1;
         }
         &:hover {
             fill: var(--text-main);
@@ -152,49 +127,6 @@
             height: 35px;
             min-width: 35px;
             min-height: 35px;
-        }
-
-        // User Menu
-        &__menu {
-            position: fixed;
-            top: 50px;
-            right: 20px;
-            background: var(--bg-second);
-            border-radius: 15px;
-            width: 300px;
-            padding-block: 15px;
-            z-index: 100;
-        }
-        &__channel {
-            gap: 20px;
-            height: 60px;
-            padding: 0 15px 25px;
-            border-bottom: 1px solid var(--border);
-            
-            .avatar {
-                width: 45px;
-                height: 45px;
-            }
-            .user__link {
-                margin-top: 5px;
-                color: var(--text-link);
-                font-size: 1.4rem;
-            }
-        }
-        &__control {
-            padding-top: 10px;
-
-            & > * {
-                padding: 10px;
-
-                &:hover {
-                    background-color: var(--bg-hover-effect);
-                }
-                & > * {
-                    width: 100%;
-                    height: 100%;
-                }
-            }
         }
     }
 

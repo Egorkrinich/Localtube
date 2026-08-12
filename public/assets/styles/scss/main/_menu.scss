@@ -1,0 +1,145 @@
+.burger {
+    // display: none;
+    position: fixed;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    width: var(--burger-width);
+    padding: 15px 20px;
+    background: var(--bg-first);
+    z-index: var(--menus);
+    transform: translate(-100%);
+    transition: transform 0.3s;
+
+    &__header {
+        margin-bottom: 20px;
+    }
+    &__logo {
+        width: 60%;
+        color: var(--text-main);
+    }
+
+    &__title {
+        margin-bottom: 20px;
+    }
+    &__link {
+        width: 100%;
+        height: 100%;
+        border-radius: 10px;
+        padding: 10px;
+        
+        svg {
+            fill: var(--text-main);
+            margin-right: 20px;
+        }
+        .avatar {
+            margin-right: 20px;
+        }      
+        .burger__arrow {
+            margin-left: auto;
+        }
+
+        &.active {
+            font-weight: 600;
+            background: var(--bg-effect);
+        }
+        &:hover {
+            background: var(--bg-hover-effect);
+        }
+    }
+    .separator {
+        margin-block: 20px;
+    }
+
+    &.active {
+        transform: translate(0);
+    }
+}
+.sidebar {
+    position: fixed;
+    height: 100vh;
+    width: 64px;
+    fill: var(--text-main);
+    font-size: 14px;
+    z-index: var(--over-content);
+    background: var(--bg-first);
+
+    &__link {
+        padding-block: 20px;
+        border-radius: 20px;
+
+        &:hover {
+            background: var(--bg-hover-effect);
+        }
+    }
+
+    @media (max-width: 800px) {
+    & {
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        bottom: 0;
+        width: 100%;
+        height: var(--header-height);
+    }
+}
+}
+.user {
+            &__menu {
+            display: none;
+            position: fixed;
+            top: 50px;
+            right: 20px;
+            background: var(--bg-second);
+            border-radius: 15px;
+            width: 300px;
+            padding-block: 15px;
+            z-index: var(--menus);
+            
+            &.active {
+                display: block;
+            }
+        }
+        &__channel {
+            gap: 20px;
+            height: 60px;
+            padding: 0 15px 25px;
+            border-bottom: 1px solid var(--border);
+            
+            .avatar {
+                width: 45px;
+                height: 45px;
+            }
+            .user__link {
+                margin-top: 5px;
+                color: var(--text-link);
+                font-size: 1.4rem;
+            }
+        }
+        &__control {
+            padding-top: 10px;
+
+            & > * {
+                padding: 10px;
+
+                &:hover {
+                    background-color: var(--bg-hover-effect);
+                }
+                & > * {
+                    width: 100%;
+                    height: 100%;
+                }
+            }
+        }
+}
+#overlay {
+    display: none;
+    position: fixed;
+    background: rgb(0, 0, 0, 0.2);
+    inset: 0;
+    z-index: var(--overlay);
+    
+    &.active {
+        display: block;
+    }
+}

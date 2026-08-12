@@ -1,0 +1,13 @@
+RewriteEngine On
+RewriteBase /Localtube/
+
+RewriteRule ^uploads/ - [L]
+RewriteCond %{DOCUMENT_ROOT}/Localtube/public/$1 -f
+RewriteRule ^(.*)$ public/$1 [L]
+
+RewriteCond %{REQUEST_URI} !^/Localtube/public/
+RewriteRule ^(.*)$ public/index.php?route=$1 [L,QSA]
+
+RewriteRule ^(parts|config|core|database) - [F,L]
+
+Options -Indexes
