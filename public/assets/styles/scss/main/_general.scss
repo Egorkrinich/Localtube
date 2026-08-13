@@ -1,3 +1,8 @@
+.content {
+    margin-top: var(--header-height);
+    padding: 20px 20px;
+}
+
 .avatar {
     width: 25px;
     height: 25px;
@@ -164,10 +169,8 @@
 .content--home {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    margin-top: var(--header-height);
     margin-left: var(--sidebar-width);
-
-    justify-items: center;
+    
     padding: 50px 20px 80px;
     gap: 20px;
 

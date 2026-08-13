@@ -1,9 +1,9 @@
 export const Templates = {
-    preview({thumb, title, uploader, views, date}) {
+    preview({id, thumb, title, views, created, user_id}) {
         return `
-        <a class="preview">
+        <a class="preview" href="watch?v=${id}">
             <div class="preview__thumb">
-                <img src="${thumb}" alt="">
+                <img src="${BASE_URL}${thumb}" alt="">
             </div>
             <div class="preview__body f-row">
                 <div class="preview__info f-row">
@@ -18,7 +18,7 @@ export const Templates = {
                             Test
                         </div>
                         <div class="preview__stats">
-                            ${views} views • ${date}
+                            ${views} views • ${created}
                         </div>
                     </div>
                 </div>

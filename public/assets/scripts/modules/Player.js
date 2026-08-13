@@ -1,4 +1,4 @@
-export default class Player {
+export class Player {
     controls = {
         togglePlay: document.querySelector('#play-toggle'),
         toggleSound: document.querySelector('#sound-toggle'),

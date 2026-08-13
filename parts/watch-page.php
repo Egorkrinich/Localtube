@@ -1,12 +1,17 @@
 <?php
     require_once 'general/header.php';
     require_once 'general/burger.php';
+
+
+    $video_id = $_GET['v'];
+    $video = $dbVideo->getVideo($video_id);
+
 ?>
 
 <main class="content content--watch">
     <div class="content__video video">
         <div class="video__player player" id="video-player">
-            <video src="<?php echo BASE_URL ?>uploads/videos/test.mp4" class="player__video" id="video"></video>
+            <video src="<?php echo BASE_URL . $video->video; ?>" class="player__video" id="video"></video>
             <div class="player__control control">
                 <div class="control__progress-bar" id="progress-bar">
                     <div class="control__progress-line" id="progress-line"></div>
@@ -42,8 +47,7 @@
             </div>
         </div>
         <div class="video__body">
-            <div class="video__title">
-            </div>
+            <div class="video__title"><?php echo $video->title; ?></div>
             <div class="video__meta">
             </div>
         </div>
