@@ -14,7 +14,7 @@ class Database {
         $this->login,
         $this->password);
     }
-    // public function initTable() {
+    // public function initVideos() {
     //     $res = $this->pdo->prepare(
     //     'CREATE TABLE videos (
     //     id VARCHAR(15) NOT NULL PRIMARY KEY,
@@ -24,10 +24,23 @@ class Database {
     //     title VARCHAR(100) NOT NULL,
     //     views BIGINT(20) UNSIGNED DEFAULT 0,
     //     duration INT UNSIGNED DEFAULT 0,
-    //     created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP()
+    //     created  
     //     )
     //     '
     //     );
+    //     $res->execute();
+    //     return $res;
+    // }
+    // public function initUsers() {
+    //     $query = 
+    //     'CREATE TABLE users (
+    //     id VARCHAR(15) NOT NULL PRIMARY KEY,
+    //     login VARCHAR(20) NOT NULL UNIQUE,
+    //     hash VARCHAR(255) NOT NULL,
+    //     registered TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP()
+    //     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+    //     ';
+    //     $res = $this->pdo->prepare($query);
     //     $res->execute();
     //     return $res;
     // }

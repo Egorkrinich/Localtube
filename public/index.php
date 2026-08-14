@@ -3,7 +3,9 @@ require_once '../config.php';
 require_once '../app/Database.php';
 require_once '../app/Video.php';
 
+
 $dbVideo = new Video;
+
 
 $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $path = str_replace('/Localtube/', '', $path);
@@ -39,6 +41,11 @@ if (str_starts_with($path, 'API')) {
             echo json_encode($res);
             exit;
     }
+}
+if (isset($_COOKIE['hash'])) {
+    $session_hash = $_COOKIE['hash'];
+} else {
+    $session_hash = null;
 }
 
 

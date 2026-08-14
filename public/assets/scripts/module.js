@@ -16,6 +16,9 @@ if (path.endsWith('watch')) {
 if (path.endsWith('upload')) {
     initUploadPage()
 }
+if (!getCookie('ses_hash')) {
+    initAuth()
+}
 
 
 async function initWatchPage() {
@@ -27,4 +30,21 @@ async function initUploadPage() {
     const { Upload } = await import('./modules/Upload.js')
 
     new Upload()
+}
+async function initAuth() {
+    const { Auth } = await import('./modules/Auth.js')
+
+    new Auth()
+}
+
+
+
+
+
+
+function getCookie(name) {
+  let matches = document.cookie.match(new RegExp(
+    "(?:^|; )" + name + "=([^;]*)"
+  ));
+  return matches ? decodeURIComponent(matches[1]) : undefined;
 }

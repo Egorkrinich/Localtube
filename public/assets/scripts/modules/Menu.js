@@ -12,14 +12,17 @@ export default class Menu {
     }
     initListeners() {
         document.addEventListener('click', (e) => {
-            const btn = e.target.closest(`[${this.selectors.button}]`)
-            if (btn) {
+            const target = e.target
+            const btn = target.closest(`[${this.selectors.button}]`)
+            if (btn && !this.activeMenu) {
                 const dataValue = btn.getAttribute(`${this.selectors.button}`)
                 const menu = document.querySelector(`[${this.selectors.menu}="${dataValue}"]`)
                 const noOverlay = btn.hasAttribute(`${this.selectors.noOverlay}`)
                 this.classManager(menu, noOverlay)
+                return;
             }
-            if (!btn || !this.activeMenu) {
+            if ((btn || !target.closest(`[${this.selectors.menu}]`)) && 
+                this.activeMenu) {
                 this.closeAll()
             }
         })
