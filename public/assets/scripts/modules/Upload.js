@@ -13,7 +13,7 @@ export class Upload {
         })
     }
     throwData(data) {
-        fetch(`${BASE_URL}API/addVideo`, {
+        fetch(`${BASE_URL}API/Videos/addVideo`, {
             method: 'POST',
             body: data
         })

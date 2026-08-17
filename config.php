@@ -1,5 +1,9 @@
 <?php
 
+$lifetime = 30 * 24 * 60 * 60; 
+session_set_cookie_params($lifetime);
+ini_set('session.gc_maxlifetime', $lifetime);
+
 define('BASE_URL', "http://" . $_SERVER['HTTP_HOST'] . "/Localtube/");
 
 define('DB_HOST', 'localhost');
@@ -23,6 +27,6 @@ define('ASSETS', [
         'upload.css'
     ]
 ]);
-ini_set('display_errors', 1); 
-ini_set('display_startup_errors', 1); 
-error_reporting(E_ALL);
+// ini_set('display_errors', 1); 
+// ini_set('display_startup_errors', 1); 
+// error_reporting(E_ALL);

@@ -112,7 +112,17 @@ export class Auth {
     }
     sendData(action) {
         const formData = new FormData(this.form)
-        console.log(Object.fromEntries(formData), action)
+
+        const link = action === "register" ? 'register' : 'login'
+
+        fetch(`${BASE_URL}API/Users/${link}`, {
+            method: 'POST',
+            body: formData
+        })
+        .then((res) => res.json())
+        .then((data) => {
+            console.log(data.message)
+        })
     }
     updateActiveForm(currentForm) {
         if (!this.form || this.form !== currentForm) {

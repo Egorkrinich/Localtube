@@ -1,3 +1,10 @@
+<?php
+if (isset($_SESSION['user_id'])) {
+    $user_id = $_SESSION['user_id'];
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,18 +16,22 @@
     <?php endforeach ?>
     <script>
         const BASE_URL = '<?php echo BASE_URL; ?>';
+
+        const USER_CONFIG = {
+            isLoggedIn: <?php echo isset($_SESSION['user_id']) ? 'true' : 'false' ?>
+        };
     </script>
 </head>
 <body>
     <div id="overlay"></div>
-    <?php if (isset($session_hash)) : ?>
+    <?php if (isset($user_id)) : ?>
     <div class="user__menu" data-menu="user">
         <div class="user__channel f-row">
             <div class="avatar f-row-center">
                     <img src="./assets/images/user-test.png" alt="">
             </div>
             <div class="user__info">
-                <div class="user__name">Example</div>
+                <div class="user__name"><?php echo $_SESSION['user_login']; ?></div>
                 <a href="#" class="user__link">View uploaded</a>
             </div>
         </div>
@@ -76,7 +87,7 @@
             </button>
         </div>
         <div class="header__right f-row-between">
-            <?php if (isset($session_hash)) : ?>
+            <?php if (isset($user_id)) : ?>
                 <button class="header__notification">
                     <svg width="24px" height="24px" viewBox="0 -960 960 960">
                         <path d="M160-200v-80h80v-280q0-83 50-147.5T420-792v-28q0-25 17.5-42.5T480-880q25 0 42.5 17.5T540-820v28q80 20 130 84.5T720-560v280h80v80H160Zm320-300Zm0 420q-33 0-56.5-23.5T400-160h160q0 33-23.5 56.5T480-80ZM320-280h320v-280q0-66-47-113t-113-47q-66 0-113 47t-47 113v280Z"/>

@@ -7,7 +7,7 @@ export default class RenderVideos {
         this.getData()
     }
     getData() {
-        fetch('http://localhost/Localtube/API/getVideos')
+        fetch(`${BASE_URL}API/Videos/getVideos`)
         .then((res) => res.json())
         .then((data) => {
             this.render(data)

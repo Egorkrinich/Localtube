@@ -16,7 +16,7 @@ if (path.endsWith('watch')) {
 if (path.endsWith('upload')) {
     initUploadPage()
 }
-if (!getCookie('ses_hash')) {
+if (USER_CONFIG.isLogged) {
     initAuth()
 }
 

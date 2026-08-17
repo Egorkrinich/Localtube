@@ -2,10 +2,11 @@
     require_once 'general/header.php';
     require_once 'general/burger.php';
 
+    $dbVideo = new Video();
+
 
     $video_id = $_GET['v'];
     $video = $dbVideo->getVideo($video_id);
-
 ?>
 
 <main class="content content--watch">

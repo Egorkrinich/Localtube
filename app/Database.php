@@ -29,7 +29,6 @@ class Database {
     //     '
     //     );
     //     $res->execute();
-    //     return $res;
     // }
     // public function initUsers() {
     //     $query = 
@@ -42,6 +41,17 @@ class Database {
     //     ';
     //     $res = $this->pdo->prepare($query);
     //     $res->execute();
-    //     return $res;
+    // }
+    // public function initHistory() {
+    //     $query =
+    //     'CREATE TABLE history (
+    //         user_id VARCHAR(15) NOT NULL,
+    //         video_id VARCHAR(15) NOT NULL ,
+    //         viewed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    //         PRIMARY KEY (user_id, video_id) 
+    //         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+    //     ';
+    //     $res = $this->pdo->prepare($query);
+    //     $res->execute();
     // }
 }
