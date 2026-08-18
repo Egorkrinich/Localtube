@@ -44,12 +44,13 @@ class Video extends Database {
             throw new Exception('Save thumb error');
         }
 
-        $query = 'INSERT INTO videos (id, thumb, video, title, duration) 
-        VALUES (:id, :thumb, :video, :title, :duration)';
+        $query = 'INSERT INTO videos (id, user_id, thumb, video, title, duration) 
+        VALUES (:id, :user_id, :thumb, :video, :title, :duration)';
 
         $res = $this->pdo->prepare($query);
 
         $res->bindValue(':id', $videoId);
+        $res->bindValue(':user_id', $_SESSION['user_id']);
         $res->bindValue(':thumb', 'uploads/thumbs/' . $thumbName);
         $res->bindValue(':video', 'uploads/videos/' . $videoName);
         $res->bindValue(':title', htmlspecialchars($title));
@@ -60,6 +61,58 @@ class Video extends Database {
         return ['success' => true, 'message' => 'video added'];
         } catch(Exception $error) {
             return ['success' => false, 'message' => $error];
+        }
+    }
+    public function delVideo($id): array {
+        try {
+            $user_id = $_SESSION['user_id'];
+
+            $selectQuery = 
+            "SELECT video, thumb FROM videos 
+            WHERE id = :id AND user_id = :user_id";
+
+            $stmt = $this->pdo->prepare($selectQuery);
+            $stmt->bindValue(':id', $id);
+            $stmt->bindValue(':user_id', $user_id);
+            $stmt->execute();
+
+            $videoData = $stmt->fetch();
+
+            if (empty($videoData)) {
+                return ['success' => false, 'message' => 'Video not found'];
+            }
+
+
+            
+            $query = 'DELETE FROM videos WHERE id = :id AND user_id = :user_id';
+            $res = $this->pdo->prepare($query);
+            $res->bindValue(':id', $id);
+            $res->bindValue(':user_id', $_SESSION['user_id']);
+            $res->execute();
+            
+            if ($res->rowCount() > 0) {
+
+                $path = __DIR__ . '/../';
+
+                $videoFile = $path . $videoData['video'];
+                $thumbFile = $path . $videoData['thumb'];
+
+                if (file_exists($videoFile)) {
+                    unlink($videoFile);
+                }
+                if (file_exists($thumbFile)) {
+                    unlink($thumbFile);
+                }               
+
+                return ['success' => true, 'message' => 'Video deleted successfully'];
+            } else {
+                return ['success' => false, 'message' => 'Video not found or access denied'];
+            }
+        } catch(PDOException $error) {
+            return [
+                'success' => false, 
+                'message' => 'Database error: ', $error->getMessage()
+                ];
         }
     }
 }

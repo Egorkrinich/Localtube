@@ -18,14 +18,14 @@ class Database {
     //     $res = $this->pdo->prepare(
     //     'CREATE TABLE videos (
     //     id VARCHAR(15) NOT NULL PRIMARY KEY,
-    //     user_id INT(15) UNSIGNED NOT NULL DEFAULT 1,
+    //     user_id VARCHAR(15) NOT NULL,
     //     thumb VARCHAR(255) NOT NULL,
     //     video VARCHAR(255) NOT NULL,
     //     title VARCHAR(100) NOT NULL,
     //     views BIGINT(20) UNSIGNED DEFAULT 0,
     //     duration INT UNSIGNED DEFAULT 0,
-    //     created  
-    //     )
+    //     created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP()
+    //     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
     //     '
     //     );
     //     $res->execute();

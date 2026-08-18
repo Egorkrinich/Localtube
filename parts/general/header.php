@@ -23,6 +23,7 @@ if (isset($_SESSION['user_id'])) {
     </script>
 </head>
 <body>
+    <div class="context" id="context-menu"></div>
     <div id="overlay"></div>
     <?php if (isset($user_id)) : ?>
     <div class="user__menu" data-menu="user">

@@ -27,8 +27,14 @@ if (str_starts_with($path, 'API')) {
                 case 'getVideos':
                     $videos = $dbVideo->getVideos();
                     echo json_encode($videos);
-                    break;
+                    
+                break;
                 case 'addVideo':
+                    if (!isset($_SESSION['user_id']) || empty($_SESSION['user_id'])) {
+                        echo json_encode(['success' => false, 'message' => 'Unathorized']);
+                        exit;
+                    }
+
                     if (!isset($_FILES['video']) || $_FILES['video']['error'] > 0) {
                         echo json_encode(['success' => false, 'message' => 'unexpected video error']);
                     };
@@ -49,8 +55,23 @@ if (str_starts_with($path, 'API')) {
                     ]);            
 
                     echo json_encode($res);
-                    break;
+
+                break;
+                case 'delVideo':
+                    if (!isset($_SESSION['user_id']) || empty($_SESSION['user_id'])) {
+                        echo json_encode(['success' => false, 'message' => 'Unathorized']);
+                        exit;
+                    }
+                    if (empty($_POST['id'])) {
+                        echo json_encode(['success' => false, 'message' => 'Please send video id']);
+                    }
+                    
+                    $res = $dbVideo->delVideo($_POST['id']);
+
+                    echo json_encode($res);
+                break;
             }
+        break;
         case 'Users':
             $dbUser = new User();
 
@@ -72,7 +93,8 @@ if (str_starts_with($path, 'API')) {
                     ]);
 
                     echo json_encode($res);
-                    break;
+
+                break;
                 case 'login':
                     $login = trim($_POST['login']);
                     $password = $_POST['password'];
@@ -85,7 +107,18 @@ if (str_starts_with($path, 'API')) {
                         'password' => $password
                     ]);
                     echo json_encode($res);
-                    break;
+
+                break;
+            }
+        break;
+        case 'History':
+            $dbHistory = new History();
+            
+            switch ($action) {
+                case 'getHistory': 
+                    $videos = $dbHistory->getHistory(10, 0);
+                    echo json_encode($videos);
+                break;
             }
         break;
     }
@@ -106,8 +139,14 @@ switch ($path) {
         
         require_once '../parts/watch-page.php';
         exit;
-    case 'upload':
+    case 'manager':
         $styles = ASSETS[$path];
         
-        require_once '../parts/upload-page.php';
+        require_once '../parts/manager-page.php';
+        exit;
+    case 'history':
+        $styles = ASSETS[$path];
+        
+        require_once '../parts/history-page.php';
+        exit;
 }   

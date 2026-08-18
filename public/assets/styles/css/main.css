@@ -643,6 +643,20 @@ a {
   display: block;
 }
 
+#context-menu {
+  opacity: 0;
+  pointer-events: none;
+  position: fixed;
+  z-index: var(--menus);
+  background: var(--bg-second);
+  padding: 20px;
+  border-radius: 20px;
+}
+#context-menu.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
 #overlay {
   display: none;
   position: fixed;

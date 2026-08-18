@@ -3,7 +3,9 @@
     require_once 'general/burger.php';
 
     $dbVideo = new Video();
+    $dbHistory = new History();
 
+    $dbHistory->addHistory();
 
     $video_id = $_GET['v'];
     $video = $dbVideo->getVideo($video_id);
@@ -54,8 +56,8 @@
         </div>
         
     </div>
-    <div class="content__list f-column" id="preview__container">
-    </div>
+
+    <div class="content__list f-column" id="preview-container"></div>
 </main>
 
 <?php

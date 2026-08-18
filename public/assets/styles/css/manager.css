@@ -1,8 +1,5 @@
-.content {
-  margin-left: var(--sidebar-width);
-}
-
 .upload {
+  display: none;
   position: fixed;
   inset: 0;
   margin: auto;
@@ -67,4 +64,21 @@
   width: fit-content;
   background: var(--bg-third);
   margin-top: auto;
-}/*# sourceMappingURL=upload.css.map */
+}
+.upload.active {
+  display: block;
+}
+
+.content {
+  margin-left: var(--sidebar-width);
+  padding: 0;
+}
+.content__header {
+  padding: 0 20px;
+  height: var(--header-height);
+  border-bottom: 1px solid var(--border);
+}
+.content__list {
+  padding: 20px;
+  gap: 20px;
+}/*# sourceMappingURL=manager.css.map */

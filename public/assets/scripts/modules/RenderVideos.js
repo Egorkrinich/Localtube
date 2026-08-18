@@ -1,13 +1,18 @@
 import { Templates } from "../Templates.js"
 
 export default class RenderVideos {
-    constructor(container) {
-        this.container = document.querySelector(`#${container}`)
+    linkSelector = {
+        history: 'History/getHistory',
+        video: 'Videos/getVideos',
+    }
+    constructor(link) {
+        this.container = document.querySelector("#preview-container")
+        this.link = link
 
         this.getData()
     }
     getData() {
-        fetch(`${BASE_URL}API/Videos/getVideos`)
+        fetch(`${BASE_URL}API/${this.linkSelector[this.link]}`)
         .then((res) => res.json())
         .then((data) => {
             this.render(data)

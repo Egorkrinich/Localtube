@@ -13,18 +13,22 @@ define('DB_PASS', 'root');
 
 define('ASSETS', [
     'home' => [
+        'utility.css',
         'main.css',
-        'utility.css'
     ],
     'watch' => [
-        'main.css',
         'utility.css',
-        'watch.css'
+        'main.css',
+        'watch.css',
     ],
-    'upload' => [
-        'main.css',
+    'manager' => [
         'utility.css',
-        'upload.css'
+        'main.css',
+        'manager.css',
+    ],
+    'history' => [
+        'utility.css',
+        'main.css',
     ]
 ]);
 // ini_set('display_errors', 1); 

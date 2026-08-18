@@ -1,8 +1,5 @@
-.content {
-    margin-left: var(--sidebar-width);
-}
-
 .upload {
+    display: none;
     position: fixed;
     inset: 0;
     margin: auto;
@@ -55,4 +52,24 @@
         background: var(--bg-third);
         margin-top: auto;
     }
+
+    &.active {
+        display: block;
+    }
 }
+
+.content {
+    margin-left: var(--sidebar-width);
+    padding: 0;
+
+    &__header {
+        padding: 0 20px;
+        height: var(--header-height);
+        border-bottom: 1px solid var(--border);
+        
+    }
+    &__list {
+        padding: 20px;
+        gap: 20px;
+    }
+} 

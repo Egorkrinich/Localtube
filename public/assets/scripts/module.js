@@ -1,22 +1,28 @@
 import Menu from './modules/Menu.js';
 import RenderVideos from './modules/RenderVideos.js';
+import Context from './modules/Context.js';
 
-new Menu()
 
 const path = window.location.pathname
-if (path.endsWith('/')) {
-    new RenderVideos('preview__container')
+new Menu()
+new Context(path)
 
+if (path.endsWith('/')) {
+    new RenderVideos('video')
 }
 if (path.endsWith('watch')) {
-    new RenderVideos('preview__container')
+    new RenderVideos('video')
 
     initWatchPage()
 }
-if (path.endsWith('upload')) {
-    initUploadPage()
+if (path.endsWith('manager')) {
+    new RenderVideos('video')
+    initManagerPage()
 }
-if (USER_CONFIG.isLogged) {
+if (path.endsWith('history')) {
+    new RenderVideos('history')
+}
+if (!USER_CONFIG.isLoggedIn) {
     initAuth()
 }
 
@@ -26,7 +32,7 @@ async function initWatchPage() {
 
     new Player()
 }
-async function initUploadPage() {
+async function initManagerPage() {
     const { Upload } = await import('./modules/Upload.js')
 
     new Upload()
