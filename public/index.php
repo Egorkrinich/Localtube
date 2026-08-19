@@ -11,7 +11,6 @@ session_start();
 
 $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $path = str_replace('/Localtube/', '', $path);
-
 if (str_starts_with($path, 'API')) {
     header('Content-Type: application/json');
 

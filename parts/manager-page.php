@@ -39,16 +39,17 @@
         </div>
     </div>
 </form>
-<main class="content content--manager">  
-    <div class="content__header f-row-between">
-        <h1 class="content__title">
+
+<main class="content manager">  
+    <div class="manager__header f-row-between">
+        <h1 class="manager__title">
             Video manager
         </h1>
-        <button class="content__button" data-menu-btn="upload">
+        <button class="manager__button" data-menu-btn="upload">
             Add
         </button>
     </div>
-    <div class="content__list f-row" id="preview-container"></div>
+    <div class="manager__list f-column" id="preview-container"></div>
 </main>
 
 <?php

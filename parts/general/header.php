@@ -23,8 +23,10 @@ if (isset($_SESSION['user_id'])) {
     </script>
 </head>
 <body>
-    <div class="context" id="context-menu"></div>
     <div id="overlay"></div>
+    <div class="context" id="context-menu"></div>
+    <div class="f-row-center" id="toast"></div>
+    
     <?php if (isset($user_id)) : ?>
     <div class="user__menu" data-menu="user">
         <div class="user__channel f-row">

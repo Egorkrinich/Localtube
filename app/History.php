@@ -18,7 +18,7 @@ class History extends Database {
     }
     public function getHistory(int $limit, int $offset): array {
         $query = 
-        "SELECT v.id, v.thumb, v.video, v.title, h.viewed_at
+        "SELECT v.id, v.thumb, v.title, v.views, v.created, h.viewed_at
         FROM history h
         JOIN videos v ON h.video_id = v.id
         WHERE h.user_id = :user_id

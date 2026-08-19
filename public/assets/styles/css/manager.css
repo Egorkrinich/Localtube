@@ -69,16 +69,25 @@
   display: block;
 }
 
-.content {
+.manager {
   margin-left: var(--sidebar-width);
   padding: 0;
 }
-.content__header {
+.manager__header {
   padding: 0 20px;
   height: var(--header-height);
   border-bottom: 1px solid var(--border);
 }
-.content__list {
+.manager__list {
   padding: 20px;
   gap: 20px;
+}
+.manager__button {
+  padding: 10px 20px;
+  border-radius: 20px;
+  background: var(--bg-third);
+  border: 1px solid var(--border);
+}
+.manager__button:hover {
+  background: var(--bg-hover-effect);
 }/*# sourceMappingURL=manager.css.map */

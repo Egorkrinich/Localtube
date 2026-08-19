@@ -24,7 +24,7 @@ class User extends Database {
             $_SESSION['user_id'] = $id;
             $_SESSION['user_login'] = $login;
 
-            return ['success' => true, 'message' => 'successful registration'];
+            return ['success' => true, 'message' => 'successful registration, reloading...'];
         } catch (PDOException $error) {
             if ($error->getCode() == 23000) {
                 return ['success' => false, 'message' => 'This login is already taken'];
@@ -50,7 +50,7 @@ class User extends Database {
             $_SESSION['user_id'] = $user->id;
             $_SESSION['user_login'] = $user->login; 
 
-            return ['success' => true, 'message' => 'login successful'];
+            return ['success' => true, 'message' => 'login successful, reloading...'];
         }
         return ['success' => false, 'message' => 'Incorrect username or password'];
 }

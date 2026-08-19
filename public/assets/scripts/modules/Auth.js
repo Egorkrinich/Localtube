@@ -121,7 +121,15 @@ export class Auth {
         })
         .then((res) => res.json())
         .then((data) => {
-            console.log(data.message)
+            window.dispatchEvent(new CustomEvent('toast', {
+                detail: {
+                    message: data.message,
+                    success: data.success
+                }
+            }))
+            if (data.success) {
+                setTimeout(() => location.reload(), 2000)
+            }
         })
     }
     updateActiveForm(currentForm) {

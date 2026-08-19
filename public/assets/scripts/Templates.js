@@ -1,16 +1,17 @@
 export const Templates = {
-    preview({id, thumb, title, views, created, user_id}) {
+    preview({id, thumb, title, views, ago, user_id}, isHorizontal) {
         return `
-        <a class="preview" href="watch?v=${id}">
+        <a class="preview ${isHorizontal ? 'preview--horizontal' : ''}" href="watch?v=${id}">
             <div class="preview__thumb">
                 <img src="${BASE_URL}${thumb}" alt="">
             </div>
             <div class="preview__body f-row">
-                <div class="preview__info f-row">
+                <div class="preview__left">
                     <div class="avatar">
                         <img src="./assets/images/user-test.png" alt="">
                     </div>
-                    <div class="preview__meta">
+                </div>
+                <div class="preview__center">
                         <h3 class="preview__title">
                             ${title}
                         </h3>
@@ -18,11 +19,10 @@ export const Templates = {
                             Test
                         </div>
                         <div class="preview__stats">
-                            ${views} views • ${created}
+                            ${views} views • ${ago}
                         </div>
-                    </div>
                 </div>
-                <div class="preview__interact">
+                <div class="preview__right">
                     <button class="interact-more" data-context-btn data-context-id="${id}">
                         <svg height="24" viewBox="0 0 24 24" width="24">
                             <path d="M12 4a2 2 0 100 4 2 2 0 000-4Zm0 6a2 2 0 100 4 2 2 0 000-4Zm0 6a2 2 0 100 4 2 2 0 000-4Z"></path>
@@ -30,7 +30,7 @@ export const Templates = {
                     </button>
                 </div>
             </div>
-        </a>  
+        </a> 
         `
     },
     contextMenu(content) {

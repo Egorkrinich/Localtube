@@ -14,7 +14,7 @@
     <div class="burger__section">
         <ul class="burger__list">
             <li class="burger__item">
-                <a href="" class="burger__link f-row active">
+                <a href="<?php echo BASE_URL; ?>" class="burger__link f-row active">
                     <svg height="24px" viewBox="0 -960 960 960" width="24px">
                         <path d="M240-200h120v-240h240v240h120v-360L480-740 240-560v360Zm-80 80v-480l320-240 320 240v480H520v-240h-80v240H160Zm320-350Z"/>
                     </svg>
@@ -24,7 +24,7 @@
                 </a>
             </li>
             <li class="burger__item">
-                <a href="" class="burger__link f-row">
+                <a href="#" class="burger__link f-row">
                     <span class="burger__item-text">
                         Followed
                     </span>
@@ -103,7 +103,7 @@
                     </span>
                 </a>
             </li>
-            <li class="burger__item">
+            <!-- <li class="burger__item">
                 <a href="#" class="burger__link f-row">
                     <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3">
                         <path d="M240-440h360v-80H240v80Zm0-120h360v-80H240v80Zm-80 400q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h640q33 0 56.5 23.5T880-720v480q0 33-23.5 56.5T800-160H160Zm0-80h640v-480H160v480Zm0 0v-480 480Z"/>
@@ -112,7 +112,7 @@
                         Videos control
                     </span>
                 </a>
-            </li>
+            </li> -->
         </ul>
     </div>
 </div>

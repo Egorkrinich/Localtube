@@ -29,6 +29,7 @@ define('ASSETS', [
     'history' => [
         'utility.css',
         'main.css',
+        'history.css',
     ]
 ]);
 // ini_set('display_errors', 1); 

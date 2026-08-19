@@ -55,7 +55,7 @@
             width: 35px;
             height: 35px;
             border-radius: 50%;
-            background: var(--bg-button);
+            background: var(--bg-second);
             position: relative;
             z-index: calc(var(--over-content) + 1);
 
@@ -92,7 +92,7 @@
         height: 35px;
         padding: 5px;
         border-radius: 50%;
-        background-color: var(--bg-button);
+        background-color: var(--bg-second);
         position: relative;
         transition: fill 0.3s;
         z-index: calc(var(--over-content) + 1);

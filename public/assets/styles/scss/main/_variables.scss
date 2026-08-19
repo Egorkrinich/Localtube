@@ -1,9 +1,10 @@
 :root {
     // Colors
+    
     --bg-first: #0f0f0f;
-    --bg-second: #2b2b2b;
+    --bg-second: #222222;
     --bg-third: #151515;
-    --bg-button: #222;
+    
 
     --bg-effect: rgba(255, 255, 255, 0.1);
     --bg-hover-effect: rgba(255, 255, 255, 0.2);
@@ -25,7 +26,4 @@
     --over-content: 100;
     --menus: 150;
     --overlay: 145;
-}
-:root.burger-opened {
-    --sidebar-width: var(--burger-width)
 }

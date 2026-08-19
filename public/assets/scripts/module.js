@@ -1,26 +1,28 @@
 import Menu from './modules/Menu.js';
 import RenderVideos from './modules/RenderVideos.js';
 import Context from './modules/Context.js';
+import Toast from './modules/Toast.js'
 
 
 const path = window.location.pathname
 new Menu()
 new Context(path)
+new Toast()
 
 if (path.endsWith('/')) {
     new RenderVideos('video')
 }
 if (path.endsWith('watch')) {
-    new RenderVideos('video')
+    new RenderVideos('video', 'h')
 
     initWatchPage()
 }
 if (path.endsWith('manager')) {
-    new RenderVideos('video')
+    new RenderVideos('video', 'h')
     initManagerPage()
 }
 if (path.endsWith('history')) {
-    new RenderVideos('history')
+    new RenderVideos('history', 'h')
 }
 if (!USER_CONFIG.isLoggedIn) {
     initAuth()

@@ -58,7 +58,7 @@ class Video extends Database {
 
         $res->execute();
 
-        return ['success' => true, 'message' => 'video added'];
+        return ['success' => true, 'message' => 'video added, reloading...'];
         } catch(Exception $error) {
             return ['success' => false, 'message' => $error];
         }
@@ -79,7 +79,7 @@ class Video extends Database {
             $videoData = $stmt->fetch();
 
             if (empty($videoData)) {
-                return ['success' => false, 'message' => 'Video not found'];
+                return ['success' => false, 'message' => 'Video not found or access denied'];
             }
 
 
@@ -104,7 +104,7 @@ class Video extends Database {
                     unlink($thumbFile);
                 }               
 
-                return ['success' => true, 'message' => 'Video deleted successfully'];
+                return ['success' => true, 'message' => 'Video deleted successfully, reloading...'];
             } else {
                 return ['success' => false, 'message' => 'Video not found or access denied'];
             }

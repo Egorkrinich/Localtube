@@ -57,7 +57,7 @@
 .sidebar {
     position: fixed;
     height: 100vh;
-    width: 64px;
+    width: var(--sidebar-width);
     fill: var(--text-main);
     font-size: 14px;
     z-index: var(--over-content);
@@ -202,6 +202,7 @@
 #context-menu {
     opacity: 0;
     pointer-events: none;
+    left: 100%;
 
     position: fixed;
     z-index: var(--menus);
@@ -212,6 +213,32 @@
     &.active {
         opacity: 1;
         pointer-events: all;
+    }
+}
+#toast {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: fixed;
+
+    width: 300px;
+    min-height: 100px;
+    padding: 15px 25px;
+
+    top: calc(var(--header-height) - 20px);
+    right: 0;
+
+    background: var(--bg-second);
+    border: 2px solid transparent;
+    border-radius: 20px;
+    transform: translateX(200%);
+    transition: all 0.3s;
+    pointer-events: none;
+    z-index: var(--menus);
+
+    &.active {
+        transform: translateX(0);
     }
 }
 #overlay {

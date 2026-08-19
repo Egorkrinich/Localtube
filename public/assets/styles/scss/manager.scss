@@ -58,7 +58,7 @@
     }
 }
 
-.content {
+.manager {
     margin-left: var(--sidebar-width);
     padding: 0;
 
@@ -66,10 +66,19 @@
         padding: 0 20px;
         height: var(--header-height);
         border-bottom: 1px solid var(--border);
-        
     }
     &__list {
         padding: 20px;
         gap: 20px;
+    }
+    &__button {
+        padding: 10px 20px;
+        border-radius: 20px;
+        background: var(--bg-third);
+        border: 1px solid var(--border);
+
+        &:hover {
+            background: var(--bg-hover-effect);
+        }
     }
 } 
