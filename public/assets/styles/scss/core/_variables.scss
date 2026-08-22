@@ -4,16 +4,21 @@
     --bg-first: #0f0f0f;
     --bg-second: #222222;
     --bg-third: #151515;
+    --bg-first-inverse: #fff;
     
 
-    --bg-effect: rgba(255, 255, 255, 0.1);
-    --bg-hover-effect: rgba(255, 255, 255, 0.2);
+    --bg-first-effect: rgba(255, 255, 255, 0.1);
 
-    --text-main: #f1f1f1;
+    --bg-first-hover: rgba(255, 255, 255, 0.2);
+    --bg-first-hover-inverse: rgba(0, 0, 0, 0.4);
+
+    --text-first: #f1f1f1;
     --text-second: #888;
     --text-link: #1572fc;
 
-    --border: #505050;
+    --text-first-inverse: #000;
+
+    --border-first: #505050;
     --border-colored: #0084ff;
 
     // Values

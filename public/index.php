@@ -108,6 +108,20 @@ if (str_starts_with($path, 'API')) {
                     echo json_encode($res);
 
                 break;
+                case 'update':
+                    if (empty($_POST)) {
+                        echo json_encode(['success' => false, 'message' => 'Empty fields']);
+                    }
+                    $res = $dbUser->update($_POST);
+                    echo json_encode($res);
+                break;
+                case 'logout':
+
+                    session_unset();
+                    session_destroy();
+                    echo json_encode(['success' => true, 'message' => 'logout successful, reloading...']);
+
+                break;
             }
         break;
         case 'History':

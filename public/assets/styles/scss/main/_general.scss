@@ -1,172 +1,32 @@
+// Standard content styles
 .content {
     margin-top: var(--header-height);
     padding: 20px 20px;
 }
 
-.avatar {
-    width: 25px;
-    height: 25px;
-    min-width: 25px;
-    min-height: 25px;
-    border-radius: 50%;
-    overflow: hidden;
-    background: var(--border);
-    cursor: pointer;
-
-    img  {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-}
-.separator {
-    width: 100%;
-    height: 1px;
-    background: var(--border);
-    margin-block: 5px;
-}
 .burger-btn {
     position: relative;
     width: 40px;
     height: 40px;
     padding: 12px;
-    cursor: pointer;
+    background: none;
+
 
     span {
         display: block;
         width: 100%;
         height: 2px;
         border-radius: 3px;
-        background: var(--text-main);
+        background: var(--text-first);
         transition: all 0.3s;
     }
-
+    
     &::before {
-        content: '';
-        position: absolute;
-        inset: 0;
-        opacity: 0;
-        border-radius: 50%;
-        transition: transform 0.3s, opacity 0.3s;
-        background: var(--bg-hover-effect);
         transform: scale(0);
-        z-index: -1;
     }
     &:hover::before {
         transform: scale(1);
         opacity: 1;
-    }
-}
-
-// Preview
-
-.preview {
-    max-width: 700px;
-    min-width: 300px;
-    width: 100%;
-    aspect-ratio: 16/9;
-    border-radius: 20px;
-    position: relative;
-
-    &__thumb {
-        border-radius: 20px;
-        height: fit-content;
-        overflow: hidden;
-        aspect-ratio: 16/9;
-
-        img {
-            width: 100%;
-            height: auto;
-            object-fit: cover;
-        }
-    }
-    &__body {
-        padding: 10px 0;
-        align-items: stretch;
-    }
-    &__thumb,
-    &__body {
-        position:  relative;
-        z-index: 2;
-        width: 100%;
-    }
-
-    // Left
-    &__left {
-        margin-right: 10px;
-        width: fit-content;
-
-        .avatar {
-            min-width: 35px;
-            min-height: 35px;
-            width: 35px;
-            height: 35px;
-        }
-    }
-
-    // Center
-    &__center {
-        max-width: 90%;
-    }
-    &__title {
-        display: -webkit-box;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-        -webkit-line-clamp: 2;
-
-        width: 100%;
-        min-width: 0;
-        margin-bottom: 5px;
-        font-size: 1.6rem;
-
-        white-space: normal;
-        overflow-wrap: break-word;
-        word-break: break-word;
-    }
-    &__uploader,
-    &__stats {
-        color: var(--text-second);
-        font-size: 14px;
-    }
-    
-    // Right
-    &__right {
-        margin-left: auto;
-    }
-
-    &::before {
-        content: '';
-        position: absolute;
-        inset: 0;
-        transform: scale(0.8);
-        background-color: var(--bg-hover-effect);
-        border-radius: inherit;
-        pointer-events: none;
-        transition: transform 0.2s, opacity 0.2s;
-        opacity: 0;
-    }
-    &:hover::before {
-        transform: scale(1.03);
-        opacity: 1;
-    }
-
-    &--horizontal {
-        display: flex;
-        aspect-ratio: auto;
-
-        .preview__thumb {
-            max-width: 300px;
-        }
-        
-        .preview__body {
-            padding: 10px;
-        }
-        .preview__left {
-            display: none;
-        }
-        .preview__title {
-            -webkit-line-clamp: 3;
-        }
     }
 }
 
@@ -179,22 +39,24 @@
     fill: var(--text-main);
     
     &::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            transform: scale(0.8);
-            background-color: var(--bg-hover-effect);
-            border-radius: 50%;
-            pointer-events: none;
-            transition: transform 0.2s, opacity 0.2s;
-            opacity: 0;
+        content: '';
+        position: absolute;
+        inset: 0;
+        transform: scale(0.8);
+        background-color: var();
+        border-radius: 50%;
+        pointer-events: none;
+        transition: transform 0.2s, opacity 0.2s;
+        opacity: 0;
     }
     &:hover::before {
-            transform: scale(1.2);
-            opacity: 1;
-    }
-    
+        transform: scale(1.2);
+        opacity: 1;
+    }  
 }
+
+
+
 
 // -- Micro-page styles --
 

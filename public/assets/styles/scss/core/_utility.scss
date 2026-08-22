@@ -18,6 +18,10 @@
     @extend .f-row;
     justify-content: space-between;
 }
+.f-row-around {
+    @extend .f-row;
+    justify-content: space-around;
+}
 
 .f-column-center {
     @extend .f-column;
@@ -27,4 +31,8 @@
 .f-column-between {
     @extend .f-column;
     justify-content: space-between;
+}
+.f-column-around {
+    @extend .f-column;
+    justify-content: space-around;
 }

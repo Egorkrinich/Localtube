@@ -14,7 +14,7 @@ export default class Toast {
     activeToast(message, success) {
         const color = success ? '#00ff0d' : '#ff0000'
 
-        this.container.textContent = message
+        this.container.innerHTML = message
         this.container.classList.add('active')
         this.container.style.borderColor = color
 
@@ -23,7 +23,7 @@ export default class Toast {
         }, 3000)
     }
     closeToast() {
-        this.container.textContent = ''
+        this.container.innerHTML = ''
         this.container.classList.remove('active')
         this.container.style.borderColor = 'transparent'
     }

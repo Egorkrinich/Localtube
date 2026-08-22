@@ -1,6 +1,5 @@
 <?php
     require_once 'general/header.php';
-    require_once 'general/burger.php';
 
     $dbVideo = new Video();
     $dbHistory = new History();

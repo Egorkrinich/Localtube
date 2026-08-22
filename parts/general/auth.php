@@ -1,13 +1,14 @@
 <div class="auth" data-form-type="reg" data-menu="auth">
 
-    <form action="" class="auth__form auth__register f-column" id="auth-reg" novalidate>
+    <form action="" class="auth__form auth__register f-column-center" id="auth-reg" novalidate>
         <h3 class="auth__title">
             Register
         </h3>
         <div class="auth__field f-column">
             <label for="login">Login</label>
-            <input type="text" name="login" minlength="3"
-            maxlength="20" aria-errormessage="login-error" 
+            <input class="input--primary"type="text" 
+            name="login" minlength="3" maxlength="20" 
+            aria-errormessage="login-error" 
             required data-form-input>
     
             <div class="auth__field-error" id="login-error" 
@@ -16,8 +17,9 @@
     
         <div class="auth__field f-column">
             <label for="password">Password</label>
-            <input type="password" name="password" minlength="10"
-            maxlength="40" aria-errormessage="password-error" 
+            <input class="input--primary" type="password" 
+            name="password" minlength="10" maxlength="30"
+            aria-errormessage="password-error" 
             required data-form-input>
     
             <div class="auth__field-error" id="password-error" 
@@ -26,8 +28,9 @@
 
         <div class="auth__field f-column">
             <label for="passConfirm">Password</label>
-            <input type="password" name="passConfirm" minlength="10"
-            maxlength="40" aria-errormessage="passConfirm-error" 
+            <input class="input--primary" type="password" 
+            name="passConfirm" minlength="10" maxlength="40" 
+            aria-errormessage="passConfirm-error" 
             required data-form-input>
     
             <div class="auth__field-error" id="passConfirm-error" 
@@ -35,19 +38,20 @@
         </div>
         <!-- ... -->
     
-        <button type="submit" class="auth__submit">Register</button>
+        <button type="submit" class="auth__submit btn--primary">Register</button>
         
         <button class="auth__switch" type="button">Already have an account?</button>
     </form>
 
-    <form action="" class="auth__form auth__login f-column" id="auth-log" novalidate>
+    <form action="" class="auth__form auth__login f-column-center" id="auth-log" novalidate>
         <h3 class="auth__title">
             Login
         </h3>
         <div class="auth__field f-column">
             <label for="login">Login</label>
-            <input type="text" name="login" minlength="3"
-            maxlength="20" aria-errormessage="login-error" 
+            <input class="input--primary" type="text" 
+            name="login" minlength="3" maxlength="20" 
+            aria-errormessage="login-error" 
             required data-form-input>
     
             <div class="auth__field-error" id="login-error" 
@@ -56,15 +60,16 @@
     
         <div class="auth__field f-column">
             <label for="password">Password</label>
-            <input type="password" name="password" minlength="10"
-            maxlength="40" aria-errormessage="password-error" 
+            <input class="input--primary" type="password" 
+            name="password" minlength="10" maxlength="30"
+            aria-errormessage="password-error" 
             required data-form-input>
     
             <div class="auth__field-error" id="password-error" 
             data-form-errors-field></div>
         </div>
     
-        <button type="submit" class="auth__submit">Login</button>
+        <button type="submit" class="auth__submit btn--primary">Login</button>
         <button class="auth__switch">Have not an account?</button>
     </form>
 

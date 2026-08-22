@@ -2,6 +2,8 @@ export class Upload {
     constructor() {
         this.form = document.querySelector(`#upload`)
 
+        this.submitBtn = null
+
         this.initListeners()
         this.setStep(1)
     }
@@ -9,10 +11,14 @@ export class Upload {
         this.form.video.addEventListener('change', () => this.setStep(2))
         this.form.addEventListener('submit', (e) => {
             e.preventDefault()
+
+            this.submitBtn = this.form.querySelector('button[type="submit"]')
+            this.submitBtn.disabled = true
+
             this.collectData()
         })
     }
-    throwData(data) {
+    sendData(data) {
         fetch(`${BASE_URL}API/Videos/addVideo`, {
             method: 'POST',
             body: data
@@ -27,6 +33,9 @@ export class Upload {
             }))
             if (data.success) {
                 setTimeout(() => location.reload(), 2000)
+            } else {
+                this.submitBtn.disabled = false
+                this.submitBtn = null
             }
         })
     }
@@ -39,7 +48,7 @@ export class Upload {
             formData.append('duration', duration)
         }
 
-        this.throwData(formData)
+        this.sendData(formData)
     }
     getVideoDuration(file) {
         return new Promise((res) => {

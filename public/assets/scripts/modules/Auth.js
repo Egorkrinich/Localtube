@@ -10,6 +10,8 @@ export class Auth {
         this.container = document.querySelector('.auth')
         this.form = null
 
+        this.submitBtn = null
+
         this.initListeners() 
     }
     manageErrors(fieldInputElement, errorMessages) {
@@ -62,8 +64,11 @@ export class Auth {
         })
 
         this.container.addEventListener('submit', (e) => {
+
             e.preventDefault()
             const action = e.target.id === 'auth-reg' ? 'register' : 'login'
+            this.submitBtn = this.form.querySelector('button[type="submit"]')
+            this.submitBtn.disabled = true
 
             this.updateActiveForm(e.target)
             
@@ -129,6 +134,9 @@ export class Auth {
             }))
             if (data.success) {
                 setTimeout(() => location.reload(), 2000)
+            } else {
+                this.submitBtn.disabled = false
+                this.submitBtn = null
             }
         })
     }

@@ -13,21 +13,21 @@ define('DB_PASS', 'root');
 
 define('ASSETS', [
     'home' => [
-        'utility.css',
+        'core.css',
         'main.css',
     ],
     'watch' => [
-        'utility.css',
+        'core.css',
         'main.css',
         'watch.css',
     ],
     'manager' => [
-        'utility.css',
+        'core.css',
         'main.css',
         'manager.css',
     ],
     'history' => [
-        'utility.css',
+        'core.css',
         'main.css',
         'history.css',
     ]

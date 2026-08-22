@@ -1,6 +1,5 @@
 <?php
     require_once 'general/header.php';
-    require_once 'general/burger.php';
     require_once 'general/sidebar.php';
 
 ?>

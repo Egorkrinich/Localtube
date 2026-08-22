@@ -6,6 +6,7 @@ export default class Menu {
     }
     constructor() {
         this.overlay = document.querySelector('#overlay')
+
         this.activeMenu = null
 
         this.initListeners();
@@ -14,10 +15,12 @@ export default class Menu {
         document.addEventListener('click', (e) => {
             const target = e.target
             const btn = target.closest(`[${this.selectors.button}]`)
-            if (btn && !this.activeMenu) {
+
+            if (btn) {
                 const dataValue = btn.getAttribute(`${this.selectors.button}`)
                 const menu = document.querySelector(`[${this.selectors.menu}="${dataValue}"]`)
                 const noOverlay = btn.hasAttribute(`${this.selectors.noOverlay}`)
+
                 this.classManager(menu, noOverlay)
                 return;
             }

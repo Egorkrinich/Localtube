@@ -2,20 +2,21 @@
     display: none;
     position: fixed;
     inset: 0;
-    margin: auto;
+
     width: 50vw;
     height: 70vh;
+    margin: auto;
     padding: 20px;
+
+    border-radius: 20px;
     background: var(--bg-second);
     z-index: var(--menus);
-    border-radius: 20px;
 
     &[data-step="1"] .upload__step--1 { display: flex; }
     &[data-step="2"] .upload__step--2 { display: flex; }
 
     &__step {
         display: none;
-        flex-direction: column;
         gap: 20px;
         width: 100%;
         height: 100%;
@@ -24,7 +25,7 @@
         width: 100%;
         height: 60px;
         padding: 10px 20px 20px;
-        border-bottom: 2px solid var(--border);
+        border-bottom: 2px solid var(--border-first);
     }
     &__body {
         width: 100%;
@@ -33,23 +34,16 @@
 
     &__step--2 &__body {
         gap: 20px;
-        width: 50%;
+        width: 500px;
     }
     &__field {
         width: 100%;
     }
     &__field--title input {
-        width: 100%;
-        padding: 10px;
+        padding: 10px 10px;
         border-radius: 10px;
-        border: 1px solid var(--border);
-        background: var(--bg-second);
     }
     &__submit {
-        padding: 15px 20px;
-        border-radius: 20px;
-        width: fit-content;
-        background: var(--bg-third);
         margin-top: auto;
     }
 
@@ -65,20 +59,13 @@
     &__header {
         padding: 0 20px;
         height: var(--header-height);
-        border-bottom: 1px solid var(--border);
+        border-bottom: 1px solid var(--border-first);
     }
     &__list {
         padding: 20px;
         gap: 20px;
     }
     &__button {
-        padding: 10px 20px;
-        border-radius: 20px;
-        background: var(--bg-third);
-        border: 1px solid var(--border);
-
-        &:hover {
-            background: var(--bg-hover-effect);
-        }
+        border: 1px solid var(--border-first);
     }
 } 

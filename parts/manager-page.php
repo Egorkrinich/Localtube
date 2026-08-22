@@ -6,12 +6,11 @@
 
     require_once 'general/header.php';
     require_once 'general/sidebar.php';
-    require_once 'general/burger.php';
 
     
 ?>
 <form action="" class="upload" enctype="multipart/form-data" id="upload" data-menu="upload">
-    <div class="upload__step upload__step--1">
+    <div class="upload__step upload__step--1 f-column">
         <div class="upload__header">
             <h3 class="upload__title">
                 Upload video
@@ -22,7 +21,7 @@
         </div>
     </div>
     
-    <div class="upload__step upload__step--2">
+    <div class="upload__step upload__step--2 f-column">
         <div class="upload__header">
             <h3 class="upload__title">
                 Title and thumb
@@ -30,12 +29,18 @@
         </div>
         <div class="upload__body f-column-center">
             <div class="upload__field upload__field--title">
-                <input type="text" name="title" placeholder="video title" maxlength="100" required>
+                <input class="input--primary" type="text" 
+                name="title" placeholder="video title" 
+                maxlength="100" required>
             </div>
+
             <div class="upload__field upload__field--thumb">
                 <input class="upload__thumb" type="file" name="thumb" accept="image/*" required>
             </div>
-            <button class="upload__submit" type="submit">upload</button>
+
+            <button class="upload__submit btn--primary" type="submit">
+                upload
+            </button>
         </div>
     </div>
 </form>
@@ -45,7 +50,7 @@
         <h1 class="manager__title">
             Video manager
         </h1>
-        <button class="manager__button" data-menu-btn="upload">
+        <button class="manager__button btn--secondary" data-menu-btn="upload">
             Add
         </button>
     </div>

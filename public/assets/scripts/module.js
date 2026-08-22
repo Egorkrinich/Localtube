@@ -2,12 +2,14 @@ import Menu from './modules/Menu.js';
 import RenderVideos from './modules/RenderVideos.js';
 import Context from './modules/Context.js';
 import Toast from './modules/Toast.js'
+import Settings from './modules/Settings.js';
 
 
 const path = window.location.pathname
 new Menu()
 new Context(path)
 new Toast()
+new Settings()
 
 if (path.endsWith('/')) {
     new RenderVideos('video')
