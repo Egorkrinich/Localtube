@@ -34,7 +34,7 @@
                         </svg>
                     </div>
                 </a>
-                <ul class="burger__accordion">
+                <!-- <ul class="burger__accordion">
                     <li class="burger__item">
                         <a href="" class="burger__link f-row">
                             <div class="burger__avatar avatar">
@@ -45,7 +45,7 @@
                             </span>
                         </a>
                     </li>
-                </ul>
+                </ul> -->
             </li>
         </ul>
     </div>

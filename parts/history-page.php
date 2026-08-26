@@ -11,7 +11,7 @@
         </h1>
     </div>
     <div class="history__body">
-        <div class="history__list" id="preview-container">
+        <div class="history__list f-column" id="preview-container">
  
         </div>
         <div class="history__tools">

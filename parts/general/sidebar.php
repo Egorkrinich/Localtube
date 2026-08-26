@@ -17,7 +17,7 @@
     </a>
     <a href="<?php echo BASE_URL; ?>manager" class="sidebar__link f-column-center">
         <div class="avatar">
-            <img src="./assets//images/user-test.png" alt="">
+            <img src="<?php echo $avatar; ?>" alt="">
         </div>
         <span class="sidebar__text">
             Uploaded

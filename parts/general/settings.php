@@ -4,10 +4,22 @@
             Settings
         </h2>
     </div>
+
+    <div class="settings__field f-column">
+        <label for="username">username</label>
+        <input class="input--primary" type="username" 
+        name="username" minlength="3" maxlength="30">
+    </div>
+
+    <div class="settings__field f-column">
+        <label for="avatar">Avatar</label>
+        <input name="avatar" type="file" accept="image/*">
+    </div>
+    
     <div class="settings__field f-column">
         <label for="password">Password change</label>
         <input class="input--primary" type="password" 
-        name="password" minlength="10" maxlength="30">
+        name="password" minlength="10" maxlength="40">
     </div>
 
     <div class="settings__actions f-row-around">

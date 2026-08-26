@@ -9,4 +9,7 @@
   padding: 0 20px;
   height: var(--header-height);
   border-bottom: 1px solid var(--border-first);
+}
+.history__list {
+  gap: 20px;
 }/*# sourceMappingURL=history.css.map */

@@ -12,7 +12,7 @@
 
 <main class="content content--watch">
     <div class="content__video video">
-        <div class="video__player player" id="video-player">
+        <div class="player" id="video-player">
             <video src="<?php echo BASE_URL . $video->video; ?>" class="player__video" id="video"></video>
             <div class="player__control control">
                 <div class="control__progress-bar" id="progress-bar">
@@ -49,8 +49,34 @@
             </div>
         </div>
         <div class="video__body">
-            <div class="video__title"><?php echo $video->title; ?></div>
             <div class="video__meta">
+                <h1 class="video__title"><?php echo htmlspecialchars($video->title); ?></h1>
+                <div class="video__subheader f-row-between">
+                    <a class="video__uploader f-row" href="<?php echo BASE_URL . $video->uploader_link; ?>">
+                        <div class="avatar">
+                            <img src="<?php echo BASE_URL . $video->uploader_avatar; ?>" alt="avatar">
+                        </div>
+                        <div class="video__uploader-name">
+                            <?php echo htmlspecialchars($video->uploader_name); ?>
+                        </div>
+                    </a>
+
+                    <div class="video__toolbar f-row" id="video-toolbar">
+                        <button class="video__toolbar-btn video__like btn--secondary f-row-center" data-video-action="like">
+                            <svg width="24px" height="24px" viewBox="0 -960 960 960">
+                                <path d="M720-120H280v-520l280-280 50 50q7 7 11.5 19t4.5 23v14l-44 174h258q32 0 56 24t24 56v80q0 7-2 15t-4 15L794-168q-9 20-30 34t-44 14Zm-360-80h360l120-280v-80H480l54-220-174 174v406Zm0-406v406-406Zm-80-34v80H160v360h120v80H80v-520h200Z"/>
+                            </svg>
+                            <span class="video__rating-amount">0</span>
+                        </button>
+                        <button class="video__toolbar-btn video__dislike btn--secondary f-row-center" data-video-action="dislike">
+                            <svg width="24px" height="24px" viewBox="0 -960 960 960">
+                                <path d="M240-840h440v520L400-40l-50-50q-7-7-11.5-19t-4.5-23v-14l44-174H120q-32 0-56-24t-24-56v-80q0-7 2-15t4-15l120-282q9-20 30-34t44-14Zm360 80H240L120-480v80h360l-54 220 174-174v-406Zm0 406v-406 406Zm80 34v-80h120v-360H680v-80h200v520H680Z"/>
+                            </svg>
+                            <span class="video__rating-amount">0</span>
+                        </button>
+                        <button class="video__toolbar-btn btn--secondary" data-video-action="share">Share</button>
+                    </div>
+                </div>
             </div>
         </div>
         

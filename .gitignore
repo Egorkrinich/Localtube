@@ -1,1 +1,9 @@
 # config.php
+
+uploads/videos/*
+uploads/thumbs/*
+uploads/avatars/*
+
+!uploads/videos/.gitkeep
+!uploads/thumbs/.gitkeep
+!uploads/avatars/.gitkeep

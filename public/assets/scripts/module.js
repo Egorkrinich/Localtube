@@ -1,7 +1,7 @@
 import Menu from './modules/Menu.js';
 import RenderVideos from './modules/RenderVideos.js';
 import Context from './modules/Context.js';
-import Toast from './modules/Toast.js'
+import Toast from './modules/Toast.js';
 import Settings from './modules/Settings.js';
 
 
@@ -33,7 +33,9 @@ if (!USER_CONFIG.isLoggedIn) {
 
 async function initWatchPage() {
     const { Player } = await import('./modules/Player.js')
+    const { Video } = await import('./modules/Video.js')
 
+    new Video()
     new Player()
 }
 async function initManagerPage() {

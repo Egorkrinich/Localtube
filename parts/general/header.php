@@ -1,6 +1,9 @@
 <?php
 if (isset($_SESSION['user_id'])) {
     $user_id = $_SESSION['user_id'];
+    $username = $_SESSION['username'];
+    $avatar = $_SESSION['avatar'];
+    $login = $_SESSION['login'];
 }
 
 ?>
@@ -25,7 +28,7 @@ if (isset($_SESSION['user_id'])) {
 <body>
     <div id="overlay"></div>
     <div class="context" id="context-menu"></div>
-    <div class="f-row-center" id="toast"></div>
+    <div class="f-column-center" id="toast"></div>
     <?php
         require_once 'burger.php'; 
 
@@ -49,7 +52,7 @@ if (isset($_SESSION['user_id'])) {
             </button>
             <a class="header__logo" href="/Localtube">
                 <div class="header__logo f-row">
-                    <span>LocalTube</span>
+                    <span>Localtube</span>
                 </div>
             </a>
         </div>
@@ -72,7 +75,7 @@ if (isset($_SESSION['user_id'])) {
                 </button>
                 
                 <button class="avatar f-row-center" data-menu-btn="user" data-no-overlay>
-                    <img src="./assets/images/user-test.png" alt="">
+                    <img src="<?php echo $avatar; ?>" alt="">
                 </button>
             <?php else :?>
                 <button class="header__auth-button" data-menu-btn="auth">Authorization</button>

@@ -2,11 +2,11 @@
     <div class="user__channel f-row">
 
         <div class="avatar f-row-center">
-                <img src="./assets/images/user-test.png" alt="">
+            <img src="<?php echo $avatar; ?>" alt="">
         </div>
 
         <div class="user__info">
-            <div class="user__name"><?php echo $_SESSION['user_login']; ?></div>
+            <div class="user__name"><?php echo $username; ?></div>
             <a href="#" class="user__link">View uploaded</a>
         </div>
         

@@ -27,24 +27,57 @@ if (str_starts_with($path, 'API')) {
                     $videos = $dbVideo->getVideos();
                     echo json_encode($videos);
                     
-                break;
+                exit;
                 case 'addVideo':
                     if (!isset($_SESSION['user_id']) || empty($_SESSION['user_id'])) {
-                        echo json_encode(['success' => false, 'message' => 'Unathorized']);
+                        echo json_encode([
+                            'success' => false,
+                            'message' => 'Unathorized'
+                        ]);
                         exit;
                     }
 
                     if (!isset($_FILES['video']) || $_FILES['video']['error'] > 0) {
-                        echo json_encode(['success' => false, 'message' => 'unexpected video error']);
+                        echo json_encode([
+                            'success' => false, 
+                            'message' => 'Unexpected video error'
+                        ]);
+                        exit;
                     };
                     if (!isset($_FILES['thumb']) ||  $_FILES['thumb']['error'] > 0) {
-                        echo json_encode(['success' => false, 'message' => 'unexpected thumb error']);
+                        echo json_encode([
+                            'success' => false, 
+                            'message' => 'Unexpected thumb error'
+                        ]);
+                        exit;
                     };
 
-                    $title = $_POST['title'];
-                    $duration = $_POST['duration'];
-                    $thumb = $_FILES['thumb'];
-                    $video = $_FILES['video'];
+                    $title    = trim($_POST['title'] ?? '');
+                    $duration = $_POST['duration'] ?? '';
+                    $thumb    = $_FILES['thumb'];
+                    $video    = $_FILES['video'];
+
+                    if (empty($title)) {
+                        echo json_encode([
+                            'success' => false, 
+                            'message' => 'Title must be filled'
+                        ]);
+                        exit;
+                    }
+                    if (mb_strlen($title) > 100) {
+                        echo json_encode([
+                            'success' => false, 
+                            'message' => 'Title is too long'
+                        ]);
+                        exit;
+                    }
+                    if (empty($duration)) {
+                        echo json_encode([
+                            'success' => false,
+                            'message' => 'Cannot count video duration'
+                        ]);
+                        exit;
+                    }
 
                     $res = $dbVideo->addVideo([
                         'title' => $title,
@@ -53,9 +86,9 @@ if (str_starts_with($path, 'API')) {
                         'video' => $video,
                     ]);            
 
+                    
                     echo json_encode($res);
-
-                break;
+                exit;
                 case 'delVideo':
                     if (!isset($_SESSION['user_id']) || empty($_SESSION['user_id'])) {
                         echo json_encode(['success' => false, 'message' => 'Unathorized']);
@@ -63,12 +96,13 @@ if (str_starts_with($path, 'API')) {
                     }
                     if (empty($_POST['id'])) {
                         echo json_encode(['success' => false, 'message' => 'Please send video id']);
+                        exit;
                     }
                     
                     $res = $dbVideo->delVideo($_POST['id']);
 
                     echo json_encode($res);
-                break;
+                exit;
             }
         break;
         case 'Users':
@@ -76,54 +110,80 @@ if (str_starts_with($path, 'API')) {
 
             switch ($action) {
                 case 'register':
-                    $login = $_POST['login'];
-                    $password = $_POST['password'];
-                    $passCorfirm = $_POST['passConfirm'];
+                    $requiredFields = [
+                    'username', 'login', 
+                    'password', 'passConfirm'
+                    ];
+                    $data = [];
 
-                    if (!isset($login, $password, $passCorfirm)) {
-                        echo json_encode(['success' => false, 'message' => 'Required fields are missing']);
+                    foreach ($requiredFields as $field) {
+                        $value = trim($_POST[$field] ?? '');
+
+                        if (empty($value)) {
+                            echo json_encode([
+                                'success' => false,
+                                'message' => 'Required field are missing or empty' 
+                            ]);
+                            exit;
+                        }
+
+                        $data[$field] = $value;
                     }
-                    if ($password !== $passCorfirm) {
-                        echo json_encode(['success' => false, 'message' => 'Passwords do not match']);
+
+                    if ($data['password'] !== $data['passConfirm']) {
+                        echo json_encode([
+                            'success' => false, 
+                            'message' => 'Passwords do not match']);
+                        exit;
                     }
-                    $res = $dbUser->register([
-                        'login' => $login,
-                        'password' => $password,
-                    ]);
+                    $res = $dbUser->register($data);
 
                     echo json_encode($res);
 
-                break;
+                exit;
                 case 'login':
-                    $login = trim($_POST['login']);
-                    $password = $_POST['password'];
-                    if (!isset($login, $password) || (empty($login) && empty($password))) {
-                        echo json_encode(['success' => false, 'message' => 'Please fill all requested fields']);
-                        break;
+                    $login    = mb_strtolower(trim($_POST['login'] ?? ''));
+                    $password = trim($_POST['password'] ?? '');
+
+                    if ((empty($login) || empty($password))) {
+                        echo json_encode([
+                            'success' => false, 
+                            'message' => 'Please fill all requested fields']);
+                        exit;
                     }
-                    $res = $dbUser->login([
-                        'login' => $login,
-                        'password' => $password
+
+                    $res = $dbUser->login([ 
+                    'login' => $login,
+                    'password' => $password
                     ]);
-                    echo json_encode($res);
 
-                break;
+                    echo json_encode($res);
+                exit;
                 case 'update':
-                    if (empty($_POST)) {
+                    if (empty($_POST) && empty($_FILES)) {
                         echo json_encode(['success' => false, 'message' => 'Empty fields']);
+                        exit;
                     }
-                    $res = $dbUser->update($_POST);
+                    $data = $_POST;
+                    if (isset($_FILES['avatar']) && $_FILES['avatar']['error'] === 0) {
+                        $data['avatar'] = $_FILES['avatar'];
+                    }
+                    $res = $dbUser->update($data);
                     echo json_encode($res);
-                break;
+                exit;
                 case 'logout':
-
                     session_unset();
                     session_destroy();
+
+                    if (isset($_COOKIE[session_name()])) {
+                        setcookie(session_name(), '', time() - 3600, '/');
+                    }
+                    
                     echo json_encode(['success' => true, 'message' => 'logout successful, reloading...']);
 
-                break;
+                exit;
             }
-        break;
+        exit;
         case 'History':
             $dbHistory = new History();
             
@@ -131,9 +191,9 @@ if (str_starts_with($path, 'API')) {
                 case 'getHistory': 
                     $videos = $dbHistory->getHistory(10, 0);
                     echo json_encode($videos);
-                break;
+                exit;
             }
-        break;
+        exit;
     }
 }
 

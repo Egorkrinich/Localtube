@@ -4,10 +4,22 @@
         <h3 class="auth__title">
             Register
         </h3>
+
+        <div class="auth__field f-column">
+            <label for="username">Username</label>
+            <input class="input--primary" type="text" 
+            name="username" minlength="3" maxlength="30" 
+            aria-errormessage="username-error" 
+            required data-form-input>
+    
+            <div class="auth__field-error" id="username-error" 
+            data-form-errors-field></div>
+        </div>
+
         <div class="auth__field f-column">
             <label for="login">Login</label>
             <input class="input--primary"type="text" 
-            name="login" minlength="3" maxlength="20" 
+            name="login" minlength="3" maxlength="30" 
             aria-errormessage="login-error" 
             required data-form-input>
     
@@ -18,7 +30,7 @@
         <div class="auth__field f-column">
             <label for="password">Password</label>
             <input class="input--primary" type="password" 
-            name="password" minlength="10" maxlength="30"
+            name="password" minlength="10" maxlength="40"
             aria-errormessage="password-error" 
             required data-form-input>
     
@@ -27,7 +39,7 @@
         </div>
 
         <div class="auth__field f-column">
-            <label for="passConfirm">Password</label>
+            <label for="passConfirm">Confirm Password</label>
             <input class="input--primary" type="password" 
             name="passConfirm" minlength="10" maxlength="40" 
             aria-errormessage="passConfirm-error" 
@@ -50,7 +62,7 @@
         <div class="auth__field f-column">
             <label for="login">Login</label>
             <input class="input--primary" type="text" 
-            name="login" minlength="3" maxlength="20" 
+            name="login" minlength="3" maxlength="30" 
             aria-errormessage="login-error" 
             required data-form-input>
     
@@ -61,7 +73,7 @@
         <div class="auth__field f-column">
             <label for="password">Password</label>
             <input class="input--primary" type="password" 
-            name="password" minlength="10" maxlength="30"
+            name="password" minlength="10" maxlength="40"
             aria-errormessage="password-error" 
             required data-form-input>
     

@@ -1,6 +1,7 @@
 export default class Settings {
     constructor() {
         this.form = document?.querySelector('#settings')
+        this.submitBtn = this.form?.querySelector('button[type="submit"]')
 
         if (!this.form) return
         this.initListeners()
@@ -9,6 +10,7 @@ export default class Settings {
         this.form.addEventListener('submit', (e) => {
             e.preventDefault()
             this.checkValues()
+            this.submitBtn.disabled = true
         })
         this.form.addEventListener('click', (e) => {
             const logoutBtn = e.target.closest('#logout')
@@ -20,8 +22,7 @@ export default class Settings {
     }
     checkValues() {
         const settingsData = new FormData()
-        const inputs = 
-        this.form.querySelectorAll('input')
+        const inputs = this.form.querySelectorAll('input:not([type="file"])')
 
         inputs.forEach((input) => {
             const isChanged = input.value !== input.defaultValue;
@@ -30,6 +31,11 @@ export default class Settings {
                 settingsData.append(input.name, input.value)
             }
         })
+        const avatar = this.form?.querySelector('[name="avatar"]').files[0];
+        if (avatar) {
+            settingsData.append('avatar', avatar);
+        }
+
         if ([...settingsData.keys()].length <= 0) {
             window.dispatchEvent(new CustomEvent('toast', {
                 detail: {
@@ -83,6 +89,9 @@ export default class Settings {
                     "success": success
                 }
             }))
+        })
+        .finally(() => {
+            this.submitBtn.disabled = false
         })
     }
     logout() {

@@ -1,8 +1,13 @@
 <?php
 
-$lifetime = 30 * 24 * 60 * 60; 
-session_set_cookie_params($lifetime);
-ini_set('session.gc_maxlifetime', $lifetime);
+mb_internal_encoding("UTF-8");
+session_set_cookie_params([
+    'lifetime' => 30 * 24 * 60 * 60,
+    'path' => '/',
+    'domain' => $_SERVER['HTTP_HOST'],
+    'httponly' => true
+]);
+ini_set('session.gc_maxlifetime', 30 * 24 * 60 * 60);
 
 define('BASE_URL', "http://" . $_SERVER['HTTP_HOST'] . "/Localtube/");
 

@@ -367,4 +367,34 @@ a {
 }
 .input--primary:hover {
   background: var(--bg-first);
+}
+
+.context-btn {
+  position: relative;
+  isolation: isolate;
+  width: 24px;
+  height: 24px;
+  fill: var(--text-first);
+  color: var(--text-first-inverse);
+}
+.context-btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: var(--bg-first-hover);
+  pointer-events: none;
+  -webkit-transform: scale(0.8);
+          transform: scale(0.8);
+  -webkit-transition: opacity 0.3s, -webkit-transform 0.3s;
+  transition: opacity 0.3s, -webkit-transform 0.3s;
+  transition: transform 0.3s, opacity 0.3s;
+  transition: transform 0.3s, opacity 0.3s, -webkit-transform 0.3s;
+  opacity: 0;
+  z-index: -1;
+}
+.context-btn:hover::before {
+  -webkit-transform: scale(1.3);
+          transform: scale(1.3);
+  opacity: 1;
 }/*# sourceMappingURL=core.css.map */

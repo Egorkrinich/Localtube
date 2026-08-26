@@ -102,7 +102,7 @@ export default class Context {
                 message: 'Copied!',
                 success: true
             }
-            }))
+        }))
     }
     deleteVideo(id) {
         const data = new FormData()

@@ -1,4 +1,9 @@
 export default class Toast {
+    colors = {
+        true: '#00ff0d',
+        false: '#ff0000',
+        warning: '#ffbb00',
+    }
     constructor() {
         this.container = document.querySelector('#toast')
 
@@ -12,11 +17,9 @@ export default class Toast {
         })
     }
     activeToast(message, success) {
-        const color = success ? '#00ff0d' : '#ff0000'
-
         this.container.innerHTML = message
         this.container.classList.add('active')
-        this.container.style.borderColor = color
+        this.container.style.borderColor = this.colors[success]
 
         setTimeout(() => {
             this.closeToast()

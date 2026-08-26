@@ -30,34 +30,6 @@
     }
 }
 
-// Preview & player interact
-
-.interact-more {
-    position: relative;
-    width: 24px;
-    height: 24px;
-    fill: var(--text-main);
-    
-    &::before {
-        content: '';
-        position: absolute;
-        inset: 0;
-        transform: scale(0.8);
-        background-color: var();
-        border-radius: 50%;
-        pointer-events: none;
-        transition: transform 0.2s, opacity 0.2s;
-        opacity: 0;
-    }
-    &:hover::before {
-        transform: scale(1.2);
-        opacity: 1;
-    }  
-}
-
-
-
-
 // -- Micro-page styles --
 
 // Home page

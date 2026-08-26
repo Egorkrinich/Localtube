@@ -33,10 +33,11 @@ export class Upload {
             }))
             if (data.success) {
                 setTimeout(() => location.reload(), 2000)
-            } else {
-                this.submitBtn.disabled = false
-                this.submitBtn = null
             }
+        })
+        .finally(() => {
+            this.submitBtn.disabled = false
+            this.submitBtn = null
         })
     }
     async collectData() {
