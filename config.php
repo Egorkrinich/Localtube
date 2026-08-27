@@ -16,6 +16,8 @@ define('DB_NAME', 'localtube');
 define('DB_USER', 'root');
 define('DB_PASS', 'root');
 
+define('DEFAULT_AVATAR', 'assets/images/default-avatar.png');
+
 define('ASSETS', [
     'home' => [
         'core.css',

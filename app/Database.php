@@ -14,6 +14,12 @@ class Database {
         $this->login,
         $this->password);
     }
+    // public function initAll() {
+    //     $this->initUsers();
+    //     $this->initVideos();
+    //     $this->initHistory();
+    //     $this->initVideoRate();
+    // }
     // public function initVideos() {
     //     $res = $this->pdo->prepare(
     //     'CREATE TABLE videos (
@@ -56,6 +62,24 @@ class Database {
     //     $res = $this->pdo->prepare($query);
     //     $res->execute();
     // }
+    // public function initVideoRate() {
+    //     $query =
+    //     'CREATE TABLE rate (
+    //         user_id VARCHAR(25) NOT NULL,
+    //         video_id VARCHAR(25) NOT NULL,
+    //         type TINYINT(1) NOT NULL,
+    //         PRIMARY KEY (user_id, video_id),
+    //         CONSTRAINT fk_video_rate 
+    //         FOREIGN KEY (video_id) 
+    //         REFERENCES videos (id) 
+    //         ON DELETE CASCADE
+    //         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+    //     ';
+    //     $res = $this->pdo->prepare($query);
+    //     $res->execute();
+    // }
+
+    
     protected function getMimeExt($file, string $type): array {
         if ($file['error'] !== UPLOAD_ERR_OK) {
             $errorRes = [ 'success' => false ];
@@ -83,7 +107,8 @@ class Database {
             'image' => [
                 'image/jpeg' => 'jpg',
                 'image/png' => 'png',
-                'image/webp' => 'webp'
+                'image/webp' => 'webp',
+                'image/avif' => 'avif'
                 ],
             'video' => ['video/mp4' => 'mp4']
         ];

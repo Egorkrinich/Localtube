@@ -1,9 +1,4 @@
 <?php
-    if (!isset($_SESSION['user_id']) || empty($_SESSION['user_id'])) {
-        header('Location: /Localtube/');
-        exit;
-    }
-
     require_once 'general/header.php';
     require_once 'general/sidebar.php';
 

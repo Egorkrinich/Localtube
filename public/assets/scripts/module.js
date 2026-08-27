@@ -20,7 +20,7 @@ if (path.endsWith('watch')) {
     initWatchPage()
 }
 if (path.endsWith('manager')) {
-    new RenderVideos('video', 'h')
+    new RenderVideos('manager', 'h')
     initManagerPage()
 }
 if (path.endsWith('history')) {
@@ -35,7 +35,7 @@ async function initWatchPage() {
     const { Player } = await import('./modules/Player.js')
     const { Video } = await import('./modules/Video.js')
 
-    new Video()
+    new Video(VIDEO_DATA['likes'], VIDEO_DATA['dislikes'])
     new Player()
 }
 async function initManagerPage() {

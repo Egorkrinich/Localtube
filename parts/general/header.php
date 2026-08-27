@@ -5,6 +5,10 @@ if (isset($_SESSION['user_id'])) {
     $avatar = $_SESSION['avatar'];
     $login = $_SESSION['login'];
 }
+$videoData = '';
+if (isset($likes) && isset($dislikes)) {
+    $videoData = "const VIDEO_DATA = {likes: $likes, dislikes: {$dislikes}}";
+}
 
 ?>
 
@@ -19,6 +23,8 @@ if (isset($_SESSION['user_id'])) {
     <?php endforeach ?>
     <script>
         const BASE_URL = '<?php echo BASE_URL; ?>';
+
+        <?php echo $videoData; ?>
 
         const USER_CONFIG = {
             isLoggedIn: <?php echo isset($_SESSION['user_id']) ? 'true' : 'false' ?>

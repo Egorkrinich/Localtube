@@ -24,9 +24,27 @@ if (str_starts_with($path, 'API')) {
 
             switch ($action) {
                 case 'getVideos':
-                    $videos = $dbVideo->getVideos();
-                    echo json_encode($videos);
+                    $exclude = '';
+                    if (isset($_GET['v']) && !empty($_GET['v'])) {
+                        $exclude = $_GET['v'];
+                    }
+                    $videos = $dbVideo->getVideos($exclude);
+
                     
+                    echo json_encode($videos);
+                exit;
+                case 'getMyVideos':
+                    if (!isset($_SESSION['user_id']) || empty($_SESSION['user_id'])) {
+                        echo json_encode([
+                            'success' => false,
+                            'message' => 'Unathorized'
+                        ]);
+                        exit;
+                    }
+                    $videos = $dbVideo->getMyVideos();
+
+                    
+                    echo json_encode($videos);
                 exit;
                 case 'addVideo':
                     if (!isset($_SESSION['user_id']) || empty($_SESSION['user_id'])) {
@@ -103,8 +121,46 @@ if (str_starts_with($path, 'API')) {
 
                     echo json_encode($res);
                 exit;
+                case 'rate':
+                    if (!isset($_SESSION['user_id']) || empty($_SESSION['user_id'])) {
+                        echo json_encode([
+                            'success' => false,
+                            'message' => 'Unathorized'
+                        ]);
+                        exit;
+                    }
+
+                    $action  = mb_strtolower(trim($_GET['action'] ?? ''));
+                    $videoId = trim($_GET['videoId'] ?? '');
+
+                    if (!isset($action) || empty($action)) {
+                        echo json_encode([
+                            'success' => false, 
+                            'message' => 'Unexpected Error'
+                        ]);
+                        exit;
+                    }
+                    if ($action !== 'like' && $action !== 'dislike') {
+                        echo json_encode([
+                            'success' => false, 
+                            'message' => 'Unexpected Error'
+                        ]);
+                        exit;
+                    }
+                    if (!isset($videoId) || empty($videoId)) {
+                        echo json_encode([
+                            'success' => false,
+                            'message' => 'Needed video id for interact'
+                        ]);
+                        exit;
+                    }
+                    $type = $action === 'like' ? 1 : 0;
+                    $res = $dbVideo->rate($type, $videoId);
+
+                    echo json_encode($res);
+                exit;
             }
-        break;
+        exit;
         case 'Users':
             $dbUser = new User();
 
@@ -201,6 +257,7 @@ switch ($path) {
     case '':
         $styles = ASSETS['home'];
 
+
         require_once '../parts/home-page.php';
         exit;
     case 'watch':
@@ -209,16 +266,27 @@ switch ($path) {
             exit;
         }
         $styles = ASSETS[$path];
+
         
         require_once '../parts/watch-page.php';
         exit;
     case 'manager':
+        if (!isset($_SESSION['user_id']) || empty($_SESSION['user_id'])) {
+            header('Location: ' . BASE_URL);
+            exit;
+        }
         $styles = ASSETS[$path];
+
         
         require_once '../parts/manager-page.php';
         exit;
     case 'history':
+        if (!isset($_SESSION['user_id']) || empty($_SESSION['user_id'])) {
+            header('Location: ' . BASE_URL);
+            exit;
+        }
         $styles = ASSETS[$path];
+
         
         require_once '../parts/history-page.php';
         exit;

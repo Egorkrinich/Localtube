@@ -15,7 +15,12 @@ export default class RenderVideos {
         this.getData()
     }
     getData() {
-        fetch(`${BASE_URL}API/${this.linkSelector[this.link]}`)
+        const v = new URLSearchParams(window.location.search).get('v')
+        let exclude = ''
+        if (v && this.link === 'video') {
+            exclude = `?v=${v}`
+        }    
+        fetch(`${BASE_URL}API/${this.linkSelector[this.link]}${exclude}`)
         .then((res) => res.json())
         .then((data) => {
             this.render(data)
