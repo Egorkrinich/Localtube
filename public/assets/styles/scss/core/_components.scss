@@ -235,3 +235,26 @@
         opacity: 1;
     }  
 }
+
+// general menu styles 
+.modal-menu {
+    display: none;
+    position: fixed;
+    inset: 0;
+
+    width: 30vw;
+    min-height: 50vh;
+    height: fit-content;
+    margin: auto;
+    padding: 20px;
+
+    background: var(--bg-second);
+    border-radius: 20px;
+    
+    z-index: var(--menus);
+
+    &.active {
+        display: block;
+    }
+
+}

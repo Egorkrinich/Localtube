@@ -37,6 +37,11 @@ define('ASSETS', [
         'core.css',
         'main.css',
         'history.css',
+    ],
+    'playlists' => [
+        'core.css',
+        'main.css',
+        'playlists.css'
     ]
 ]);
 // ini_set('display_errors', 1); 

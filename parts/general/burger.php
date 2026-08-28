@@ -74,7 +74,7 @@
                 </a>
             </li>
             <li class="burger__item">
-                <a href="#" class="burger__link f-row">
+                <a href="<?php echo BASE_URL; ?>playlists" class="burger__link f-row">
                     <svg width="24px" height="24px" viewBox="0 -960 960 960">
                         <path d="M120-320v-80h320v80H120Zm0-160v-80h480v80H120Zm0-160v-80h480v80H120Zm520 520v-320l240 160-240 160Z"/>
                     </svg>

@@ -19,6 +19,7 @@ class Database {
     //     $this->initVideos();
     //     $this->initHistory();
     //     $this->initVideoRate();
+    //     $this->initPlaylist();
     // }
     // public function initVideos() {
     //     $res = $this->pdo->prepare(
@@ -77,6 +78,36 @@ class Database {
     //     ';
     //     $res = $this->pdo->prepare($query);
     //     $res->execute();
+    // }
+    // public function initPlaylist() {
+        // $res = $this->pdo->prepare("CREATE TABLE playlists (
+        // id VARCHAR(25) NOT NULL,
+        // uid VARCHAR(25) NOT NULL,
+        // title VARCHAR(100) NOT NULL,
+        // type ENUM('global', 'private'),
+
+        // PRIMARY KEY (id, uid)
+
+        // ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+        // $res->execute();
+
+        // $res2 = $this->pdo->prepare("CREATE TABLE playlists_videos (
+        // playlist_id VARCHAR(25) NOT NULL,
+        // video_id VARCHAR(25) NOT NULL,
+        // position INT NOT NULL DEFAULT 0,
+
+        // PRIMARY KEY (playlist_id, video_id),
+
+        // CONSTRAINT fk_playlist
+        // FOREIGN KEY (playlist_id)
+        // REFERENCES playlists (id) ON DELETE CASCADE,
+
+        // CONSTRAINT fk_video_in_playlist 
+        // FOREIGN KEY (video_id) 
+        // REFERENCES videos (id) ON DELETE CASCADE
+
+        // ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+        // $res2->execute(); 
     // }
 
     

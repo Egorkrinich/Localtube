@@ -3,6 +3,7 @@ import RenderVideos from './modules/RenderVideos.js';
 import Context from './modules/Context.js';
 import Toast from './modules/Toast.js';
 import Settings from './modules/Settings.js';
+import { Playlist } from './modules/Playlist.js';
 
 
 const path = window.location.pathname
@@ -10,6 +11,8 @@ new Menu()
 new Context(path)
 new Toast()
 new Settings()
+
+
 
 if (path.endsWith('/')) {
     new RenderVideos('video')
@@ -28,6 +31,9 @@ if (path.endsWith('history')) {
 }
 if (!USER_CONFIG.isLoggedIn) {
     initAuth()
+}
+if (path.endsWith('playlists')) {
+    new Playlist()
 }
 
 

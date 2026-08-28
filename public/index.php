@@ -250,6 +250,58 @@ if (str_starts_with($path, 'API')) {
                 exit;
             }
         exit;
+        case 'Playlist':
+            $dbPlaylist = new Playlist();
+
+            switch($action) {
+                case 'createPlaylist':
+                    $name = (string)trim($_POST['title'] ?? '');
+                    $type = (string)mb_strtolower(trim($_POST['type'] ?? ''));
+
+                    if (empty($_POST['title']) || empty($_POST['type'])) {
+                        echo json_encode([
+                            'success' => false,
+                            'message' => 'Title or Type empty'
+                        ]);
+                        exit;
+                    }
+                    if ($type !== 'global' && $type !== 'private') {
+                        echo json_encode([
+                            'success' => false,
+                            'message' => 'Invalid type'
+                        ]);
+                        exit;
+                    }
+
+                    $res = $dbPlaylist->createPlaylist([
+                        'title' => $name,
+                        'type' => $type
+                    ]);
+
+                    echo json_encode($res);
+
+                exit;
+                case 'addToPlaylist':
+                    $video_id = trim($_POST['video_id'] ?? '');
+                    $playlist_id = trim($_POST['playlist_id'] ?? '');
+                    if (empty($playlist_id) || empty($video_id)) {
+                        echo json_encode([
+                            'success' => false,
+                            'message' => 'Id empty'
+                        ]);
+                        exit;
+                    }
+
+                    $res = $dbPlaylist->addToPlaylist([
+                        'playlist_id' => $playlist_id,
+                        'video_id' => $video_id
+                    ]);
+
+                    echo json_encode($res);
+                exit;
+            }
+
+        exit;
     }
 }
 
@@ -259,7 +311,7 @@ switch ($path) {
 
 
         require_once '../parts/home-page.php';
-        exit;
+    exit;
     case 'watch':
         if (!isset($_GET['v']) || empty($_GET['v'])) {
             header("Location: /Localtube/");
@@ -269,7 +321,7 @@ switch ($path) {
 
         
         require_once '../parts/watch-page.php';
-        exit;
+    exit;
     case 'manager':
         if (!isset($_SESSION['user_id']) || empty($_SESSION['user_id'])) {
             header('Location: ' . BASE_URL);
@@ -279,7 +331,7 @@ switch ($path) {
 
         
         require_once '../parts/manager-page.php';
-        exit;
+    exit;
     case 'history':
         if (!isset($_SESSION['user_id']) || empty($_SESSION['user_id'])) {
             header('Location: ' . BASE_URL);
@@ -289,5 +341,14 @@ switch ($path) {
 
         
         require_once '../parts/history-page.php';
-        exit;
+    exit;
+    case 'playlists':
+        if (!isset($_SESSION['user_id']) || empty($_SESSION['user_id'])) {
+            header('Location: ' . BASE_URL);
+            exit;
+        }
+        $styles = ASSETS[$path];
+
+        require_once '../parts/playlists-page.php';
+    exit;
 }   

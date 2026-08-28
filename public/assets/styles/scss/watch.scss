@@ -99,8 +99,9 @@
         opacity: 1;
     }
 }
-// Video body
 
+
+// Video body
 .video {
     &__title {
         font-size: 2rem;
@@ -121,15 +122,29 @@
     }
     &__toolbar {
         gap: 10px;
+        position: relative;
 
         .video__toolbar-btn {
             padding: 10px;
-            width: 55px;
             height: 40px;
             border-radius: 10px;
             svg {
                 margin-right: 5px;
             }
+        }
+        .video__playlist {
+            display: none;
+            position: absolute;
+            top: -100%;
+            right: 0;
+            
+            padding: 10px;
+            background: var(--bg-second);
+            z-index: var(--over-content);
+
+        }
+        .video__playlist.active {
+            display: block;
         }
     }
 }

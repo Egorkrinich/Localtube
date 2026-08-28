@@ -103,13 +103,25 @@
 }
 .video__toolbar {
   gap: 10px;
+  position: relative;
 }
 .video__toolbar .video__toolbar-btn {
   padding: 10px;
-  width: 55px;
   height: 40px;
   border-radius: 10px;
 }
 .video__toolbar .video__toolbar-btn svg {
   margin-right: 5px;
+}
+.video__toolbar .video__playlist {
+  display: none;
+  position: absolute;
+  top: -100%;
+  right: 0;
+  padding: 10px;
+  background: var(--bg-second);
+  z-index: var(--over-content);
+}
+.video__toolbar .video__playlist.active {
+  display: block;
 }/*# sourceMappingURL=watch.css.map */

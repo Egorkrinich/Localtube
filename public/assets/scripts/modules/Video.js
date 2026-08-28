@@ -1,7 +1,8 @@
 export class Video {
     attrSelector = {
         btn: 'data-video-action',
-        btnValue: 'data-btn-value'
+        btnValue: 'data-video-btn-value',
+        playlistId: 'data-video-playlist-id'
 
     }
     get selector() {
@@ -38,6 +39,7 @@ export class Video {
             e.preventDefault()
             
             const btn = e.target.closest(`[${this.attrSelector.btn}]`)
+            if (!btn) return 
             const attr = btn.getAttribute(`${this.attrSelector.btn}`)
             btn.disabled = true;
             
@@ -58,6 +60,9 @@ export class Video {
                         }
                     }))
                     btn.disabled = false;
+                break;
+                case 'addToPlaylist':
+                    this.addToPlaylist(btn)
                 break;
             }
         })
@@ -99,6 +104,28 @@ export class Video {
                 break
             }
  
+        })
+        .finally(() => {
+            btn.disabled = false
+        })
+    }
+    addToPlaylist(btn) {
+        const playlistId = btn.getAttribute(`${this.attrSelector.playlistId}`)
+        const data = new FormData();
+        data.append('playlist_id', playlistId)
+        data.append('video_id', this.videoId)
+        fetch(`${BASE_URL}API/Playlist/addToPlaylist`, {
+            method: 'POST',
+            body: data
+        })
+        .then((res) => res.json())
+        .then((data) => {
+            window.dispatchEvent(new CustomEvent('toast', {
+                detail: {
+                    message: data.message,
+                    success: data.success
+                }
+            }))
         })
         .finally(() => {
             btn.disabled = false

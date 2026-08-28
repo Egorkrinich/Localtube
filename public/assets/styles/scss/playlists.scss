@@ -1,0 +1,36 @@
+.add-playlist {
+    display: block;
+
+    &__header {
+        padding-bottom: 10px;
+        margin-bottom: 10px;
+        border-bottom: 1px solid var(--border-first);
+    }
+    &__field {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        margin-bottom: 5px;
+        max-width: 250px;
+    }
+    select {
+        width: fit-content;
+    }
+}
+
+.playlists {
+    margin-left: var(--sidebar-width);
+    padding: 0;
+
+    &__header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px;
+        border-bottom: 1px solid var(--border-first);
+    }
+    &__body {
+        padding: 20px;
+        min-height: 100vh;
+    }
+}
