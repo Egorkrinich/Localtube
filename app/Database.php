@@ -25,7 +25,7 @@ class Database {
     //     $res = $this->pdo->prepare(
     //     'CREATE TABLE videos (
     //     id VARCHAR(25) NOT NULL PRIMARY KEY,
-    //     user_id VARCHAR(25) NOT NULL,
+    //     uid VARCHAR(25) NOT NULL,
     //     thumb VARCHAR(255) NOT NULL,
     //     video VARCHAR(255) NOT NULL,
     //     title VARCHAR(100) NOT NULL,
@@ -54,10 +54,10 @@ class Database {
     // public function initHistory() {
     //     $query =
     //     'CREATE TABLE history (
-    //         user_id VARCHAR(25) NOT NULL,
+    //         uid VARCHAR(25) NOT NULL,
     //         video_id VARCHAR(25) NOT NULL ,
     //         viewed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    //         PRIMARY KEY (user_id, video_id) 
+    //         PRIMARY KEY (uid, video_id) 
     //         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
     //     ';
     //     $res = $this->pdo->prepare($query);
@@ -66,10 +66,10 @@ class Database {
     // public function initVideoRate() {
     //     $query =
     //     'CREATE TABLE rate (
-    //         user_id VARCHAR(25) NOT NULL,
+    //         uid VARCHAR(25) NOT NULL,
     //         video_id VARCHAR(25) NOT NULL,
     //         type TINYINT(1) NOT NULL,
-    //         PRIMARY KEY (user_id, video_id),
+    //         PRIMARY KEY (uid, video_id),
     //         CONSTRAINT fk_video_rate 
     //         FOREIGN KEY (video_id) 
     //         REFERENCES videos (id) 
@@ -84,7 +84,7 @@ class Database {
         // id VARCHAR(25) NOT NULL,
         // uid VARCHAR(25) NOT NULL,
         // title VARCHAR(100) NOT NULL,
-        // type ENUM('global', 'private'),
+        // type ENUM('public', 'private'),
 
         // PRIMARY KEY (id, uid)
 

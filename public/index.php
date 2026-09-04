@@ -24,17 +24,21 @@ if (str_starts_with($path, 'API')) {
 
             switch ($action) {
                 case 'getVideos':
-                    $exclude = '';
+                    $exclude = null;
+                    $playlist = null;
                     if (isset($_GET['v']) && !empty($_GET['v'])) {
                         $exclude = $_GET['v'];
                     }
-                    $videos = $dbVideo->getVideos($exclude);
+                    if (isset($_GET['playlist']) && !empty($_GET['playlist'])) {
+                        $playlist = $_GET['playlist'];
+                    }
+                    $videos = $dbVideo->getVideos($exclude, $playlist);
 
                     
                     echo json_encode($videos);
                 exit;
                 case 'getMyVideos':
-                    if (!isset($_SESSION['user_id']) || empty($_SESSION['user_id'])) {
+                    if (!isset($_SESSION['uid']) || empty($_SESSION['uid'])) {
                         echo json_encode([
                             'success' => false,
                             'message' => 'Unathorized'
@@ -47,7 +51,7 @@ if (str_starts_with($path, 'API')) {
                     echo json_encode($videos);
                 exit;
                 case 'addVideo':
-                    if (!isset($_SESSION['user_id']) || empty($_SESSION['user_id'])) {
+                    if (!isset($_SESSION['uid']) || empty($_SESSION['uid'])) {
                         echo json_encode([
                             'success' => false,
                             'message' => 'Unathorized'
@@ -108,7 +112,7 @@ if (str_starts_with($path, 'API')) {
                     echo json_encode($res);
                 exit;
                 case 'delVideo':
-                    if (!isset($_SESSION['user_id']) || empty($_SESSION['user_id'])) {
+                    if (!isset($_SESSION['uid']) || empty($_SESSION['uid'])) {
                         echo json_encode(['success' => false, 'message' => 'Unathorized']);
                         exit;
                     }
@@ -122,7 +126,7 @@ if (str_starts_with($path, 'API')) {
                     echo json_encode($res);
                 exit;
                 case 'rate':
-                    if (!isset($_SESSION['user_id']) || empty($_SESSION['user_id'])) {
+                    if (!isset($_SESSION['uid']) || empty($_SESSION['uid'])) {
                         echo json_encode([
                             'success' => false,
                             'message' => 'Unathorized'
@@ -265,7 +269,7 @@ if (str_starts_with($path, 'API')) {
                         ]);
                         exit;
                     }
-                    if ($type !== 'global' && $type !== 'private') {
+                    if ($type !== 'public' && $type !== 'private') {
                         echo json_encode([
                             'success' => false,
                             'message' => 'Invalid type'
@@ -299,6 +303,58 @@ if (str_starts_with($path, 'API')) {
 
                     echo json_encode($res);
                 exit;
+                case 'editPlaylist':
+                    $id     = (string)trim($_POST['playlistId'] ?? '');
+                    $videos = isset($_POST['videos']) ?
+                    json_decode($_POST['videos'], true) : [];
+                    
+                    $title = (string)trim($_POST['title'] ?? '');
+                    $type  = $_POST['type'] ?? '';
+                    $data  = [];
+                    
+                    if (!isset($id) || empty($id)) {
+                        echo json_encode([
+                            'success' => false, 
+                            'message' => 'Undefined playlist id'
+                        ]);
+                        exit;
+                    }
+
+                    if (!empty($title)) { $data['title'] = $title; }
+                    if (!empty($type) && 
+                        ($type === 'public' || $type === 'private'))  { 
+                        $data['type'] = $type; 
+                    }
+
+                    $res = $dbPlaylist->editPlaylist($id, $videos, $data);
+
+                    echo json_encode($res);
+                exit;
+                case 'deletePlaylist':
+                    $id = trim($_GET['playlistId'] ?? '');
+                    if (!isset($id) || empty($id)) {
+                        echo json_encode([
+                            'success' => false,
+                            'message' => 'Undefined playlist id'
+                        ]);
+                        exit;
+                    }
+                    $res = $dbPlaylist->deletePlaylist($id);
+
+                    echo json_encode($res);
+                exit;
+
+                case 'getPlaylists':
+                    $playlists = $dbPlaylist->getPlaylists();
+                    
+                    
+                    echo json_encode($playlists);
+                exit;
+                case 'getPlaylist':
+                    $playlist = $dbPlaylist->getPlaylist($_GET['id']);
+
+                    echo json_encode($playlist);
+                exit;
             }
 
         exit;
@@ -323,7 +379,7 @@ switch ($path) {
         require_once '../parts/watch-page.php';
     exit;
     case 'manager':
-        if (!isset($_SESSION['user_id']) || empty($_SESSION['user_id'])) {
+        if (!isset($_SESSION['uid']) || empty($_SESSION['uid'])) {
             header('Location: ' . BASE_URL);
             exit;
         }
@@ -333,7 +389,7 @@ switch ($path) {
         require_once '../parts/manager-page.php';
     exit;
     case 'history':
-        if (!isset($_SESSION['user_id']) || empty($_SESSION['user_id'])) {
+        if (!isset($_SESSION['uid']) || empty($_SESSION['uid'])) {
             header('Location: ' . BASE_URL);
             exit;
         }
@@ -343,7 +399,7 @@ switch ($path) {
         require_once '../parts/history-page.php';
     exit;
     case 'playlists':
-        if (!isset($_SESSION['user_id']) || empty($_SESSION['user_id'])) {
+        if (!isset($_SESSION['uid']) || empty($_SESSION['uid'])) {
             header('Location: ' . BASE_URL);
             exit;
         }

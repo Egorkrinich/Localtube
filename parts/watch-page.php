@@ -1,26 +1,24 @@
 <?php
     $dbVideo = new Video();
-    $dbHistory = new History();
-    $dbPlaylist = '';
-    $playlists = false;
-    $dbHistory->addHistory();
-
-    if (isset($_SESSION['user_id']) && !empty($_SESSION['user_id'])) {
-        $dbPlaylist = new Playlist();
-        $playlists = $dbPlaylist->getPlaylistsModal(); 
-    }
-
-
     $video_id = $_GET['v'];
     $video = $dbVideo->getVideo($video_id);
-
-    $likes = $video->likes ?? 0;
-    $dislikes = $video->dislikes ?? 0;
-
 
     if (!$video) {
         header("Location: /Localtube/");
         exit;
+    }
+    $likes = $video->likes ?? 0;
+    $dislikes = $video->dislikes ?? 0;
+
+    $myPlaylists = false;
+
+    if (isset($_SESSION['uid']) && !empty($_SESSION['uid'])) {
+        $dbHistory = new History();
+        $dbHistory->addHistory();
+
+
+        $dbPlaylist = new Playlist();
+        $myPlaylists = $dbPlaylist->getPlaylistsModal();
     }
 
     require_once 'general/header.php';
@@ -80,7 +78,7 @@
                     <div class="video__toolbar f-row">
 
                         <button class="video__toolbar-btn btn--secondary f-row-center" 
-                        data-video-action="like">
+                            data-video-action="like">
                             <svg width="24px" height="24px" viewBox="0 -960 960 960">
                                 <path d="M720-120H280v-520l280-280 50 50q7 7 11.5 19t4.5 23v14l-44 174h258q32 0 56 24t24 56v80q0 7-2 15t-4 15L794-168q-9 20-30 34t-44 14Zm-360-80h360l120-280v-80H480l54-220-174 174v406Zm0-406v406-406Zm-80-34v80H160v360h120v80H80v-520h200Z"/>
                             </svg>
@@ -88,7 +86,7 @@
                         </button>
 
                         <button class="video__toolbar-btn btn--secondary f-row-center" 
-                        data-video-action="dislike">
+                            data-video-action="dislike">
                             <svg width="24px" height="24px" viewBox="0 -960 960 960">
                                 <path d="M240-840h440v520L400-40l-50-50q-7-7-11.5-19t-4.5-23v-14l44-174H120q-32 0-56-24t-24-56v-80q0-7 2-15t4-15l120-282q9-20 30-34t44-14Zm360 80H240L120-480v80h360l-54 220 174-174v-406Zm0 406v-406 406Zm80 34v-80h120v-360H680v-80h200v520H680Z"/>
                             </svg>
@@ -104,13 +102,13 @@
                         <div class="video__playlist" data-menu="playlist">
                             <ul>
                                 <?php
-                                if ($playlists) :
-                                    foreach ($playlists as $playlist) : 
+                                if ($myPlaylists) :
+                                    foreach ($myPlaylists as $singlePlaylist) : 
                                 ?>
                                 <li>
-                                    <button data-video-playlist-id="<?php echo $playlist['id']; ?>" 
+                                    <button data-video-playlist-id="<?php echo $singlePlaylist['id']; ?>" 
                                     data-video-action="addToPlaylist">
-                                        <?php echo $playlist['title']; ?>
+                                        <?php echo $singlePlaylist['title']; ?>
                                     </button>
                                 </li>
                                 <?php endforeach; endif; ?>
@@ -123,7 +121,11 @@
         
     </div>
 
-    <div class="content__list f-column" id="preview-container"></div>
+    <div class="preview__list f-column" id="general-container">
+        <div class="preview__videos f-column" id="preview-container">
+
+        </div>
+    </div>
 </main>
 
 <?php

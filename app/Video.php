@@ -3,26 +3,44 @@ require_once 'Database.php';
 
 
 class Video extends Database {
-    public function getVideos(?string $exclude = null): array {
+    public function getVideos(?string $excludeId = null, ?string $playlistId = null): array {
+        // Optional takes exclude id and playlist id
+        try {
+        $params = [];
         $query = 
         "SELECT v.*, 
         u.username as uploader_name,
         u.login as uploader_link,
         u.avatar as uploader_avatar
         FROM videos v
-        JOIN users u ON v.user_id = u.id";
+        JOIN users u ON v.uid = u.id";
 
-        if ($exclude) $query .= " WHERE v.id != :exclude_id";
+        $where = [];
+        if ($excludeId) {
+            $where[] = "v.id != :exclude_id";
+            $params['exclude_id'] = $excludeId;
+        }
+        if ($playlistId) {
+            $where[] = "v.id NOT IN 
+            (SELECT video_id FROM playlists_videos WHERE playlist_id = :p_id)";
+            $params['p_id'] = $playlistId;
+        }
+
+        if (!empty($where)) {
+            $query .= " WHERE " . implode(' AND ', $where);
+        }
 
         $query .= " ORDER BY v.created DESC";
 
         
         $res = $this->pdo->prepare($query);
-        if ($exclude) $res->bindValue(':exclude_id', $exclude);
-        $res->execute();
+        $res->execute($params);
         $videos = $res->fetchAll(PDO::FETCH_ASSOC);
 
         return $videos;
+        } catch (PDOException $e) {
+            return ['success' => false, 'message' => 'Unexpected error'];
+        }
     }
     public function getMyVideos() {
         $query = 
@@ -30,13 +48,13 @@ class Video extends Database {
         u.username as uploader_name,
         u.login as uploader_link
         FROM videos v
-        JOIN users u ON v.user_id = u.id
-        WHERE v.user_id = :user_id
+        JOIN users u ON v.uid = u.id
+        WHERE v.uid = :uid
         ORDER BY v.created DESC";
 
 
         $res = $this->pdo->prepare($query);
-        $res->execute(['user_id' => $_SESSION['user_id']]);
+        $res->execute(['uid' => $_SESSION['uid']]);
         $videos = $res->fetchAll(PDO::FETCH_ASSOC);
 
         return $videos;
@@ -51,7 +69,7 @@ class Video extends Database {
         (SELECT COUNT(*) FROM rate WHERE video_id = v.id AND type = 1) as likes,
         (SELECT COUNT(*) FROM rate WHERE video_id = v.id AND type = 0) as dislikes
         FROM videos v
-        JOIN users u ON v.user_id = u.id
+        JOIN users u ON v.uid = u.id
         WHERE v.id = :id';
         $res = $this->pdo->prepare($query);
         $res->bindValue(':id', $id);
@@ -90,13 +108,13 @@ class Video extends Database {
         }
 
         $query = 'INSERT INTO videos 
-        (id, user_id, thumb, video, title, duration) VALUES
-        (:id, :user_id, :thumb, :video, :title, :duration)';
+        (id, uid, thumb, video, title, duration) VALUES
+        (:id, :uid, :thumb, :video, :title, :duration)';
 
         $res = $this->pdo->prepare($query);
 
         $res->bindValue(':id',       $videoId);
-        $res->bindValue(':user_id',  $_SESSION['user_id']);
+        $res->bindValue(':uid',  $_SESSION['uid']);
         $res->bindValue(':thumb',    'uploads/thumbs/' . $thumbName);
         $res->bindValue(':video',    'uploads/videos/' . $videoName);
         $res->bindValue(':title',    $data['title']);
@@ -111,15 +129,15 @@ class Video extends Database {
     }
     public function delVideo($id): array {
         try {
-            $user_id = $_SESSION['user_id'];
+            $uid = $_SESSION['uid'];
 
             $selectQuery = 
             "SELECT video, thumb FROM videos 
-            WHERE id = :id AND user_id = :user_id";
+            WHERE id = :id AND uid = :uid";
 
             $stmt = $this->pdo->prepare($selectQuery);
             $stmt->bindValue(':id', $id);
-            $stmt->bindValue(':user_id', $user_id);
+            $stmt->bindValue(':uid', $uid);
             $stmt->execute();
 
             $videoData = $stmt->fetch();
@@ -130,10 +148,10 @@ class Video extends Database {
 
 
             
-            $query = 'DELETE FROM videos WHERE id = :id AND user_id = :user_id';
+            $query = 'DELETE FROM videos WHERE id = :id AND uid = :uid';
             $res = $this->pdo->prepare($query);
             $res->bindValue(':id', $id);
-            $res->bindValue(':user_id', $_SESSION['user_id']);
+            $res->bindValue(':uid', $_SESSION['uid']);
             $res->execute();
             
             if ($res->rowCount() > 0) {
@@ -163,7 +181,7 @@ class Video extends Database {
     }
     public function rate(int $type, string $video_id): array {
         try {
-        $user_id = $_SESSION['user_id'];
+        $uid = $_SESSION['uid'];
 
         $check = $this->pdo->prepare(
         "SELECT u.id as uid, v.id as vid 
@@ -171,7 +189,7 @@ class Video extends Database {
         JOIN users u ON u.id = :uid
         WHERE v.id = :vid"
         );
-        $check->execute(['uid' => $user_id, 'vid' => $video_id]);
+        $check->execute(['uid' => $uid, 'vid' => $video_id]);
 
         $isFound = $check->fetch(PDO::FETCH_ASSOC);
 
@@ -185,8 +203,8 @@ class Video extends Database {
 
 
         $stmt = $this->pdo->prepare("SELECT type FROM rate 
-        WHERE user_id = :user_id AND video_id = :video_id");
-        $stmt->execute(['user_id' => $user_id, 'video_id' => $video_id]);
+        WHERE uid = :uid AND video_id = :video_id");
+        $stmt->execute(['uid' => $uid, 'video_id' => $video_id]);
 
         $exist = $stmt->fetch();
 
@@ -196,9 +214,9 @@ class Video extends Database {
             if ((int)$exist['type'] == $type) {
 
                 $del = $this->pdo->prepare("DELETE FROM rate WHERE
-                user_id = :user_id AND video_id = :video_id");
+                uid = :uid AND video_id = :video_id");
                 $del->execute([
-                    'user_id' => $user_id,
+                    'uid' => $uid,
                     'video_id' => $video_id
                 ]);
 
@@ -207,10 +225,10 @@ class Video extends Database {
             } else {
 
                 $upd = $this->pdo->prepare("UPDATE rate SET type = :type
-                WHERE user_id = :user_id AND video_id = :video_id");
+                WHERE uid = :uid AND video_id = :video_id");
                 $upd->execute([
                     'type' => $type, 
-                    'user_id' => $user_id,
+                    'uid' => $uid,
                     'video_id' => $video_id
                 ]);
 
@@ -221,10 +239,10 @@ class Video extends Database {
 
 
 
-        $ins = $this->pdo->prepare("INSERT INTO rate (user_id, video_id, type) 
-        VALUES (:user_id, :video_id, :type)");
+        $ins = $this->pdo->prepare("INSERT INTO rate (uid, video_id, type) 
+        VALUES (:uid, :video_id, :type)");
         $ins->execute([
-            'user_id' => $user_id, 
+            'uid' => $uid, 
             'video_id' => $video_id,
             'type' => $type
         ]);

@@ -1,27 +1,73 @@
-.add-playlist {
-  display: block;
-}
-.add-playlist__header {
-  padding-bottom: 10px;
-  margin-bottom: 10px;
-  border-bottom: 1px solid var(--border-first);
-}
-.add-playlist__field {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
+.playlist-menu__field {
   gap: 5px;
   margin-bottom: 5px;
   max-width: 250px;
 }
-.add-playlist select {
+.playlist-menu__list {
+  gap: 15px;
+  height: 300px;
+  padding: 10px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.playlist-menu select {
   width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
+}
+.playlist-menu__delete-btn {
+  color: red;
+  fill: red;
+}
+
+.edit-playlist {
+  padding: 20px 0;
+}
+.edit-playlist .playlist-menu__header,
+.edit-playlist .playlist-menu__body {
+  padding-inline: 0 20px;
+}
+
+.preview--edit::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  -webkit-transform: scale(1.1);
+          transform: scale(1.1);
+  border-radius: inherit;
+  pointer-events: none;
+  background-color: rgba(255, 0, 0, 0.1);
+  -webkit-transition: opacity 0.2s;
+  transition: opacity 0.2s;
+  opacity: 0;
+}
+.preview--edit [data-edit-btn=moveUp],
+.preview--edit [data-edit-btn=moveDown] {
+  padding: 5px 10px;
+  border-radius: 10px;
+}
+.preview--edit [data-edit-btn=moveDown] svg {
+  -webkit-transform: rotateX(180deg);
+          transform: rotateX(180deg);
+}
+.preview--edit [data-edit-btn=delete] {
+  padding: 10px;
+}
+.preview--edit [data-edit-btn=delete] .delete-icon {
+  display: block;
+}
+.preview--edit [data-edit-btn=delete] .deny-icon {
+  display: none;
+}
+
+.preview.deleted::after {
+  opacity: 1;
+}
+.preview.deleted .delete-icon {
+  display: none;
+}
+.preview.deleted .deny-icon {
+  display: block;
 }
 
 .playlists {
@@ -29,15 +75,6 @@
   padding: 0;
 }
 .playlists__header {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
   padding: 20px;
   border-bottom: 1px solid var(--border-first);
 }

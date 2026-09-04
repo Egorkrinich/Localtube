@@ -1,27 +1,24 @@
 import { Templates } from "../Templates.js"
 
 export default class Context {
+    types = {
+        global: 'contextGlobal',
+        manager: 'contextManager',
+        playlists: 'contextPlaylists'
+    }
     attributes = {
         btn: 'data-context-btn',
         videoId: 'data-context-id'
     }
-    content = {
-        global: [
-            { body: "Share", class: 'share' },
-        ],
-        personal: [
-            { body: "Share", class: 'share' },
-            { body: "Delete", class: "delete"},
-        ]
-    }
-    constructor(path) {
+
+    constructor(type) {
+        this.contentType = this.types[type]
         this.menu = document.querySelector('#context-menu')
-        this.contentType = path.endsWith('manager') ? 'personal' : 'global'
 
         this.menuWidth = null
         this.menuHeight = null
 
-        this.videoId = null
+        this.id = null
 
         this.isActive = false
         
@@ -36,7 +33,8 @@ export default class Context {
             if (btn) {
                 e.stopPropagation()
                 e.preventDefault()
-                this.videoId = btn.getAttribute(this.attributes.videoId)
+
+                this.id = btn.getAttribute(this.attributes.videoId)
                 this.MenuPosition(btn)
                 return;
             }
@@ -45,17 +43,27 @@ export default class Context {
             }
         })
         this.menu.addEventListener('click', (e) => {
-            if (!this.videoId) return
+            if (!this.id) return
             const target = e.target
             if (target.closest('.context__delete')) {
-                if (confirm('Are you sure?')) {
-                    this.deleteVideo(this.videoId);
-                }
+                window.dispatchEvent(new CustomEvent('video:delete', {
+                    detail: {
+                        id: this.id
+                    }
+                }))
             }
             if (target.closest('.context__share')) {
-                this.copyVideo()
+                this.copyLink()
             }
-});
+            if (target.closest('.context__edit')) {
+                window.dispatchEvent(new CustomEvent('edit', {
+                    detail: {
+                        id: this.id
+                    }
+                }))
+                this.closeMenu()
+            }
+    });
     }
     MenuPosition(btn) {
         const rect = btn.getBoundingClientRect();
@@ -82,21 +90,11 @@ export default class Context {
     closeMenu() {
         this.menu.classList.remove('active')
         this.isActive = false
-        this.videoId = null
+        this.id = null
     }
     
-    renderMenu() {
-        const content = Templates.contextMenu(this.content[this.contentType])
-        this.menu.innerHTML = content
-    }
-    getMenuSize() {
-        const size = this.menu.getBoundingClientRect()
-        this.menuWidth = Math.ceil(size.width)
-        this.menuHeight = Math.ceil(size.height)
-    }
-
-    copyVideo() {
-        navigator.clipboard.writeText(BASE_URL + 'watch?v=' + this.videoId);
+    copyLink() {
+        navigator.clipboard.writeText(BASE_URL + 'watch?v=' + this.id);
         window.dispatchEvent(new CustomEvent('toast', {
             detail: {
                 message: 'Copied!',
@@ -104,25 +102,16 @@ export default class Context {
             }
         }))
     }
-    deleteVideo(id) {
-        const data = new FormData()
-        data.append('id', id)
 
-        fetch(`${BASE_URL}API/Videos/delVideo`, {
-            method: 'POST',
-            body: data
-        })
-        .then((res) => res.json())
-        .then((data) => {
-            window.dispatchEvent(new CustomEvent('toast', {
-                detail: {
-                    message: data.message,
-                    success: data.success
-                }
-            }))
-            if (data.success) {
-                setTimeout(() => location.reload(), 2000)
-            }
-        })
+
+    renderMenu() {
+        const content = Templates[this.contentType]() 
+        || Templates['contextGlobal']()
+        this.menu.innerHTML = content
+    }
+    getMenuSize() {
+        const size = this.menu.getBoundingClientRect()
+        this.menuWidth = Math.ceil(size.width)
+        this.menuHeight = Math.ceil(size.height)
     }
 }

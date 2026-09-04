@@ -1,21 +1,68 @@
-.add-playlist {
-    display: block;
-
-    &__header {
-        padding-bottom: 10px;
-        margin-bottom: 10px;
-        border-bottom: 1px solid var(--border-first);
-    }
+.playlist-menu {
     &__field {
-        display: flex;
-        flex-direction: column;
         gap: 5px;
         margin-bottom: 5px;
         max-width: 250px;
     }
+    &__list {
+        gap: 15px;  
+        height: 300px;
+        padding: 10px;
+
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
     select {
         width: fit-content;
     }
+    &__delete-btn {
+        color: red;
+        fill: red;
+    }
+}
+.edit-playlist {
+    padding: 20px 0;
+    .playlist-menu__header,
+    .playlist-menu__body {
+        padding-inline: 0 20px;
+    }
+}
+// changed preview for edit menu
+.preview--edit {
+    &::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        transform: scale(1.1);
+        border-radius: inherit;
+        pointer-events: none;
+        background-color: rgba($color: #ff0000, $alpha: 0.1);
+        transition: opacity 0.2s;
+        opacity: 0;
+    }
+    
+
+    [data-edit-btn=moveUp],
+    [data-edit-btn=moveDown] {
+        padding: 5px 10px;
+        border-radius: 10px;
+    }
+    [data-edit-btn=moveDown] svg { 
+        transform: rotateX(180deg); 
+    }
+    [data-edit-btn=delete] {
+        padding: 10px;
+        .delete-icon { display: block; }
+        .deny-icon { display: none; }
+    }
+    
+}
+.preview.deleted {
+    &::after {
+        opacity: 1;
+    }
+    .delete-icon { display: none; }
+    .deny-icon { display: block; }
 }
 
 .playlists {
@@ -23,9 +70,6 @@
     padding: 0;
 
     &__header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
         padding: 20px;
         border-bottom: 1px solid var(--border-first);
     }

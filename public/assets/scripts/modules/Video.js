@@ -12,7 +12,7 @@ export class Video {
         }
     }
     constructor(likes, dislikes) {
-        this.cont= document.querySelector('#video-body')
+        this.cont = document.querySelector('#video-body')
 
         this.videoId = new URLSearchParams(window.location.search).get('v')
 

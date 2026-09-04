@@ -3,7 +3,7 @@
     require_once 'general/sidebar.php';
 ?>
 
-<main class="content content--home" id="preview-container">  
+<main class="home content content--grid" id="preview-container">  
     
 </main>
 

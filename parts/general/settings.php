@@ -1,5 +1,5 @@
-<form class="settings f-column" data-menu="settings" id="settings">
-    <div class="settings__header">
+<form class="settings f-column modal-menu" data-menu="settings" id="settings">
+    <div class="settings__header modal-menu__header">
         <h2 class="settings__title">
             Settings
         </h2>

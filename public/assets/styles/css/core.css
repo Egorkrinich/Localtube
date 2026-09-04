@@ -339,8 +339,8 @@ a {
 
 .input--primary {
   width: 100%;
-  padding: 0 20px;
-  border-radius: 20px;
+  padding: 5px 10px;
+  border-radius: 10px;
   border: 1px solid var(--border-first);
   background: var(--bg-third);
   -webkit-transition: border-color 0.3s;
@@ -403,16 +403,20 @@ a {
   display: none;
   position: fixed;
   inset: 0;
-  width: 30vw;
+  max-width: 500px;
+  max-height: 500px;
+  min-width: 30vw;
   min-height: 50vh;
-  height: -webkit-fit-content;
-  height: -moz-fit-content;
-  height: fit-content;
   margin: auto;
   padding: 20px;
-  background: var(--bg-second);
   border-radius: 20px;
+  background: var(--bg-second);
   z-index: var(--menus);
+}
+.modal-menu__header {
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid var(--border-first);
 }
 .modal-menu.active {
   display: block;

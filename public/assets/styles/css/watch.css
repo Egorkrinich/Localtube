@@ -9,7 +9,11 @@
           justify-content: center;
 }
 
-.content__list {
+.preview__playlist {
+  background: red;
+}
+
+.preview__videos {
   -webkit-box-align: stretch;
       -ms-flex-align: stretch;
           align-items: stretch;

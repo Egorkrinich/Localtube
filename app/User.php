@@ -106,10 +106,8 @@ class User extends Database {
         $res->execute();
 
 
-        $_SESSION['user_id']  = $id;
-        $_SESSION['avatar']   = 'assets/images/default-avatar.png';
-        $_SESSION['username'] = $fields['username'];
-        $_SESSION['login']    = $fields['login'];
+        $_SESSION['uid']   = $id;
+        $_SESSION['login'] = $fields['login'];
 
         return ['success' => true, 'message' => 'Successful registration, reloading...'];
 
@@ -124,7 +122,7 @@ class User extends Database {
         $login    = $data['login'];
         $password = $data['password'];
 
-        $res = $this->getData(
+        $res = $this->getUserData(
             ['id', 'username', 'avatar', 'login', 'hash'],
             'login',
             $login);
@@ -136,16 +134,14 @@ class User extends Database {
         }
 
             
-        $_SESSION['user_id']  = $res['id'];
-        $_SESSION['avatar']   = $res['avatar'];
-        $_SESSION['username'] = $res['username'];
-        $_SESSION['login']    = $res['login']; 
+        $_SESSION['uid']  = $res['id'];
+        $_SESSION['login']    = $res['login'];
         
         return ['success' => true, 'message' => 'Login successful, reloading...'];
     }
     public function update(array $data) {
         try {
-        $userData = $this->getData(['hash', 'avatar', 'username'], 'id');
+        $userData = $this->getUserData(['hash', 'avatar', 'username'], 'id');
 
         // Response fields, errors and fields
         $resFields = [];
@@ -260,26 +256,15 @@ class User extends Database {
         
         $query = "UPDATE users SET "
         . implode(', ', array_column($fields, 'query'))
-        . " WHERE id = :user_id";
+        . " WHERE id = :uid";
 
         $stmt = $this->pdo->prepare($query);
         
         foreach ($fields as $field) {
             $stmt->bindValue(":" . $field["key"], $field["newValue"]);
         }
-        $stmt->bindValue(':user_id', $_SESSION['user_id']);
+        $stmt->bindValue(':uid', $_SESSION['uid']);
         $stmt->execute();
-
-        foreach ($fields as $field) {
-            switch ($field['key']) {
-                case 'username':
-                    $_SESSION['username'] = $field['newValue'];
-                break;
-                case 'avatar':
-                    $_SESSION['avatar'] = $field['newValue'];
-                break;
-            }
-        }
 
         return [
             'success' => true,
@@ -293,9 +278,9 @@ class User extends Database {
             return ['success' => false, 'message' => 'Unexpected error'];
         }
     }
-    private function getData(array $params, string $by, ?string $login = null): array {
+    public function getUserData(array $params, string $by, ?string $login = null): array {
         try {
-        $bindValue = $by === 'login' ? $login : $_SESSION['user_id'];
+        $bindValue = $by === 'id' ? $_SESSION['uid'] : $login;
 
         $query = "SELECT " . implode(', ', $params) . 
         " FROM users WHERE {$by} = :{$by}";
@@ -307,8 +292,8 @@ class User extends Database {
 
         $result = $res->fetch(PDO::FETCH_ASSOC);
 
+        
         return $result ?: [];
-
         } catch (PDOException) {
             return ['success' => false, 'message' => 'Unexpected error'];
         }

@@ -1,4 +1,4 @@
-<div class="auth" data-form-type="reg" data-menu="auth">
+<div class="auth modal-menu" data-form-type="reg" data-menu="auth">
 
     <form action="" class="auth__form auth__register f-column-center" id="auth-reg" novalidate>
         <h3 class="auth__title">

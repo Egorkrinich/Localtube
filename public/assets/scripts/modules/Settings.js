@@ -85,8 +85,8 @@ export default class Settings {
 
             window.dispatchEvent(new CustomEvent('toast', {
                 detail: {
-                    "message": message,
-                    "success": success
+                    "success": success,
+                    "message": message
                 }
             }))
         })

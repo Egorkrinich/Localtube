@@ -134,20 +134,6 @@
     }
 }
 .auth {
-    display: none;   
-    position: fixed;
-    gap: 20px;
-    inset: 0;
-
-    width: 30vw;
-    height: fit-content;
-    margin: auto;
-    padding: 20px;
-
-    border-radius: 20px;
-    background: var(--bg-second);
-    z-index: var(--menus);
-
     &__title {
         margin-bottom: 10px;
     }
@@ -192,10 +178,6 @@
     &__switch {
         font-size: 0.8em;
         color: var(--text-link);
-    }
-    
-    &.active {
-        display: block;
     }
 }
 #context-menu {
@@ -249,27 +231,6 @@
 }
 
 .settings {
-    display: none;
-    position: fixed;
-    inset: 0;
-
-    width: 30vw;
-    height: 50vh;
-    margin: auto;
-    padding: 20px;
-
-    background: var(--bg-second);
-    border-radius: 20px;
-
-    z-index: var(--menus);
-
-    &__header {
-        margin-bottom: 20px;
-        padding: 10px 0;
-
-        border-bottom: 1px solid var(--border);
-    }
-
     &__field {
         max-width: 250px;
 
@@ -292,6 +253,5 @@
 
     &.active {
         display: flex;
-
     }
 }
