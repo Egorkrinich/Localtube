@@ -82,12 +82,14 @@ a {
   --bg-first: #0f0f0f;
   --bg-second: #222222;
   --bg-third: #151515;
+  --bg-fourth: #17171b;
   --bg-first-inverse: #fff;
   --bg-first-effect: rgba(255, 255, 255, 0.1);
   --bg-first-hover: rgba(255, 255, 255, 0.2);
   --bg-first-hover-inverse: rgba(0, 0, 0, 0.4);
   --text-first: #f1f1f1;
   --text-second: #888;
+  --text-third: #b9b9b9;
   --text-link: #1572fc;
   --text-first-inverse: #000;
   --border-first: #505050;

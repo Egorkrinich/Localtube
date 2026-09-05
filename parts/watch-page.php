@@ -99,21 +99,19 @@
                         <button class="video__toolbar-btn btn--secondary" data-menu-btn="playlist" data-no-overlay>
                             Add to playlist
                         </button>
-                        <div class="video__playlist" data-menu="playlist">
-                            <ul>
-                                <?php
-                                if ($myPlaylists) :
-                                    foreach ($myPlaylists as $singlePlaylist) : 
-                                ?>
-                                <li>
-                                    <button data-video-playlist-id="<?php echo $singlePlaylist['id']; ?>" 
-                                    data-video-action="addToPlaylist">
+                        <ul class="video__playlist" data-menu="playlist">
+                            <?php
+                            if ($myPlaylists) :
+                                foreach ($myPlaylists as $singlePlaylist) : 
+                            ?>
+                            <li>
+                                <button data-video-playlist-id="<?php echo $singlePlaylist['id']; ?>" 
+                                data-video-action="addToPlaylist">
                                         <?php echo $singlePlaylist['title']; ?>
-                                    </button>
-                                </li>
-                                <?php endforeach; endif; ?>
-                            </ul>
-                        </div>
+                                </button>
+                            </li>
+                            <?php endforeach; endif; ?>
+                        </ul>
                     </div>
                 </div>
             </div>

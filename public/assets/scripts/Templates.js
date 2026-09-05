@@ -105,67 +105,32 @@ export const Templates = {
         </a> 
         `
     },
-    
-    contextGlobal() {
-        return `
-        <ul class="context__list">
-            <li class="context__item">
-                <button class="context__button context__share">
-                    Share
-                </button>
-            </li>
-        </ul>
-        `
-    },
-    contextManager() {
-        return `
-        <ul class="context__list">
-            <li class="context__item">
-                <button class="context__button context__share">
-                    Share
-                </button>
-            </li>
-            <li class="context__item">
-                <button class="context__button context__delete">
-                    Delete
-                </button>
-            </li>
-        </ul>
-        `
-    },
-    contextPlaylists() {
-        return `
-        <ul class="context__list">
-            <li class="context__item">
-                <button class="context__button context__share">
-                    Share
-                </button>
-            </li>
-            <li class="context__item">
-                <button class="context__button context__edit" data-menu-btn="edit">
-                    Edit
-                </button>
-            </li>
-        </ul>
-        `
-    },
     playlistWatch(info, videos) {
         return `
-        <div class="preview__playlist playlist">
-            <div class="playlist__header">
-                <h2 class="playlist__title">
+        <div class="watch-playlist">
+            <div class="watch-playlist__header">
+                <h2 class="watch-playlist__title">
                     ${htmlspecialchars(info['title'])}
                 </h2>
-                <span>${info['id']}</span>
-                <span>${info['type']}</span>
-                <span>${htmlspecialchars(info['username'])}</span>
-                <span>${info['amount']}</span>
+                <div class="watch-playlist__info">
+                    <span class="watch-playlist__user">
+                        ${htmlspecialchars(info['username'])}
+                    </span>
+                    <div class="watch-playlist__meta f-row-between">
+                        <span class="watch-playlist__type f-row">
+                            ${typeIcon[info['type']] + info['type']}
+                        </span>
+                        <span class="watch-playlist__amount">
+                            ${info['amount']}
+                        </span>
+                    </div>
+                </div>
             </div>
-            <div class="playlist__list">
+            <div class="watch-playlist__list f-column">
             ${
                 videos.map((video) => {
                     return `
-                    <a class="preview preview--horizontal" href="watch?v=<?php echo $video['id'] . '&playlist=' . $info['id']; ?>">
+                    <a class="preview preview--horizontal" href="watch?v=${info['id']}">
                         <div class="preview__thumb">
                             <img src="${BASE_URL + video['thumb']}" 
                             alt="Thumb of ${htmlspecialchars(video['title'])}">
@@ -198,13 +163,27 @@ export const Templates = {
                     </a>
                     `
                 }).join('')
-
             }
-            <?php endforeach; ?>
             </div>
         </div>
         `
-    }
+    },
+    contextMenu(content) {
+        return `
+        <ul class="context__list">
+        ${
+            content.map((btn) => {
+            return `
+            <li class="context__item">
+                ${btn}
+            </li>`
+            }).join('')
+
+        }
+        </ul>
+        `
+    },
+
 }
 const htmlspecialchars = (str) => {
     if (!str) return ""
@@ -242,4 +221,16 @@ const timeAgo = (date) => {
 
     const years = Math.floor(months / 12);
     return `${years} y. ago`
+}
+
+const typeIcon = {
+    private: `
+    <svg width="24px "height="24px" viewBox="0 -960 960 960">
+        <path d="M240-80q-33 0-56.5-23.5T160-160v-400q0-33 23.5-56.5T240-640h40v-80q0-83 58.5-141.5T480-920q83 0 141.5 58.5T680-720v80h40q33 0 56.5 23.5T800-560v400q0 33-23.5 56.5T720-80H240Zm0-80h480v-400H240v400Zm296.5-143.5Q560-327 560-360t-23.5-56.5Q513-440 480-440t-56.5 23.5Q400-393 400-360t23.5 56.5Q447-280 480-280t56.5-23.5ZM360-640h240v-80q0-50-35-85t-85-35q-50 0-85 35t-35 85v80ZM240-160v-400 400Z"/>
+    </svg>`,
+    public: `
+    <svg width="24px" height="24px" viewBox="0 -960 960 960">
+        <path d="M240-160h480v-400H240v400Zm296.5-143.5Q560-327 560-360t-23.5-56.5Q513-440 480-440t-56.5 23.5Q400-393 400-360t23.5 56.5Q447-280 480-280t56.5-23.5ZM240-160v-400 400Zm0 80q-33 0-56.5-23.5T160-160v-400q0-33 23.5-56.5T240-640h280v-80q0-83 58.5-141.5T720-920q83 0 141.5 58.5T920-720h-80q0-50-35-85t-85-35q-50 0-85 35t-35 85v80h120q33 0 56.5 23.5T800-560v400q0 33-23.5 56.5T720-80H240Z"/>
+    </svg>
+    `
 }

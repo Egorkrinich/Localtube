@@ -2,14 +2,43 @@ import { Templates } from "../Templates.js"
 
 export default class Context {
     types = {
-        global: 'contextGlobal',
-        manager: 'contextManager',
-        playlists: 'contextPlaylists'
+        global: [
+            `
+            <button class="context__button context__share">
+                    Share
+            </button>
+            `
+        ],
+        manager: [
+            `
+            <button class="context__button context__share">
+                Share
+            </button>
+            `,
+            `
+            <button class="context__button context__delete">
+                Delete
+            </button>
+            `
+        ],
+        playlists: [
+            `
+                <button class="context__button context__share">
+                    Share
+                </button>
+            `,
+            `
+                <button class="context__button context__edit" data-menu-btn="edit">
+                    Edit
+                </button>
+            `
+        ]
     }
     attributes = {
         btn: 'data-context-btn',
         videoId: 'data-context-id'
     }
+    
 
     constructor(type) {
         this.contentType = this.types[type]
@@ -105,8 +134,8 @@ export default class Context {
 
 
     renderMenu() {
-        const content = Templates[this.contentType]() 
-        || Templates['contextGlobal']()
+        const content = Templates.contextMenu(this.contentType) 
+        || Templates.contextMenu(this.types.global)
         this.menu.innerHTML = content
     }
     getMenuSize() {
