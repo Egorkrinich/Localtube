@@ -1,17 +1,18 @@
 .burger {
     position: fixed;
+
     top: 0;
+    bottom: 0;
     left: 0;
-    
     width: var(--burger-width);
-    fill: var(--text-first);
-    height: 100vh;
-    padding: 15px 20px;
-
-
-    background: var(--bg-first);
+    padding: 15px;
+    
+    
     transition: transform 0.3s;
     transform: translate(-100%);
+    fill: var(--text-first);
+    color: var(--text-first);
+    background: var(--bg-first);
     
     z-index: var(--menus);
 
@@ -58,9 +59,11 @@
 .sidebar {
     position: fixed;
 
+    left: 0;
+    top: var(--header-height);
+    bottom: 0;
     width: var(--sidebar-width);
-    height: 100vh;
-
+    
     font-size: 14px;
     background: var(--bg-first);
 
@@ -75,34 +78,37 @@
         }
     }
 
-    @media (max-width: 800px) {
-        & {
-            display: flex;
-            align-items: center;
-            justify-content: space-around;
-            bottom: 0;
-            width: 100%;
-            height: var(--header-height);
-        }
-    }
+    // @media (max-width: 800px) {
+    //     & {
+    //         display: flex;
+    //         align-items: center;
+    //         justify-content: space-around;
+    //         bottom: 0;
+    //         width: 100%;
+    //         height: var(--header-height);
+    //     }
+    // }
 }
 .user {
     display: none;
     position: fixed;
+    
     top: 50px;
     right: 20px;
-
-    width: 300px;
+    width: 250px;
     padding-block: 15px;
-
-    border-radius: 15px;
+    
+    border-radius: 10px;
+    border: 1px solid var(--border-first);
     background: var(--bg-second);
     z-index: var(--menus);
         
-    &__channel {
-        gap: 20px;
+    &__header {
         height: 60px;
-        padding: 0 15px 25px;
+        gap: 20px;
+        padding: 0 15px 20px;
+        margin-bottom: 15px;
+
         border-bottom: 1px solid var(--border-first);
         
         .avatar {
@@ -115,17 +121,15 @@
             font-size: 1.4rem;
         }
     }
-    &__control {
-        padding-top: 10px;
+    &__control > * {
+        padding: 10px;
+        
         & > * {
-            padding: 10px;
-            &:hover {
-                background-color: var(--bg-first-hover);
-            }
-            & > * {
-                width: 100%;
-                height: 100%;
-            }
+            width: 100%;
+            height: 100%;
+        }
+        &:hover {
+            background-color: var(--bg-first-hover);
         }
     }
 
@@ -138,20 +142,19 @@
         margin-bottom: 10px;
     }
     &__form {
+        position: absolute;
         opacity: 0;
         pointer-events: none;
-        
-        position: absolute;
     }
-    &[data-form-type="reg"] .auth__register {
+    &[data-auth-form="sign-up"] .auth__sign-up {
+        position: relative;
         opacity: 1;
         pointer-events: all;
-        position: relative;
     }
-    &[data-form-type="log"] .auth__login {
+    &[data-auth-form="sign-in"] .auth__sign-in {
+        position: relative;
         opacity: 1;
         pointer-events: all;
-        position: relative;
     }
     
     &__field {
@@ -159,7 +162,6 @@
         margin-bottom: 10px;
 
         input {
-            padding: 5px 10px;
             border-radius: 10px;
         }
         &-error {
@@ -185,18 +187,19 @@
     
     left: 100%;
     max-width: 100px;
+    padding: 5px 0;
     
-    opacity: 0;
     border-radius: 10px;
-    border: 1px solid var(--border-first);
-    background: var(--bg-second);
+    opacity: 0;
     overflow: hidden;
     pointer-events: none;
+    border: 1px solid var(--border-first);
+    background: var(--bg-second);
     z-index: var(--menus);
 
     button {
-        padding: 7px 10px;
         width: 100%;
+        padding: 7px 10px;
         &:hover { background: var(--bg-first-hover); }
     }
 
@@ -206,19 +209,19 @@
     }
 }
 #toast {
-    text-align: center;
     position: fixed;
+
     top: calc(var(--header-height) - 20px);
     right: 0;
-
     width: 300px;
     min-height: 100px;
     padding: 15px 25px;
-
+    
+    text-align: center;
     border-radius: 20px;
     border: 2px solid transparent;
     pointer-events: none;
-    transition: all 0.3s;
+    transition: transform 0.3s;
     transform: translateX(200%);
     background: var(--bg-second);
     z-index: calc(var(--menus) + 10);
@@ -228,25 +231,24 @@
     }
 }
 .settings {
+    overflow-y: auto;
+
     &__field {
-        max-width: 250px;
+        max-width: 300px;
+        margin-bottom: 10px;
 
         label {
             margin-bottom: 5px;
+            padding: 0 10px;
         }
         input {
+            border-radius: 10px;
             padding-block: 5px;
         }
     }
     
-    &__actions {
-        margin-top: auto;
-
-    }
-    &__logout {
-        color: #ff0000;
-    }
-
+    &__actions { margin-top: auto; }
+    &__logout { color: #ff0000; }
 
     &.active {
         display: flex;

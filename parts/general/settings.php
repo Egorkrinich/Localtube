@@ -6,24 +6,26 @@
     </div>
 
     <div class="settings__field f-column">
-        <label for="username">username</label>
-        <input class="input--primary" type="username" 
-        name="username" minlength="3" maxlength="30">
+        <label for="username">New username</label>
+        <input name="username" class="input--primary"
+        minlength="3" maxlength="30">
     </div>
-
     <div class="settings__field f-column">
         <label for="avatar">Avatar</label>
         <input name="avatar" type="file" accept="image/*">
     </div>
-    
     <div class="settings__field f-column">
-        <label for="password">Password change</label>
-        <input class="input--primary" type="password" 
-        name="password" minlength="10" maxlength="40">
+        <label for="password">New password</label>
+        <input name="password" class="input--primary"
+        type="password" minlength="10" maxlength="40">
     </div>
 
     <div class="settings__actions f-row-around">
-        <button class="settings__submit btn--primary" type="submit">Save</button>
-        <button class="settings__logout" id="logout">Logout</button>
+        <button class="settings__submit btn--primary" type="submit">
+            Save
+        </button>
+        <button class="settings__logout" id="logout">
+            Logout
+        </button>
     </div>
 </form>

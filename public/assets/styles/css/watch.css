@@ -20,7 +20,7 @@
   position: relative;
   width: auto;
   max-height: 90vh;
-  border-radius: 12px;
+  border-radius: 10px;
   background: #000;
   aspect-ratio: 16/9;
   overflow: hidden;
@@ -35,15 +35,22 @@
 
 .control {
   position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 0px 20px 10px;
+  inset: 0;
   opacity: 0;
   -webkit-transition: opacity 0.3s;
   transition: opacity 0.3s;
-  background: var(--bg-first-effect);
   z-index: 10;
+  cursor: pointer;
+}
+.control__header, .control__body {
+  background: var(--bg-first-effect-inverse);
+  cursor: default;
+}
+.control__header {
+  padding: 15px 20px;
+}
+.control__body {
+  padding: 0 20px 5px;
 }
 .control__progress-bar {
   width: 100%;
@@ -83,7 +90,7 @@
 .control .toggle-btn .toggle__item--inactive {
   display: block;
 }
-.control:hover {
+.control.active {
   opacity: 1;
 }
 
@@ -116,7 +123,7 @@
 .video__toolbar .video__playlist {
   display: none;
   position: absolute;
-  top: -100%;
+  bottom: 110%;
   right: 0;
   max-width: 300px;
   border-radius: 10px;

@@ -22,7 +22,7 @@
     width: auto;
     max-height: 90vh;
     
-    border-radius: 12px;
+    border-radius: 10px;
     background: #000;
     aspect-ratio: 16 / 9;
     overflow: hidden;
@@ -36,16 +36,20 @@
 }
 .control {
     position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-
-    padding: 0px 20px 10px;
+    inset: 0;
 
     opacity: 0;
     transition: opacity 0.3s;
-    background: var(--bg-first-effect);
     z-index: 10;
+    cursor: pointer;
+
+    &__header, &__body {
+        background: var(--bg-first-effect-inverse);
+        cursor: default;  
+    }
+    &__header { padding: 15px 20px; }
+    &__body { padding: 0 20px 5px; }
+
 
     &__progress-bar {
         width: 100%;
@@ -93,7 +97,7 @@
         }
     }
 
-    &:hover {
+    &.active {
         opacity: 1;
     }
 }
@@ -133,7 +137,7 @@
             display: none;
             position: absolute;
 
-            top: -100%;
+            bottom: 110%;
             right: 0;
             max-width: 300px;
 
@@ -155,7 +159,7 @@
     }
 }
 
-// -- List section
+// -- List section --
 
 // Playlist
 

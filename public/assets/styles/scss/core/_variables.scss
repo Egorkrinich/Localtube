@@ -9,6 +9,7 @@
     
 
     --bg-first-effect: rgba(255, 255, 255, 0.1);
+    --bg-first-effect-inverse: rgba(0, 0, 0, 0.4);
 
     --bg-first-hover: rgba(255, 255, 255, 0.2);
     --bg-first-hover-inverse: rgba(0, 0, 0, 0.4);
@@ -25,9 +26,13 @@
 
     // Values
 
-    --header-height: 60px;
+    --header-height: 55px;
     --sidebar-width: 70px;
     --burger-width: 250px;
+
+    // --gap--primary: 20px;
+    // --margin--primary: 20px;
+    // --padding--primary: 20px;
 
     // z-index
     --over-content: 100;

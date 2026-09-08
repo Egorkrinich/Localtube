@@ -1,6 +1,6 @@
-<div class="auth modal-menu" data-form-type="reg" data-menu="auth">
+<div class="auth modal-menu" data-auth-form="sign-up" data-menu="auth">
 
-    <form action="" class="auth__form auth__register f-column-center" id="auth-reg" novalidate>
+    <form class="auth__sign-up auth__form f-column-center" id="auth-signUp" novalidate>
         <h3 class="auth__title">
             Register
         </h3>
@@ -50,12 +50,15 @@
         </div>
         <!-- ... -->
     
-        <button type="submit" class="auth__submit btn--primary">Register</button>
-        
-        <button class="auth__switch" type="button">Already have an account?</button>
+        <button type="submit" class="auth__submit btn--primary">
+            Register
+        </button>
+        <button class="auth__switch" data-auth-switch type="button">
+            Already have an account?
+        </button>
     </form>
 
-    <form action="" class="auth__form auth__login f-column-center" id="auth-log" novalidate>
+    <form class="auth__sign-in auth__form f-column-center" id="auth-signIn" novalidate>
         <h3 class="auth__title">
             Login
         </h3>
@@ -81,8 +84,12 @@
             data-form-errors-field></div>
         </div>
     
-        <button type="submit" class="auth__submit btn--primary">Login</button>
-        <button class="auth__switch">Have not an account?</button>
+        <button type="submit" class="auth__submit btn--primary">
+            Login
+        </button>
+        <button class="auth__switch" data-auth-switch type="button">
+            Have not an account?
+        </button>
     </form>
-
+    
 </div>

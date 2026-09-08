@@ -151,18 +151,19 @@
 .burger {
   position: fixed;
   top: 0;
+  bottom: 0;
   left: 0;
   width: var(--burger-width);
-  fill: var(--text-first);
-  height: 100vh;
-  padding: 15px 20px;
-  background: var(--bg-first);
+  padding: 15px;
   -webkit-transition: -webkit-transform 0.3s;
   transition: -webkit-transform 0.3s;
   transition: transform 0.3s;
   transition: transform 0.3s, -webkit-transform 0.3s;
   -webkit-transform: translate(-100%);
           transform: translate(-100%);
+  fill: var(--text-first);
+  color: var(--text-first);
+  background: var(--bg-first);
   z-index: var(--menus);
 }
 .burger__header {
@@ -204,8 +205,10 @@
 
 .sidebar {
   position: fixed;
+  left: 0;
+  top: var(--header-height);
+  bottom: 0;
   width: var(--sidebar-width);
-  height: 100vh;
   font-size: 14px;
   background: var(--bg-first);
   z-index: var(--over-content);
@@ -217,60 +220,44 @@
 .sidebar__link:hover {
   background: var(--bg-first-hover);
 }
-@media (max-width: 800px) {
-  .sidebar {
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-align: center;
-        -ms-flex-align: center;
-            align-items: center;
-    -ms-flex-pack: distribute;
-        justify-content: space-around;
-    bottom: 0;
-    width: 100%;
-    height: var(--header-height);
-  }
-}
 
 .user {
   display: none;
   position: fixed;
   top: 50px;
   right: 20px;
-  width: 300px;
+  width: 250px;
   padding-block: 15px;
-  border-radius: 15px;
+  border-radius: 10px;
+  border: 1px solid var(--border-first);
   background: var(--bg-second);
   z-index: var(--menus);
 }
-.user__channel {
-  gap: 20px;
+.user__header {
   height: 60px;
-  padding: 0 15px 25px;
+  gap: 20px;
+  padding: 0 15px 20px;
+  margin-bottom: 15px;
   border-bottom: 1px solid var(--border-first);
 }
-.user__channel .avatar {
+.user__header .avatar {
   width: 45px;
   height: 45px;
 }
-.user__channel .user__link {
+.user__header .user__link {
   margin-top: 5px;
   color: var(--text-link);
   font-size: 1.4rem;
 }
-.user__control {
-  padding-top: 10px;
-}
 .user__control > * {
   padding: 10px;
-}
-.user__control > *:hover {
-  background-color: var(--bg-first-hover);
 }
 .user__control > * > * {
   width: 100%;
   height: 100%;
+}
+.user__control > *:hover {
+  background-color: var(--bg-first-hover);
 }
 .user.active {
   display: block;
@@ -280,26 +267,25 @@
   margin-bottom: 10px;
 }
 .auth__form {
+  position: absolute;
   opacity: 0;
   pointer-events: none;
-  position: absolute;
 }
-.auth[data-form-type=reg] .auth__register {
+.auth[data-auth-form=sign-up] .auth__sign-up {
+  position: relative;
   opacity: 1;
   pointer-events: all;
-  position: relative;
 }
-.auth[data-form-type=log] .auth__login {
+.auth[data-auth-form=sign-in] .auth__sign-in {
+  position: relative;
   opacity: 1;
   pointer-events: all;
-  position: relative;
 }
 .auth__field {
   gap: 5px;
   margin-bottom: 10px;
 }
 .auth__field input {
-  padding: 5px 10px;
   border-radius: 10px;
 }
 .auth__field-error {
@@ -327,17 +313,18 @@
   position: fixed;
   left: 100%;
   max-width: 100px;
-  opacity: 0;
+  padding: 5px 0;
   border-radius: 10px;
-  border: 1px solid var(--border-first);
-  background: var(--bg-second);
+  opacity: 0;
   overflow: hidden;
   pointer-events: none;
+  border: 1px solid var(--border-first);
+  background: var(--bg-second);
   z-index: var(--menus);
 }
 #context-menu button {
-  padding: 7px 10px;
   width: 100%;
+  padding: 7px 10px;
 }
 #context-menu button:hover {
   background: var(--bg-first-hover);
@@ -348,18 +335,20 @@
 }
 
 #toast {
-  text-align: center;
   position: fixed;
   top: calc(var(--header-height) - 20px);
   right: 0;
   width: 300px;
   min-height: 100px;
   padding: 15px 25px;
+  text-align: center;
   border-radius: 20px;
   border: 2px solid transparent;
   pointer-events: none;
-  -webkit-transition: all 0.3s;
-  transition: all 0.3s;
+  -webkit-transition: -webkit-transform 0.3s;
+  transition: -webkit-transform 0.3s;
+  transition: transform 0.3s;
+  transition: transform 0.3s, -webkit-transform 0.3s;
   -webkit-transform: translateX(200%);
           transform: translateX(200%);
   background: var(--bg-second);
@@ -370,13 +359,19 @@
           transform: translateX(0);
 }
 
+.settings {
+  overflow-y: auto;
+}
 .settings__field {
-  max-width: 250px;
+  max-width: 300px;
+  margin-bottom: 10px;
 }
 .settings__field label {
   margin-bottom: 5px;
+  padding: 0 10px;
 }
 .settings__field input {
+  border-radius: 10px;
   padding-block: 5px;
 }
 .settings__actions {

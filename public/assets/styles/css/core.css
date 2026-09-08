@@ -37,7 +37,7 @@ body {
   font-family: "Roboto", "Arial", sans-serif;
   font-size: 1.6rem;
   font-weight: 400;
-  line-height: 1.1;
+  line-height: 1.2;
   letter-spacing: 0.3px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -85,6 +85,7 @@ a {
   --bg-fourth: #17171b;
   --bg-first-inverse: #fff;
   --bg-first-effect: rgba(255, 255, 255, 0.1);
+  --bg-first-effect-inverse: rgba(0, 0, 0, 0.4);
   --bg-first-hover: rgba(255, 255, 255, 0.2);
   --bg-first-hover-inverse: rgba(0, 0, 0, 0.4);
   --text-first: #f1f1f1;
@@ -94,7 +95,7 @@ a {
   --text-first-inverse: #000;
   --border-first: #505050;
   --border-colored: #0084ff;
-  --header-height: 60px;
+  --header-height: 55px;
   --sidebar-width: 70px;
   --burger-width: 250px;
   --over-content: 100;
@@ -341,8 +342,8 @@ a {
 
 .input--primary {
   width: 100%;
-  padding: 5px 10px;
-  border-radius: 10px;
+  padding: 3px 10px;
+  border-radius: 20px;
   border: 1px solid var(--border-first);
   background: var(--bg-third);
   -webkit-transition: border-color 0.3s;

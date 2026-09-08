@@ -20,7 +20,7 @@ class Playlist extends Database {
         ]);
 
 
-        return ['success' => true, 'message' => 'Playlist created'];
+        return ['success' => true, 'message' => 'Playlist created, reloading...'];
         } catch (PDOException $e) {
             return ['success' => false, 'message' => 'Unexpected error'];
         }
@@ -239,7 +239,7 @@ class Playlist extends Database {
         ]);
                     
         if ($stmt->rowCount() > 0) {
-            return ['success' => true, 'message' => 'Playlist deleted'];
+            return ['success' => true, 'message' => 'Playlist deleted, reloading...'];
         }
                     
         return ['success' => false, 'message' => 'Playlist not found or access denied'];

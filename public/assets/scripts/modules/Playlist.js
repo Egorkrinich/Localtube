@@ -123,6 +123,7 @@ export class Playlist {
                         message: data.message
                     }
                 }))
+                setTimeout(() => { location.reload() }, 3000)
                 })
             }
                     
@@ -212,7 +213,7 @@ export class Playlist {
                             message: message,
                         }
                     }))
-                    setTimeout(() => { location.reload() }, 5000)
+                    setTimeout(() => { location.reload() }, 3000)
                 break;
                 default:
                     window.dispatchEvent(new CustomEvent('toast', {
@@ -221,7 +222,7 @@ export class Playlist {
                             message: data.message
                         }
                     }))
-                    setTimeout(() => { location.reload() }, 5000)
+                    setTimeout(() => { location.reload() }, 3000)
                 break;
             }
         })

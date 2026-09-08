@@ -8,11 +8,6 @@ if (isset($_SESSION['uid'])) {
     $avatar = $data['avatar'];
     $username = $data['username'];
 }
-$videoData = '';
-if (isset($likes) && isset($dislikes)) {
-    $videoData = "const VIDEO_DATA = {likes: $likes, dislikes: {$dislikes}}";
-}
-
 ?>
 
 <!DOCTYPE html>
@@ -26,12 +21,15 @@ if (isset($likes) && isset($dislikes)) {
     <?php endforeach ?>
     <script>
         const BASE_URL = '<?php echo BASE_URL; ?>';
-
-        <?php echo $videoData; ?>
-
         const USER_CONFIG = {
-            isLoggedIn: <?php echo isset($uid) ? 'true' : 'false' ?>
+            isLoggedIn: <?php echo isset($uid) ? 'true,' : 'false,' ?>
         };
+
+        <?php if (isset($pageData) && !empty($pageData)) : ?>
+            const <?php echo $pageData['name'] ?> =
+            <?php echo json_encode($pageData['meta'])?>
+        <?php endif; ?>
+
     </script>
 </head>
 <body>
