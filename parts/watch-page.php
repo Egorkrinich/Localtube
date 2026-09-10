@@ -8,7 +8,7 @@
         exit;
     }
 
-    // JS data
+    // Video data
     $pageData = [];
 
     $pageData['name']             = 'VIDEO_DATA';
@@ -23,7 +23,6 @@
         $dbHistory = new History();
         $dbHistory->addHistory();
 
-
         $dbPlaylist = new Playlist();
         $myPlaylists = $dbPlaylist->getPlaylistsModal();
     }
@@ -36,6 +35,7 @@
         <div class="player" id="player">
             <video src="<?php echo BASE_URL . $video->video; ?>"
             class="player__video" id="player-video"></video>
+            
             <div class="control f-column-between active" id="player-control">
 
                 <div class="control__header">
@@ -85,6 +85,7 @@
                 </div>
 
             </div>
+            
         </div>
         <div class="video__body" id="video-body">
             <div class="video__meta">
@@ -120,9 +121,12 @@
                         <button class="video__toolbar-btn btn--secondary" data-video-action="share">
                             Share
                         </button>
+
                         <button class="video__toolbar-btn btn--secondary" data-menu-btn="playlist" data-no-overlay>
                             Add to playlist
                         </button>
+
+                        
                         <ul class="video__playlist" data-menu="playlist">
                             <?php
                             if ($myPlaylists) :
@@ -140,11 +144,10 @@
                 </div>
             </div>
         </div>
-        
     </div>
 
-    <div class="preview__list f-column" id="general-container">
-        <div class="preview__videos f-column" id="preview-container">
+    <div class="content__media media f-column" id="general-container">
+        <div class="media__videos f-column" id="preview-container">
 
         </div>
     </div>

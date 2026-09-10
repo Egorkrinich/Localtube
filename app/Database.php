@@ -109,6 +109,24 @@ class Database {
         // ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
         // $res2->execute(); 
     // }
+    // public function initViews() {
+    //     $query = "CREATE TABLE views (
+    //         uid VARCHAR(25),
+    //         video_id VARCHAR(25) NOT NULL,
+    //         viewed_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP(),
+    //         amount INT NOT NULL DEFAULT 1,
+
+
+    //         PRIMARY KEY (video_id, uid),
+
+    //         CONSTRAINT fk_video_view
+    //         FOREIGN KEY (video_id)
+    //         REFERENCES videos (id)
+    //         ON DELETE CASCADE
+    //         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4";
+    //     $res = $this->pdo->prepare($query);
+    //     $res->execute();
+    // }
 
     
     protected function getMimeExt($file, string $type): array {

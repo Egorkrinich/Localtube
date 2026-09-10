@@ -63,16 +63,16 @@ if (isset($_SESSION['uid'])) {
                 </div>
             </a>
         </div>
-        <div class="header__search f-row-center">
+        <form id="search-form" class="header__search f-row-center">
             <div class="search__wrapper">
-                <input type="text" class="search__input input--primary" placeholder="Search...">
+                <input name="search" type="text" class="search__input input--primary" placeholder="Search...">
             </div>
-            <button class="search__btn f-row-center btn--secondary" aria-label="Search">
-                <svg height="24px" width="24px" viewBox="0 -960 960 960">
+            <button type="submit" class="search__btn f-row-center btn--secondary">
+                <svg width="24px" height="24px" viewBox="0 -960 960 960">
                     <path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"/>
                 </svg>
             </button>
-        </div>
+        </form>
         <div class="header__right f-row-between">
             <?php if (isset($uid)) : ?>
                 <button class="header__notification f-row-center btn--secondary">
@@ -81,7 +81,7 @@ if (isset($_SESSION['uid'])) {
                     </svg>
                 </button>
                 
-                <button class="avatar f-row-center" data-menu-btn="user" data-no-overlay>
+                <button class="avatar f-row-center" data-menu-="user" data-no-overlay>
                     <img src="<?php echo $avatar; ?>" alt="">
                 </button>
             <?php else :?>

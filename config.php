@@ -9,6 +9,7 @@ session_set_cookie_params([
 ]);
 ini_set('session.gc_maxlifetime', 30 * 24 * 60 * 60);
 
+
 define('BASE_URL', "http://" . $_SERVER['HTTP_HOST'] . "/Localtube/");
 
 define('DB_HOST', 'localhost');
@@ -17,6 +18,7 @@ define('DB_USER', 'root');
 define('DB_PASS', 'root');
 
 define('DEFAULT_AVATAR', 'assets/images/default-avatar.png');
+
 
 define('ASSETS', [
     'home' => [
@@ -42,8 +44,24 @@ define('ASSETS', [
         'core.css',
         'main.css',
         'playlists.css'
+    ],
+    'search' => [
+        'core.css',
+        'main.css',
+        'search.css'
     ]
 ]);
-// ini_set('display_errors', 1); 
-// ini_set('display_startup_errors', 1); 
-// error_reporting(E_ALL);
+
+
+
+
+ini_set('display_errors', 1); 
+ini_set('display_startup_errors', 1); 
+error_reporting(E_ALL);
+
+// -- Settings --
+
+// Videos & Views & History
+
+define('ALLOW_DUPLICATE_VIEWS', true);
+define('ALLOW_GUEST_VIEWS'    , false);

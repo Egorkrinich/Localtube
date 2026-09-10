@@ -18,8 +18,9 @@ export class VideoManager {
     }
     initListeners() {
         // Upload
-        this.uploadForm.video.addEventListener('change', () => 
-            this.setStep(this.uploadForm, 2))
+        this.uploadForm.video.addEventListener('change', () => {
+            this.setStep(this.uploadForm, 2)
+        })
         this.uploadForm.addEventListener('submit', (e) => {
             e.preventDefault()
 
@@ -35,7 +36,6 @@ export class VideoManager {
                 this.deleteVideo(this.videoId);
             }
         })
-
     }    
 
     async collectData(form, action) {
@@ -45,9 +45,8 @@ export class VideoManager {
         if (videoFile) {
             const duration = await this.getVideoDuration(videoFile)
             formData.append('duration', duration)
+            this.sendData(formData, action)
         }
-
-        this.sendData(formData, action)
     }
     sendData(data, action) {
         const API = this.Apis[action]
@@ -63,9 +62,7 @@ export class VideoManager {
                     success: data.success
                 }
             }))
-            if (data.success) {
-                setTimeout(() => location.reload(), 2000)
-            }
+            if (data.success) setTimeout(() => location.reload(), 2000)
         })
         .finally(() => {
             this.submitBtn.disabled = false

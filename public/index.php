@@ -163,6 +163,16 @@ if (str_starts_with($path, 'API')) {
 
                     echo json_encode($res);
                 exit;
+                case 'addView':
+                    $id = trim($_GET['v'] ?? '');
+                    $uid = $_SESSION['uid'] ?? '';
+
+                    if (empty($id)) exit;
+                    if (!ALLOW_GUEST_VIEWS && empty($_SESSION['uid'])) exit;
+                        
+
+                    $dbVideo->addView($id, $uid);
+                exit;
             }
         exit;
         case 'Users':
@@ -310,6 +320,7 @@ if (str_starts_with($path, 'API')) {
                     
                     $title = (string)trim($_POST['title'] ?? '');
                     $type  = $_POST['type'] ?? '';
+                    
                     $data  = [];
                     
                     if (!isset($id) || empty($id)) {
@@ -406,5 +417,14 @@ switch ($path) {
         $styles = ASSETS[$path];
 
         require_once '../parts/playlists-page.php';
+    exit;
+    case 'search':
+        if (!isset($_GET['search']) || empty($_GET['search'])) {
+            header("Location: /Localtube/");
+            exit;
+        }
+        $styles = ASSETS[$path];
+
+        require_once '../parts/search-page.php';
     exit;
 }   

@@ -11,6 +11,7 @@
                 Upload video
             </h3>
         </div>
+
         <div class="upload__body f-row-center">
             <input type="file" name="video" accept="video/mp4" required>
         </div>
@@ -22,6 +23,7 @@
                 Title and thumb
             </h3>
         </div>
+        
         <div class="upload__body f-column-center">
             <div class="upload__field upload__field--title">
                 <input class="input--primary" type="text" 

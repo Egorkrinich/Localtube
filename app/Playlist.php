@@ -25,34 +25,25 @@ class Playlist extends Database {
             return ['success' => false, 'message' => 'Unexpected error'];
         }
     }
-    public function getPlaylistsModal(): array|bool {
-        $uid = $_SESSION['uid'];
-        
-        $res = $this->pdo->prepare("SELECT id, title 
-        FROM playlists WHERE uid = :uid");
-        $res->execute(['uid' => $uid]);
-        $playlists = $res->fetchAll(PDO::FETCH_ASSOC);
-
-        return $playlists;
-    } 
     public function addToPlaylist(array $data): array {
         try {
         $uid = $_SESSION['uid'];
 
         $check = $this->pdo->prepare("SELECT 
-        p.id AS p_exists, 
-        v.id AS v_exists,
-        (SELECT IFNULL(MAX(position), 0) 
-        FROM playlists_videos 
-        WHERE playlist_id = p.id) AS last_pos,
+            p.id AS p_exists, 
+            v.id AS v_exists,
+            (SELECT IFNULL(MAX(position), 0) 
+            FROM playlists_videos 
+            WHERE playlist_id = p.id) AS last_pos,
 
-        (SELECT COUNT(*) FROM playlists_videos 
-        WHERE playlist_id = p.id AND video_id = v.id) AS already_exists
+            (SELECT COUNT(*) FROM playlists_videos 
+            WHERE playlist_id = p.id AND video_id = v.id) AS already_exists
 
-        FROM playlists p
-        CROSS JOIN videos v
-        WHERE p.id = :p_id AND v.id = :v_id AND p.uid = :uid
-        LIMIT 1;");
+            FROM playlists p
+            CROSS JOIN videos v
+            WHERE p.id = :p_id AND v.id = :v_id AND p.uid = :uid
+            LIMIT 1;"
+        );
 
         $check->execute([
             'p_id' => $data['playlist_id'],
@@ -64,15 +55,15 @@ class Playlist extends Database {
         if (!$isExist) {
             return ['success' => false, 'message' => 'Playlist or video not found'];
         }
-
         if ($isExist['already_exists'] > 0) {
             return ['success' => false, 'message' => 'Already in playlist'];
         }
-
         $newPos = (int)$isExist['last_pos'] + 1;
 
         $res = $this->pdo->prepare("INSERT INTO playlists_videos 
-        (playlist_id, video_id, position) VALUES (:p_id, :v_id, :pos)");
+            (playlist_id, video_id, position) 
+            VALUES (:p_id, :v_id, :pos)"
+        );
         $res->execute([
             'p_id' => $data['playlist_id'], 
             'v_id' => $data['video_id'],
@@ -85,63 +76,11 @@ class Playlist extends Database {
             return ['success' => false, 'message' => 'Unexpected Error'];
         }
     }
-    public function getPlaylists() {
-        $query = "SELECT
-        p.id as playlist_id, p.title, u.username,
-
-        (SELECT video_id FROM playlists_videos 
-        WHERE playlist_id = p.id ORDER BY position ASC LIMIT 1) as video_id,
-
-        (SELECT v.thumb FROM videos v
-        JOIN playlists_videos pv ON v.id = pv.video_id
-        WHERE pv.playlist_id = p.id ORDER BY pv.position ASC LIMIT 1) as thumb
-
-        FROM playlists p
-        JOIN users u ON u.id = p.uid
-        WHERE p.uid = :uid OR p.type = 'public'";
-        
-        $res = $this->pdo->prepare($query);
-        $res->execute(['uid' => $_SESSION['uid']]);
-        $playlists = $res->fetchAll(PDO::FETCH_ASSOC);
-
-        return $playlists;
-    }
-    public function getPlaylist(string $playlistId) {
-        try {
-        $info = $this->getPlaylistAndUserInfo($playlistId, 
-        ['id', 'title', 'type', 'username', 'avatar' , 'amount']);
-        
-        if (!$info) {
-            return ['success' => false, 'message' => 'Undefined playlist'];
-        }     
-        $res = $this->pdo->prepare("SELECT
-        pv.position,
-        v.*, 
-        u.username as uploader_name,
-        u.login as uploader_link,
-        u.avatar as uploader_avatar
-
-        FROM playlists_videos pv
-        JOIN videos v ON v.id = pv.video_id
-        JOIN users u On u.id = v.uid
-        WHERE pv.playlist_id = :p_id
-        ORDER BY pv.position ASC");
-
-        $res->execute(['p_id' => $playlistId]);
-        $videos = $res->fetchAll(PDO::FETCH_ASSOC);
-
-        return ['info' => $info, 'videos' => $videos];
-        } catch (PDOException $e) {
-            return ['success' => false, 'message' => 'Unexpected error'];
-        }
-    }
     public function editPlaylist(string $id, array $videos, array $data): array {
         try {
-        $response = [
-            'success' => false,
-        ];
-        $keys = array_keys($data);
-        $keys[] = "uid";
+        $response = ['success' => false];
+
+        $keys = array_keys($data); $keys[] = "uid";
         $info = $this->getPlaylistAndUserInfo($id, $keys);
 
         if (!isset($info) || empty($info)) {
@@ -154,7 +93,6 @@ class Playlist extends Database {
         $this->pdo->beginTransaction(); 
 
         $updateParams = [];
-
         foreach ($data as $key => $value) {
             switch ($key) {
                 case 'title':
@@ -187,10 +125,9 @@ class Playlist extends Database {
         }
 
 
-        if (!empty($videos)) {
-            
-        $params = [];
+        if (!empty($videos)) {   
         $rows = [];
+        $params = [];
         
         $index = 1;
         foreach($videos as $video) {
@@ -217,10 +154,10 @@ class Playlist extends Database {
             $ins->execute($params);
             $response['videosMessage'] = 'Positions changed';
         }
-            $response['success'] = true;
+
+        $response['success'] = true;
         }
         
-
 
         $this->pdo->commit();
         return $response;
@@ -247,13 +184,75 @@ class Playlist extends Database {
             return ['success' => false, 'message' => 'Unexpected error'];
         }
     }
+    
+    public function getPlaylist(string $playlistId) {
+        try {
+        $info = $this->getPlaylistAndUserInfo($playlistId, 
+        ['id', 'title', 'type', 'username', 'avatar' , 'amount']);
+        
+        if (!$info) {
+            return ['success' => false, 'message' => 'Undefined playlist'];
+        }     
+        $res = $this->pdo->prepare("SELECT
+        pv.position,
+        v.*, 
+        u.username as uploader_name,
+        u.login as uploader_link,
+        u.avatar as uploader_avatar
+
+        FROM playlists_videos pv
+        JOIN videos v ON v.id = pv.video_id
+        JOIN users u On u.id = v.uid
+        WHERE pv.playlist_id = :p_id
+        ORDER BY pv.position ASC");
+
+        $res->execute(['p_id' => $playlistId]);
+        $videos = $res->fetchAll(PDO::FETCH_ASSOC);
+
+        return ['info' => $info, 'videos' => $videos];
+        } catch (PDOException $e) {
+            return ['success' => false, 'message' => 'Unexpected error'];
+        }
+    }
+    public function getPlaylists() {
+        $query = "SELECT
+        p.id as playlist_id, p.title, u.username,
+
+        (SELECT video_id FROM playlists_videos 
+        WHERE playlist_id = p.id ORDER BY position ASC LIMIT 1) as video_id,
+
+        (SELECT v.thumb FROM videos v
+        JOIN playlists_videos pv ON v.id = pv.video_id
+        WHERE pv.playlist_id = p.id ORDER BY pv.position ASC LIMIT 1) as thumb
+
+        FROM playlists p
+        JOIN users u ON u.id = p.uid
+        WHERE p.uid = :uid OR p.type = 'public'";
+        
+        $res = $this->pdo->prepare($query);
+        $res->execute(['uid' => $_SESSION['uid']]);
+        $playlists = $res->fetchAll(PDO::FETCH_ASSOC);
+
+        return $playlists;
+    }
+
+    public function getPlaylistsModal(): array|bool {
+        $uid = $_SESSION['uid'];
+        
+        $res = $this->pdo->prepare("SELECT id, title 
+        FROM playlists WHERE uid = :uid");
+        $res->execute(['uid' => $uid]);
+        $playlists = $res->fetchAll(PDO::FETCH_ASSOC);
+
+        return $playlists;
+    } 
 
     private function getPlaylistAndUserInfo(string $playlistId, array $params): array|bool {
         $rows = [];
         foreach($params as $param) {
             switch($param) {
-                case "username":
-                    $rows[] = "u.username";
+                case "username": 
+                    $rows[] = "u.username"; 
                 break;
                 case "avatar":
                     $rows[] = "u.avatar";
@@ -267,9 +266,10 @@ class Playlist extends Database {
                 break;
                 default:
                     $rows[] = "p.{$param}";
-                    break;
+                break;
             }
         }
+
         try {
         $res = $this->pdo->prepare("SELECT " 
         . implode(", ", $rows) . 

@@ -64,12 +64,12 @@ class User extends Database {
         }
         
         $id = '';
-        $isIdUniqid    = false;
-        
+
+        $isIdUniqid = false;
         $isFieldsUniqid = false;
         while (!$isIdUniqid) {
             $params = [];
-            $newId = substr(md5(uniqid()), 0, 11);
+            $newId = $this->getUniqidId('users', false);
             
             if (!$isFieldsUniqid) $params['login'] = $fields['login'];
             $params['id'] = $newId; 
@@ -92,11 +92,10 @@ class User extends Database {
             }
         }
 
-        $query = 
-        "INSERT INTO users (id, username, login, hash) 
-        VALUES (:id, :username, :login, :hash)";
-
-        $res = $this->pdo->prepare($query);
+        $res = $this->pdo->prepare("INSERT 
+            INTO users (id, username, login, hash) 
+            VALUES (:id, :username, :login, :hash)"
+        );
 
         $res->bindValue(':id', $id);
         $res->bindValue(':username', $fields['username']);
@@ -124,18 +123,21 @@ class User extends Database {
 
         $res = $this->getUserData(
             ['id', 'username', 'avatar', 'login', 'hash'],
-            'login',
-            $login);
+            'login', $login
+        );
 
         if (isset($res['success']) && $res['success'] === false) return $res;
 
         if (empty($res['hash']) || !password_verify($password, $res['hash'])) {
-            return ['success' => false, 'message' => 'Incorrect username or password'];
+            return [
+                'success' => false, 
+                'message' => 'Incorrect username or password'
+            ];
         }
 
             
-        $_SESSION['uid']  = $res['id'];
-        $_SESSION['login']    = $res['login'];
+        $_SESSION['uid']   = $res['id'];
+        $_SESSION['login'] = $res['login'];
         
         return ['success' => true, 'message' => 'Login successful, reloading...'];
     }
@@ -278,6 +280,7 @@ class User extends Database {
             return ['success' => false, 'message' => 'Unexpected error'];
         }
     }
+    
     public function getUserData(array $params, string $by, ?string $login = null): array {
         try {
         $bindValue = $by === 'id' ? $_SESSION['uid'] : $login;
@@ -291,7 +294,6 @@ class User extends Database {
 
 
         $result = $res->fetch(PDO::FETCH_ASSOC);
-
         
         return $result ?: [];
         } catch (PDOException) {

@@ -1,6 +1,6 @@
 .content--watch {
   display: grid;
-  grid-template-columns: minmax(320px, calc((100vh - 150px) * 1.77)) clamp(300px, 25vw, 400px);
+  grid-template-columns: minmax(320px, calc((100vh - 150px) * 1.77)) clamp(300px, 25vw, 550px);
   gap: 20px;
   max-width: 2000px;
   margin-inline: auto;
@@ -9,11 +9,11 @@
           justify-content: center;
 }
 
-.preview__videos {
+.media__videos {
   -webkit-box-align: stretch;
       -ms-flex-align: stretch;
           align-items: stretch;
-  gap: 14px;
+  gap: 15px;
 }
 
 .player {
@@ -48,6 +48,13 @@
 }
 .control__header {
   padding: 15px 20px;
+}
+.control__title {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  line-height: 1.3;
+  overflow: hidden;
+  -webkit-line-clamp: 1;
 }
 .control__body {
   padding: 0 20px 5px;

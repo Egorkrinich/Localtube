@@ -66,6 +66,9 @@ export class Video {
                 break;
             }
         })
+        window.addEventListener('video:viewed', () => {
+            fetch(`${BASE_URL}API/Videos/addView?v=${this.videoId}`)
+        })
     }
     rate(btn, action) {
         fetch(`${BASE_URL}API/Videos/rate?videoId=${this.videoId}&action=${action}`)
@@ -114,6 +117,7 @@ export class Video {
         const data = new FormData();
         data.append('playlist_id', playlistId)
         data.append('video_id', this.videoId)
+        
         fetch(`${BASE_URL}API/Playlist/addToPlaylist`, {
             method: 'POST',
             body: data
@@ -127,9 +131,6 @@ export class Video {
                 }
             }))
         })
-        .finally(() => {
-            btn.disabled = false
-        })
+        .finally(() => { btn.disabled = false })
     }
-
 }

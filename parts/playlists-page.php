@@ -32,6 +32,7 @@
     </div>
 
 </form>
+
 <!-- id: edit-playlist, data-menu: edit -->
 <form class="edit-playlist playlist-menu modal-menu" id="edit-playlist" data-menu="edit">
 

@@ -55,6 +55,8 @@ class Video extends Database {
 
         $res = $this->pdo->prepare($query);
         $res->execute(['uid' => $_SESSION['uid']]);
+
+
         $videos = $res->fetchAll(PDO::FETCH_ASSOC);
 
         return $videos;
@@ -71,10 +73,13 @@ class Video extends Database {
         FROM videos v
         JOIN users u ON v.uid = u.id
         WHERE v.id = :id';
+
         $res = $this->pdo->prepare($query);
         $res->bindValue(':id', $id);
 
         $res->execute();
+
+
         $video = $res->fetch(PDO::FETCH_OBJ);
 
         return $video;
@@ -114,7 +119,7 @@ class Video extends Database {
         $res = $this->pdo->prepare($query);
 
         $res->bindValue(':id',       $videoId);
-        $res->bindValue(':uid',  $_SESSION['uid']);
+        $res->bindValue(':uid',      $_SESSION['uid']);
         $res->bindValue(':thumb',    'uploads/thumbs/' . $thumbName);
         $res->bindValue(':video',    'uploads/videos/' . $videoName);
         $res->bindValue(':title',    $data['title']);
@@ -122,61 +127,63 @@ class Video extends Database {
 
         $res->execute();
 
-        return ['success' => true, 'message' => 'video added, reloading...'];
+        return ['success' => true, 'message' => 'Video added, reloading...'];
         } catch(PDOException $e) {
             return ['success' => false, 'message' => 'Unexpected error'];
         }
     }
     public function delVideo($id): array {
         try {
-            $uid = $_SESSION['uid'];
+        $uid = $_SESSION['uid'];
 
-            $selectQuery = 
-            "SELECT video, thumb FROM videos 
-            WHERE id = :id AND uid = :uid";
+        $sel = "SELECT video, thumb FROM videos WHERE id = :id AND uid = :uid";
+        $stmt = $this->pdo->prepare($sel);
 
-            $stmt = $this->pdo->prepare($selectQuery);
-            $stmt->bindValue(':id', $id);
-            $stmt->bindValue(':uid', $uid);
-            $stmt->execute();
+        $stmt->bindValue(':id', $id);
+        $stmt->bindValue(':uid', $uid);
 
-            $videoData = $stmt->fetch();
+        $stmt->execute();
 
-            if (empty($videoData)) {
-                return ['success' => false, 'message' => 'Video not found or access denied'];
-            }
+        $videoData = $stmt->fetch();
 
+        if (empty($videoData)) {
+            return [
+                'success' => false, 
+                'message' => 'Video not found or access denied'
+            ];
+        }
+
+        $del = 'DELETE FROM videos WHERE id = :id AND uid = :uid';
+        $res = $this->pdo->prepare($del);
+        
+        $res->bindValue(':id', $id);
+        $res->bindValue(':uid', $_SESSION['uid']);
+
+        $res->execute();
+        
+        if ($res->rowCount() > 0) {
+            $path = __DIR__ . '/../';
+            $videoFile = $path . $videoData['video'];
+            $thumbFile = $path . $videoData['thumb'];
+            if (file_exists($videoFile)) unlink($videoFile); 
+            if (file_exists($thumbFile)) unlink($thumbFile);
 
             
-            $query = 'DELETE FROM videos WHERE id = :id AND uid = :uid';
-            $res = $this->pdo->prepare($query);
-            $res->bindValue(':id', $id);
-            $res->bindValue(':uid', $_SESSION['uid']);
-            $res->execute();
-            
-            if ($res->rowCount() > 0) {
-
-                $path = __DIR__ . '/../';
-
-                $videoFile = $path . $videoData['video'];
-                $thumbFile = $path . $videoData['thumb'];
-
-                if (file_exists($videoFile)) {
-                    unlink($videoFile);
-                }
-                if (file_exists($thumbFile)) {
-                    unlink($thumbFile);
-                }               
-
-                return ['success' => true, 'message' => 'Video deleted successfully, reloading...'];
-            } else {
-                return ['success' => false, 'message' => 'Video not found or access denied'];
-            }
+            return [
+                'success' => true, 
+                'message' => 'Video deleted successfully, reloading...'
+            ];
+        } else {
+            return [
+                'success' => false, 
+                'message' => 'Video not found or access denied'
+            ];
+        }
         } catch(PDOException $error) {
             return [
                 'success' => false, 
                 'message' => 'Database error: ', $error->getMessage()
-                ];
+            ];
         }
     }
     public function rate(int $type, string $video_id): array {
@@ -251,6 +258,74 @@ class Video extends Database {
         return ['success' => true, 'action' => "+"];
         } catch (PDOException $e) {
             return ['success' => false, 'message' => 'Unexpected error'];
+        }
+    }
+    public function search(string $q) {
+        try {
+        $q = trim($q);
+        if (empty($q)) return [];
+
+        $words = explode(' ', $q);
+
+        $whereParts = [];
+        $params = [];
+
+        foreach ($words as $index => $word) {
+            $paramName = "w" . $index;
+
+            $whereParts[] = "v.title LIKE :{$paramName}";
+            $params[$paramName] = "%" . $word . "%";
+        }
+
+        $sqlWhere = implode(' OR ', $whereParts);
+
+        $query = "SELECT v.*, 
+        u.username as uploader_name,
+        u.login as uploader_link,
+        u.avatar as uploader_avatar
+        FROM videos v
+        JOIN users u ON v.uid = u.id
+        WHERE {$sqlWhere}";
+
+        $res = $this->pdo->prepare($query);
+        $res->execute($params);
+        $result = $res->fetchAll(PDO::FETCH_ASSOC);
+
+
+        return $result;
+        } catch (PDOException $e) {
+            return ['success' => false, 'message' => 'Unexpected error'];
+        }
+    }
+    public function addView(string $id, ?string $uid = null) {
+        try {
+        if (!ALLOW_DUPLICATE_VIEWS && !empty($uid)) {
+            $sel = $this->pdo->prepare('SELECT * 
+            FROM views WHERE video_id = :vid AND uid = :uid');
+
+            $sel->execute(['vid' => $id, 'uid' => $uid]);
+            $res = $sel->fetch(PDO::FETCH_ASSOC);
+            if (!empty($res)) return;
+        }
+
+        $this->pdo->beginTransaction();
+
+        $upd = $this->pdo->prepare('UPDATE videos 
+        SET views = views + 1 WHERE id = :id');
+        $upd->execute(['id' => $id]);
+
+        $ins = $this->pdo->prepare('INSERT 
+        INTO views (video_id, uid) VALUES (:id, :uid)
+        ON DUPLICATE KEY UPDATE amount = amount + 1');
+        
+
+        $ins->execute(['id' => $id, 'uid' => $uid]);
+
+        $this->pdo->commit();
+        return;
+        } catch(PDOException $e) {
+            $this->pdo->rollBack();
+            return;
         }
     }
 }

@@ -15,9 +15,10 @@ export class Player {
         this.timer = document.querySelector('#timer')
 
         // -- State & Flags
-        this.timeout = null;
-
+        this.timeout = null
         this.isPaused = true
+
+        this.duration = VIDEO_DATA.duration || 0
 
         this.initListeners()
         this.initHotkeys()
@@ -143,20 +144,26 @@ export class Player {
         }, 2000)
     }
     scrub(e) {
-        const scrubTime = (e.offsetX / this.progressBar.offsetWidth) * this.video.duration;
+        const scrubTime = (e.offsetX / this.progressBar.offsetWidth) * this.duration;
         this.video.currentTime = scrubTime;
     }
 
 
     updateProgress() {
-        const duration = VIDEO_DATA.duration || 0
         const current = this.video.currentTime
 
-        this.timer.textContent = `${this.formatTime(current)} / ${this.formatTime(duration)}`
+        this.timer.textContent = `
+        ${this.formatTime(current)} / 
+        ${this.formatTime(this.duration)}
+        `
 
         if (this.progressLine) {
-            const percent = (current / duration) * 100;
+            const percent = (current / this.duration) * 100;
             this.progressLine.style.width = `${percent}%`;
+            if (percent >= 70 && !this.isViewed) {
+                this.isViewed = true
+                window.dispatchEvent(new CustomEvent('video:viewed'))
+            }
         }
     }
 
