@@ -22,7 +22,8 @@ if (isset($_SESSION['uid'])) {
     <script>
         const BASE_URL = '<?php echo BASE_URL; ?>';
         const USER_CONFIG = {
-            isLoggedIn: <?php echo isset($uid) ? 'true,' : 'false,' ?>
+            isLoggedIn: <?php echo isset($uid) ? 'true' : 'false' ?>,
+            isMobile: window.matchMedia("(pointer: coarse)").matches,
         };
 
         <?php if (isset($pageData) && !empty($pageData)) : ?>

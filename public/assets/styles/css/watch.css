@@ -39,8 +39,7 @@
   opacity: 0;
   -webkit-transition: opacity 0.3s;
   transition: opacity 0.3s;
-  z-index: 10;
-  cursor: pointer;
+  z-index: 1;
 }
 .control__header, .control__body {
   background: var(--bg-first-effect-inverse);
@@ -58,6 +57,7 @@
 }
 .control__body {
   padding: 0 20px 5px;
+  pointer-events: auto;
 }
 .control__progress-bar {
   width: 100%;
@@ -99,6 +99,52 @@
 }
 .control.active {
   opacity: 1;
+}
+.control.hide-instantly {
+  display: none;
+}
+
+.rewind {
+  position: absolute;
+  inset: 0;
+  padding: 0 10%;
+  font-weight: 600;
+  pointer-events: none;
+}
+.rewind-left, .rewind-right {
+  opacity: 0;
+  font-size: 1.5em;
+}
+.rewind-left {
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: reverse;
+      -ms-flex-direction: row-reverse;
+          flex-direction: row-reverse;
+}
+.rewind-left .rewind-svg {
+  rotate: 180deg;
+}
+.rewind-svg {
+  width: 1.5em;
+  height: 1.5em;
+  -webkit-transition: -webkit-transform 0.3s;
+  transition: -webkit-transform 0.3s;
+  transition: transform 0.3s;
+  transition: transform 0.3s, -webkit-transform 0.3s;
+}
+.rewind.active--left .rewind-left {
+  opacity: 1;
+}
+.rewind.active--left .rewind-left .rewind-svg {
+  -webkit-transform: translateX(10px);
+          transform: translateX(10px);
+}
+.rewind.active--right .rewind-right {
+  opacity: 1;
+}
+.rewind.active--right .rewind-right .rewind-svg {
+  -webkit-transform: translateX(10px);
+          transform: translateX(10px);
 }
 
 .video__title {

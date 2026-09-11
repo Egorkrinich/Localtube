@@ -40,8 +40,7 @@
 
     opacity: 0;
     transition: opacity 0.3s;
-    z-index: 10;
-    cursor: pointer;
+    z-index: 1;
 
     &__header, &__body {
         background: var(--bg-first-effect-inverse);
@@ -55,7 +54,10 @@
         overflow: hidden;
         -webkit-line-clamp: 1;
     }
-    &__body { padding: 0 20px 5px; }
+    &__body { 
+        padding: 0 20px 5px;
+        pointer-events: auto;
+    }
 
 
     &__progress-bar {
@@ -104,8 +106,48 @@
         }
     }
 
-    &.active {
+
+    &.active { opacity: 1; }
+    &.hide-instantly { display: none;}
+}
+.rewind {
+    position: absolute;
+
+    inset: 0;
+    padding: 0 10%;
+
+    font-weight: 600;
+    pointer-events: none;
+    
+    &-left,
+    &-right {
+        opacity: 0;
+        font-size: 1.5em;
+    }
+    &-left { 
+        flex-direction: row-reverse;
+        .rewind-svg { rotate: 180deg; }
+    }
+
+    &-svg {
+        width: 1.5em;
+        height: 1.5em;
+        transition: transform 0.3s;
+    }
+
+
+
+    &.active--left &-left {
         opacity: 1;
+        .rewind-svg {
+            transform: translateX(10px);
+        }
+    }
+    &.active--right &-right {
+        opacity: 1;
+        .rewind-svg {
+            transform: translateX(10px);
+        }
     }
 }
 

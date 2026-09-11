@@ -32,9 +32,11 @@
 
 <main class="content content--watch">
     <div class="content__video video">
+
         <div class="player" id="player">
-            <video src="<?php echo BASE_URL . $video->video; ?>"
-            class="player__video" id="player-video"></video>
+            
+            <video class="player__video" id="player-video" 
+            src="<?php echo BASE_URL . $video->video; ?>"></video>
             
             <div class="control f-column-between active" id="player-control">
 
@@ -83,10 +85,27 @@
 
                     </div>
                 </div>
+            </div>
 
+            <div class="rewind f-row-between">
+                <div class="rewind-left f-row-center" 
+                data-player-rewind="left">
+                    - 5s 
+                    <svg class="rewind-svg" height="24px" viewBox="0 -960 960 960">
+                        <path d="m321-80-71-71 329-329-329-329 71-71 400 400L321-80Z"/>
+                    </svg>
+                </div>
+                <div class="rewind-right f-row-center"
+                data-player-rewind="right">
+                    + 5s  
+                    <svg class="rewind-svg" height="24px" viewBox="0 -960 960 960">
+                        <path d="m321-80-71-71 329-329-329-329 71-71 400 400L321-80Z"/>
+                    </svg>
+                </div>
             </div>
             
         </div>
+
         <div class="video__body" id="video-body">
             <div class="video__meta">
                 <h1 class="video__title"><?php echo htmlspecialchars($video->title); ?></h1>
@@ -144,6 +163,7 @@
                 </div>
             </div>
         </div>
+
     </div>
 
     <div class="content__media media f-column" id="general-container">

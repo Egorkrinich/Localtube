@@ -33,7 +33,7 @@ export class Playlist {
     initListeners() {
         // Create new playlist listener
         this.createForm?.addEventListener('submit', (e) => {
-            e.preventDefault()
+            // e.preventDefault()
             const formData = new FormData(this.createForm)
 
             this.sendData(formData, this.Apis.create)
@@ -109,8 +109,6 @@ export class Playlist {
             }
         })
         this.editForm?.addEventListener('click', (e) => {
-            e.preventDefault()
-            e.stopPropagation()
             const btn = e.target.closest(`[${this.editAttr.btn}=deletePlaylist]`)
             if (!btn) return
             if (confirm('Are you sure?')) {
