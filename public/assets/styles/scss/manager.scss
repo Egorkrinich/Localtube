@@ -1,70 +1,37 @@
-.upload {
-    display: none;
-    position: fixed;
-    inset: 0;
-
-    width: 50vw;
-    height: 70vh;
-    margin: auto;
-    padding: 20px;
-
-    border-radius: 20px;
-    background: var(--bg-second);
-    z-index: var(--menus);
-
-    &[data-step="1"] .upload__step--1 { display: flex; }
-    &[data-step="2"] .upload__step--2 { display: flex; }
-
+.m-upload {
     &__step {
         display: none;
-        gap: 20px;
         width: 100%;
         height: 100%;
     }
-    &__header {
-        width: 100%;
-        height: 60px;
-        padding: 10px 20px 20px;
-        border-bottom: 2px solid var(--border-first);
-    }
-    &__body {
-        width: 100%;
-        flex: 1;
-    }
+    &[data-step="1"] &__step--1 { display: flex; }
+    &[data-step="2"] &__step--2 { display: block; }
 
-    &__step--2 &__body {
-        gap: 20px;
-        width: 500px;
-    }
+    &__step--1 &__body { flex: 1; }
+    &__step--2 &__body { gap: 10px; }
+
     &__field {
+        gap: 5px;
         width: 100%;
+        input { padding: 10px; }
     }
-    &__field--title input {
-        padding: 10px 10px;
-        border-radius: 10px;
-    }
-    &__submit {
-        margin-top: auto;
-    }
+}
 
-    &.active {
-        display: block;
+.m-edit {
+    &__header, &__body { gap: 10px; }
+    &__submit { margin-left: auto; }
+
+    &__field {
+        gap: 5px;
+        input { padding: 10px; }
+    }
+    &__thumb {
+        width: 300px;
+        aspect-ratio: 16/9;
     }
 }
 
 .manager {
-    margin-left: var(--sidebar-width);
     padding: 0;
-
-    &__header {
-        padding: 0 20px;
-        border-bottom: 1px solid var(--border-first);
-    }
-    &__list {
-        padding: 20px;
-        gap: 20px;
-    }
-    &__button {
-        border: 1px solid var(--border-first);
-    }
-} 
+    &__body { gap: var(--gap-primary); }
+}

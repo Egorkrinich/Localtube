@@ -2,8 +2,8 @@
     require_once 'general/header.php';
     require_once 'general/sidebar.php';
 ?>
-<!-- id: create-playlist, data-menu: create-playlist -->
-<form class="add-playlist playlist-menu modal-menu" id="create-playlist" data-menu="create-playlist">
+<form class="add-playlist playlist-menu modal-menu" 
+id="create-playlist" data-menu="create-playlist">
 
     <div class="playlist-menu modal-menu__header">
         <h2 class="playlist-menu__title">
@@ -33,8 +33,8 @@
 
 </form>
 
-<!-- id: edit-playlist, data-menu: edit -->
-<form class="edit-playlist playlist-menu modal-menu" id="edit-playlist" data-menu="edit">
+<form class="edit-playlist playlist-menu modal-menu" 
+id="edit-playlist" data-menu="edit">
 
     <div class="playlist-menu__header modal-menu__header">
         <h2 class="playlist-menu__title">
@@ -76,7 +76,7 @@
     <div class="playlist-menu__list f-column"></div>
 </form>
 
-<main class="content playlists">  
+<main class="playlists content">  
     <div class="playlists__header f-row-between">
         <h1 class="playlists__title">
             Playlists

@@ -40,7 +40,7 @@ export class Playlist {
         })
 
         // Edit playlist listeners
-        window.addEventListener('edit', (e) => {
+        window.addEventListener('initEdit', (e) => {
             if (this.playlistId != e.detail.id) {
                 this.playlistId = e.detail.id
                 this.initEditForm()

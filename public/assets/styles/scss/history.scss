@@ -1,17 +1,15 @@
 .history {
     padding: 0;
-    margin-left: var(--sidebar-width);
 
-    &__header,
-    &__body {
-        padding: 20px;
-    }
     &__header {
-        padding: 0 20px;
-        height: var(--header-height);
+        padding: 15px;
         border-bottom: 1px solid var(--border-first);
     }
-    &__list {
-        gap: 20px;
+    &__body { 
+        padding: 15px;
     }
+    &__list {
+        gap: var(--gap-primary);
+    }
+
 }

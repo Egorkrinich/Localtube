@@ -1,8 +1,23 @@
 // Standard content styles
 .content {
     margin-top: var(--header-height);
-    padding: 20px 20px;
+    margin-left: var(--sidebar-width);
+    padding: 15px;
 }
+// Main grid
+.content--grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--gap-primary);
+
+    @media (max-width: 800px) {
+        & {
+            margin-left: 0;
+            padding-inline: 10px;
+        }
+    }
+}
+
 
 .burger-btn {
     position: relative;
@@ -34,18 +49,4 @@
 
 // Home page
 
-.content--grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    margin-left: var(--sidebar-width);
-    
-    padding: 50px 20px 80px;
-    gap: 20px;
-
-    @media (max-width: 800px) {
-        & {
-            margin-left: 0;
-            padding-inline: 10px;
-        }
-    }
-}
+.home { padding: 50px 20px 80px; }

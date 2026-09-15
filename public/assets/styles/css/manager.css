@@ -1,73 +1,52 @@
-.upload {
+.m-upload__step {
   display: none;
-  position: fixed;
-  inset: 0;
-  width: 50vw;
-  height: 70vh;
-  margin: auto;
-  padding: 20px;
-  border-radius: 20px;
-  background: var(--bg-second);
-  z-index: var(--menus);
-}
-.upload[data-step="1"] .upload__step--1 {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-}
-.upload[data-step="2"] .upload__step--2 {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-}
-.upload__step {
-  display: none;
-  gap: 20px;
   width: 100%;
   height: 100%;
 }
-.upload__header {
-  width: 100%;
-  height: 60px;
-  padding: 10px 20px 20px;
-  border-bottom: 2px solid var(--border-first);
+.m-upload[data-step="1"] .m-upload__step--1 {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
 }
-.upload__body {
-  width: 100%;
+.m-upload[data-step="2"] .m-upload__step--2 {
+  display: block;
+}
+.m-upload__step--1 .m-upload__body {
   -webkit-box-flex: 1;
       -ms-flex: 1;
           flex: 1;
 }
-.upload__step--2 .upload__body {
-  gap: 20px;
-  width: 500px;
+.m-upload__step--2 .m-upload__body {
+  gap: 10px;
 }
-.upload__field {
+.m-upload__field {
+  gap: 5px;
   width: 100%;
 }
-.upload__field--title input {
-  padding: 10px 10px;
-  border-radius: 10px;
+.m-upload__field input {
+  padding: 10px;
 }
-.upload__submit {
-  margin-top: auto;
+
+.m-edit__header, .m-edit__body {
+  gap: 10px;
 }
-.upload.active {
-  display: block;
+.m-edit__submit {
+  margin-left: auto;
+}
+.m-edit__field {
+  gap: 5px;
+}
+.m-edit__field input {
+  padding: 10px;
+}
+.m-edit__thumb {
+  width: 300px;
+  aspect-ratio: 16/9;
 }
 
 .manager {
-  margin-left: var(--sidebar-width);
   padding: 0;
 }
-.manager__header {
-  padding: 0 20px;
-  border-bottom: 1px solid var(--border-first);
-}
-.manager__list {
-  padding: 20px;
-  gap: 20px;
-}
-.manager__button {
-  border: 1px solid var(--border-first);
+.manager__body {
+  gap: var(--gap-primary);
 }/*# sourceMappingURL=manager.css.map */

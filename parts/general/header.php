@@ -82,7 +82,7 @@ if (isset($_SESSION['uid'])) {
                     </svg>
                 </button>
                 
-                <button class="avatar f-row-center" data-menu-="user" data-no-overlay>
+                <button class="avatar f-row-center" data-menu-btn="user" data-no-overlay>
                     <img src="<?php echo $avatar; ?>" alt="">
                 </button>
             <?php else :?>

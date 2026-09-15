@@ -9,13 +9,6 @@
           justify-content: center;
 }
 
-.media__videos {
-  -webkit-box-align: stretch;
-      -ms-flex-align: stretch;
-          align-items: stretch;
-  gap: 15px;
-}
-
 .player {
   position: relative;
   width: auto;
@@ -193,6 +186,13 @@
 }
 .video__toolbar .video__playlist.active {
   display: block;
+}
+
+.media__videos {
+  -webkit-box-align: stretch;
+      -ms-flex-align: stretch;
+          align-items: stretch;
+  gap: var(--gap-primary);
 }
 
 .watch-playlist {

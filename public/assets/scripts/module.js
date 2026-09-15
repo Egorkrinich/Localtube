@@ -3,6 +3,7 @@ import Context from './modules/Context.js';
 import Toast from './modules/Toast.js';
 import Settings from './modules/Settings.js';
 import Search from './modules/Search.js';
+import Stage from './modules/Stage.js';
 
 const currentFullURL = window.location.origin + window.location.pathname
 let cleanPath = currentFullURL.replace(BASE_URL, '') || 'home'
@@ -59,6 +60,7 @@ async function initManagerPage() {
     const { VideoManager } = await import('./modules/VideoManager.js')
     
     new Context('manager')
+    new Stage()
     
     new VideoManager()
     new RenderVideos('manager', 'h')
@@ -77,6 +79,7 @@ async function initPlaylistsPage() {
     
 
     new Context('playlists')
+    // new Stage()
 
     playlist.renderPlaylists('preview-container')
 }

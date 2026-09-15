@@ -8,16 +8,17 @@ export class Player {
         '+': (a, b) => a + b, 
         '-': (a, b) => a - b 
     }
+
     constructor() {
         // -- Elements --
         this.player = document.querySelector('#player')
         this.video = this.player.querySelector('#player-video')
         this.control = this.player.querySelector('#player-control')
-        this.rewind = this.player.querySelector('.rewind')
+        this.rewind = this.player.querySelector('#rewind')
 
         this.progressBar = this.player.querySelector('#progress-bar')
-        this.progressLine = document.querySelector('#progress-line')
-        this.timer = document.querySelector('#timer')
+        this.progressLine = this.progressBar.querySelector('#progress-line')
+        this.timer = this.control.querySelector('#timer')
 
         // -- State & Flags
         this.isPaused = true
@@ -33,26 +34,28 @@ export class Player {
         
 
         this.initListeners()
-        if (!USER_CONFIG.isMobile) {
-            this.initHotkeys()
-        }
         this.updateProgress()
+        if (!USER_CONFIG.isMobile) { this.initHotkeys() }
     }
     initListeners() {
+        // Global Listeners
         this.video.addEventListener('timeupdate', () => this.updateProgress())
         this.video.addEventListener('ended', () => { 
             this.controlBtns.togglePlay.classList.remove('active')
+            this.isPaused = true
         })
-        // Global Listeners
+
         this.control.addEventListener('pointerdown', (e) => {
+            if (e.button !== 0) return;
             const btn = e.target.closest(`[data-player-btn]`)
             if (!btn) {
                 if (!this.isControlShowed && USER_CONFIG.isMobile) {
                     this.showControl()
                     return
                 }
-                // if NOT '.control__header' AND '.control__body'
-                if (!e.target.closest('.control__header') && !e.target.closest('.control__body')) {
+
+                if (!e.target.closest('.control__header') && 
+                    !e.target.closest('.control__body')) {
                     this.togglePlay()
                 }
                 return
@@ -128,7 +131,7 @@ export class Player {
                     this.toggleFull()
                 break;
                 case 'ArrowLeft':
-                    this.skipTime('+')
+                    this.skipTime('-')
                 break;
                 case 'ArrowRight':
                     this.skipTime('+')
@@ -195,6 +198,7 @@ export class Player {
         
         this.controlHideTimeout = setTimeout(() => { 
             if (this.isPaused) return
+
             this.control.classList.remove('active')
             this.isControlShowed = false
         }, this.controlDuration)

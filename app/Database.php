@@ -10,7 +10,7 @@ class Database {
     protected ?PDO $pdo;
 
     public function __construct() {
-        $this->pdo = new PDO("mysql:host={$this->host};dbname={$this->name};port=3306",
+        $this->pdo = new PDO("mysql:host={$this->host};dbname={$this->name};port=3306;charset=utf8mb4",
         $this->login,
         $this->password);
     }

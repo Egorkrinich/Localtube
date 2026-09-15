@@ -14,13 +14,13 @@
     require_once 'general/sidebar.php';  
 ?>
 
-<main class="content search">  
+<main class="search content">  
     <div class="search__header f-row-between">
         <h1 class="search__title">
             Result: <?php echo $searchQuery; ?>
         </h1>
     </div>
-    <div class="manager__list f-column">
+    <div class="search__body f-column">
     <?php
         if (isset($res) && !empty($res)) :
             foreach ($res as $video) :

@@ -14,8 +14,11 @@ export default class Context {
             <button class="context__button context__share">
                 Share
             </button>
-            `,
-            `
+            `,`
+            <button class="context__button context__edit" data-page-menu-btn="edit">
+                Edit
+            </button>
+            `,`
             <button class="context__button context__delete">
                 Delete
             </button>
@@ -23,14 +26,13 @@ export default class Context {
         ],
         playlists: [
             `
-                <button class="context__button context__share">
-                    Share
-                </button>
-            `,
-            `
-                <button class="context__button context__edit" data-menu-btn="edit">
-                    Edit
-                </button>
+            <button class="context__button context__share">
+                Share
+            </button>
+            `,`
+            <button class="context__button context__edit" data-menu-btn="edit">
+                Edit
+            </button>
             `
         ]
     }
@@ -85,10 +87,8 @@ export default class Context {
                 this.copyLink()
             }
             if (target.closest('.context__edit')) {
-                window.dispatchEvent(new CustomEvent('edit', {
-                    detail: {
-                        id: this.id
-                    }
+                window.dispatchEvent(new CustomEvent('initEdit', {
+                    detail: { id: this.id }
                 }))
                 this.closeMenu()
             }

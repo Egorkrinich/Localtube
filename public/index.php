@@ -5,12 +5,14 @@ spl_autoload_register(function ($class_name) {
         require_once $file;
     }
 });
+
 require_once '../config.php';
 session_start();
 
 
 $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $path = str_replace('/Localtube/', '', $path);
+
 if (str_starts_with($path, 'API')) {
     header('Content-Type: application/json');
 
@@ -23,33 +25,6 @@ if (str_starts_with($path, 'API')) {
             $dbVideo = new Video();
 
             switch ($action) {
-                case 'getVideos':
-                    $exclude = null;
-                    $playlist = null;
-                    if (isset($_GET['v']) && !empty($_GET['v'])) {
-                        $exclude = $_GET['v'];
-                    }
-                    if (isset($_GET['playlist']) && !empty($_GET['playlist'])) {
-                        $playlist = $_GET['playlist'];
-                    }
-                    $videos = $dbVideo->getVideos($exclude, $playlist);
-
-                    
-                    echo json_encode($videos);
-                exit;
-                case 'getMyVideos':
-                    if (!isset($_SESSION['uid']) || empty($_SESSION['uid'])) {
-                        echo json_encode([
-                            'success' => false,
-                            'message' => 'Unathorized'
-                        ]);
-                        exit;
-                    }
-                    $videos = $dbVideo->getMyVideos();
-
-                    
-                    echo json_encode($videos);
-                exit;
                 case 'addVideo':
                     if (!isset($_SESSION['uid']) || empty($_SESSION['uid'])) {
                         echo json_encode([
@@ -111,6 +86,35 @@ if (str_starts_with($path, 'API')) {
                     
                     echo json_encode($res);
                 exit;
+                case 'editVideo':
+                    if (empty($_POST) && empty($_FILES)) {
+                        echo json_encode([
+                            'success' => false, 
+                            'message' => 'No changes'
+                        ]);
+                        exit;
+                    }
+                    $id    = (string)trim($_POST['id'] ?? '');                    
+                    $title = (string)trim($_POST['title'] ?? '');
+
+                    if (empty($id)) {
+                        echo json_encode([
+                            'success' => false,
+                            'message' => 'Undefined video'
+                        ]);
+                        exit;
+                    }
+                    $data = [];
+
+                    if (!empty($title)) { $data['title'] = $title; }
+                    if (isset($_FILES['thumb']) && $_FILES['thumb']['error'] === 0) { 
+                        $data['thumb'] = $_FILES['thumb']; 
+                    }
+
+                    $res = $dbVideo->editVideo($id, $data);
+
+                    echo json_encode($res);
+                exit;
                 case 'delVideo':
                     if (!isset($_SESSION['uid']) || empty($_SESSION['uid'])) {
                         echo json_encode(['success' => false, 'message' => 'Unathorized']);
@@ -125,6 +129,41 @@ if (str_starts_with($path, 'API')) {
 
                     echo json_encode($res);
                 exit;
+
+                case 'getVideo':
+                    $id = $_GET['id'];
+
+                    $res = $dbVideo->getVideo($id);
+                    echo json_encode($res);
+                exit;
+                case 'getVideos':
+                    $exclude = null;
+                    $playlist = null;
+                    if (isset($_GET['v']) && !empty($_GET['v'])) {
+                        $exclude = $_GET['v'];
+                    }
+                    if (isset($_GET['playlist']) && !empty($_GET['playlist'])) {
+                        $playlist = $_GET['playlist'];
+                    }
+                    $videos = $dbVideo->getVideos($exclude, $playlist);
+
+                    
+                    echo json_encode($videos);
+                exit;
+                case 'getMyVideos':
+                    if (!isset($_SESSION['uid']) || empty($_SESSION['uid'])) {
+                        echo json_encode([
+                            'success' => false,
+                            'message' => 'Unathorized'
+                        ]);
+                        exit;
+                    }
+                    $videos = $dbVideo->getMyVideos();
+
+                    
+                    echo json_encode($videos);
+                exit;
+
                 case 'rate':
                     if (!isset($_SESSION['uid']) || empty($_SESSION['uid'])) {
                         echo json_encode([

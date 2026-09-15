@@ -71,14 +71,12 @@
 }
 
 .playlists {
-  margin-left: var(--sidebar-width);
   padding: 0;
 }
 .playlists__header {
-  padding: 20px;
+  padding: 15px;
   border-bottom: 1px solid var(--border-first);
 }
 .playlists__body {
-  padding: 20px;
-  min-height: 100vh;
+  padding: 15px;
 }/*# sourceMappingURL=playlists.css.map */

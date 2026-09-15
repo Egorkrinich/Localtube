@@ -1,6 +1,19 @@
 .content {
   margin-top: var(--header-height);
-  padding: 20px 20px;
+  margin-left: var(--sidebar-width);
+  padding: 15px;
+}
+
+.content--grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--gap-primary);
+}
+@media (max-width: 800px) {
+  .content--grid {
+    margin-left: 0;
+    padding-inline: 10px;
+  }
 }
 
 .burger-btn {
@@ -29,18 +42,8 @@
   opacity: 1;
 }
 
-.content--grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  margin-left: var(--sidebar-width);
+.home {
   padding: 50px 20px 80px;
-  gap: 20px;
-}
-@media (max-width: 800px) {
-  .content--grid {
-    margin-left: 0;
-    padding-inline: 10px;
-  }
 }
 
 .header {

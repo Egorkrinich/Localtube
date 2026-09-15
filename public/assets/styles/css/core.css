@@ -98,6 +98,8 @@ a {
   --header-height: 55px;
   --sidebar-width: 70px;
   --burger-width: 250px;
+  --page-header-height: 75px;
+  --gap-primary: 15px;
   --over-content: 100;
   --menus: 150;
   --overlay: 145;
@@ -341,9 +343,10 @@ a {
 }
 
 .input--primary {
+  max-width: 500px;
   width: 100%;
   padding: 3px 10px;
-  border-radius: 20px;
+  border-radius: 10px;
   border: 1px solid var(--border-first);
   background: var(--bg-third);
   -webkit-transition: border-color 0.3s;
@@ -417,10 +420,25 @@ a {
   z-index: var(--menus);
 }
 .modal-menu__header {
+  width: 100%;
   padding-bottom: 10px;
   margin-bottom: 10px;
   border-bottom: 1px solid var(--border-first);
 }
 .modal-menu.active {
+  display: block;
+}
+
+.page-menu {
+  display: none;
+}
+.page-menu > :nth-child(1) {
+  padding: 15px;
+  border-bottom: 1px solid var(--border-first);
+}
+.page-menu > :nth-child(2) {
+  padding: 15px;
+}
+.page-menu.active {
   display: block;
 }/*# sourceMappingURL=core.css.map */
