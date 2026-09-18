@@ -39,7 +39,15 @@
 .m-edit__field input {
   padding: 10px;
 }
+.m-edit__thumb-container {
+  gap: 10px;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+}
 .m-edit__thumb {
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid var(--border-first);
   width: 300px;
   aspect-ratio: 16/9;
 }

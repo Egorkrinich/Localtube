@@ -1,4 +1,4 @@
-import { Templates } from "../Templates.js"
+import { Templates } from "../../Templates.js"
 
 export class RenderVideos {
     linkSelector = {
@@ -12,7 +12,16 @@ export class RenderVideos {
 
         this.link = link
 
-        this.getData()
+        this.videosRaw = []
+
+        this._videosLoaded = this.getData()
+        this.initListeners()
+    }
+    initListeners() {
+        window.addEventListener('video:toggled', () => {
+            this.container.innerHTML = ''
+            this.getData()
+        })
     }
     getData() {
         const v = new URLSearchParams(window.location.search).get('v')
@@ -29,10 +38,20 @@ export class RenderVideos {
         })
     }
     render(data) {
-        data.forEach((video) => {
-            const videoEl = Templates.preview(video, this.isHorizontal)
+        this.videosRaw.length = 0
+        data.forEach((v) => {
+            this.videosRaw.push({
+                'id': v.id,
+                'thumb': v.thumb, 
+                'title': v.title, 
+                'duration': v.duration
+            })
+            const videoEl = Templates.preview(v, this.isHorizontal)
 
             this.container?.insertAdjacentHTML('beforeend', videoEl)
         })
+    }
+    get ready() {
+        return this._videosLoaded
     }
 }

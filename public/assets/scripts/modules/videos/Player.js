@@ -1,12 +1,10 @@
+import { formatTime, ops } from "../helper.js"
+
 export class Player {
     controlBtns = {
         togglePlay:  document.querySelector('[data-player-btn="toggle-play"]'),
         toggleSound: document.querySelector('[data-player-btn="toggle-sound"]'),
         toggleFull:  document.querySelector('[data-player-btn="toggle-full"]')
-    }
-    ops = {
-        '+': (a, b) => a + b, 
-        '-': (a, b) => a - b 
     }
 
     constructor() {
@@ -38,11 +36,20 @@ export class Player {
         if (!USER_CONFIG.isMobile) { this.initHotkeys() }
     }
     initListeners() {
+        window.addEventListener('video:toggled', () => {
+            setTimeout(() => {
+                this.duration = VIDEO_DATA.duration
+                this.video.currentTime = 0
+                this.updateProgress()
+                this.togglePlay()
+            }, 0)
+        })
         // Global Listeners
         this.video.addEventListener('timeupdate', () => this.updateProgress())
         this.video.addEventListener('ended', () => { 
             this.controlBtns.togglePlay.classList.remove('active')
             this.isPaused = true
+            window.dispatchEvent(new CustomEvent('video:ended'))
         })
 
         this.control.addEventListener('pointerdown', (e) => {
@@ -154,7 +161,7 @@ export class Player {
                 return
             }
 
-            setTimeout(() => { this.showControl(false) }, this.controlDuration)
+            this.showControl()
         } else {
             this.isPaused = true
             this.video.pause()
@@ -209,7 +216,7 @@ export class Player {
     }
     skipTime(action) {
         const rewindClass = action === "+" ? 'active--right' : 'active--left'
-        this.video.currentTime = this.ops[action](this.video.currentTime, 5)
+        this.video.currentTime = ops[action](this.video.currentTime, 5)
 
         this.rewind.classList.add(rewindClass)
         setTimeout(() => {this.rewind.classList.remove(rewindClass)}, 500)
@@ -220,8 +227,7 @@ export class Player {
         const current = this.video.currentTime
 
         this.timer.textContent = `
-        ${this.formatTime(current)} / 
-        ${this.formatTime(this.duration)}
+        ${formatTime(current)} / ${formatTime(this.duration)}
         `
 
         if (this.progressLine) {
@@ -232,19 +238,5 @@ export class Player {
                 window.dispatchEvent(new CustomEvent('video:viewed'))
             }
         }
-    }
-
-    formatTime(timeInSeconds) {
-        const hours = Math.floor(timeInSeconds / 3600);
-        const minutes = Math.floor((timeInSeconds % 3600) / 60);
-        const seconds = Math.floor(timeInSeconds % 60);
-        
-        const paddedMinutes = String(minutes).padStart(2, '0');
-        const paddedSeconds = String(seconds).padStart(2, '0');
-        
-        if (hours > 0) {
-            return `${hours}:${paddedMinutes}:${paddedSeconds}`;
-        }
-        return `${minutes}:${paddedSeconds}`;
     }
 }

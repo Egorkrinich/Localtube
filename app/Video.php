@@ -3,91 +3,6 @@ require_once 'Database.php';
 
 
 class Video extends Database {
-    public function getVideos(?string $excludeId = null, ?string $playlistId = null): array {
-        // Optional takes exclude id and playlist id
-        try {
-        $params = [];
-        $query = 
-        "SELECT v.*, 
-        u.username as uploader_name,
-        u.login as uploader_link,
-        u.avatar as uploader_avatar
-        FROM videos v
-        JOIN users u ON v.uid = u.id";
-
-        $where = [];
-        if ($excludeId) {
-            $where[] = "v.id != :exclude_id";
-            $params['exclude_id'] = $excludeId;
-        }
-        if ($playlistId) {
-            $where[] = "v.id NOT IN 
-            (SELECT video_id FROM playlists_videos WHERE playlist_id = :p_id)";
-            $params['p_id'] = $playlistId;
-        }
-
-        if (!empty($where)) {
-            $query .= " WHERE " . implode(' AND ', $where);
-        }
-
-        $query .= " ORDER BY v.created DESC";
-
-        
-        $res = $this->pdo->prepare($query);
-        $res->execute($params);
-        $videos = $res->fetchAll(PDO::FETCH_ASSOC);
-
-        return $videos;
-        } catch (PDOException $e) {
-            return ['success' => false, 'message' => 'Unexpected error'];
-        }
-    }
-    public function getMyVideos() {
-        $query = 
-        "SELECT v.*, 
-        u.username as uploader_name,
-        u.login as uploader_link
-        FROM videos v
-        JOIN users u ON v.uid = u.id
-        WHERE v.uid = :uid
-        ORDER BY v.created DESC";
-
-
-        $res = $this->pdo->prepare($query);
-        $res->execute(['uid' => $_SESSION['uid']]);
-
-
-        $videos = $res->fetchAll(PDO::FETCH_ASSOC);
-
-        return $videos;
-    }
-    public function getVideo(string $id): object|bool {
-        try {
-        $query = 
-        'SELECT v.*, 
-        u.username as uploader_name,
-        u.login as uploader_link,
-        u.avatar as uploader_avatar,
-        (SELECT COUNT(*) FROM rate WHERE video_id = v.id AND type = 1) as likes,
-        (SELECT COUNT(*) FROM rate WHERE video_id = v.id AND type = 0) as dislikes
-        FROM videos v
-        JOIN users u ON v.uid = u.id
-        WHERE v.id = :id';
-
-        $res = $this->pdo->prepare($query);
-        $res->bindValue(':id', $id);
-
-        $res->execute(['id' => $id]);
-
-
-        $video = $res->fetch(PDO::FETCH_OBJ);
-
-        return $video;
-
-        } catch (PDOException $e) {
-            return false;
-        } 
-    }
     public function addVideo(array $data): array {
         try {        
         $videoId = $this->getUniqidId('videos');
@@ -132,19 +47,122 @@ class Video extends Database {
             return ['success' => false, 'message' => 'Unexpected error'];
         }
     }
-    public function delVideo($id): array {
+    public function editVideo(string $id, array $data): array {
+        $props = [];
+
+        try {
+        $response = ['success' => false, 'updated' => [], 'warnings' => []];
+
+        $uid = $_SESSION['uid'];
+
+        $details = $this->getVideo($id, ['id', 'uid', 'title', 'thumb']);
+
+        if (!isset($details) || empty($details)) {
+            return ['success' => false, 'message' => 'Undefined video'];
+        }
+        if ($details['uid'] !== $uid) {
+            return ['success' => false, 'message' => 'Access denied'];
+        }
+
+        $params = [];
+
+        foreach ($data as $key => $value) {
+            switch ($key) {
+                case 'title':
+                    if ($value === $details['title']) {
+                        $response['warnings'][] = 'New title must not match with old';
+                        break;
+                    }
+                    if (mb_strlen($value) > 100) {
+                        $response['warnings'][] = 'Title is too long';
+                        break;
+                    }
+                    $params['title'] = $value;
+                break;
+                case 'thumb':
+                    $ext = $this->getMimeExt($value, 'image');
+
+                    if (!$ext['success']) {
+                        $props['warnings'][] = $ext['message'];
+                        break;
+                    }
+                    $dir = __DIR__ . '/../uploads/thumbs/';
+
+                    $oldThumb = $details['thumb'];
+                    $oldExt = pathinfo($oldThumb, PATHINFO_EXTENSION);
+
+                    $filename = $details['id'] . '.' . $ext['ext'];
+                    
+                    if ($oldThumb && ($oldExt === $ext['ext'])) {
+                        $oldThumbPath = __DIR__ . '/../' . $oldThumb;
+                        
+                        if (file_exists($oldThumbPath)) {
+                            unlink($oldThumbPath); 
+                            move_uploaded_file($value['tmp_name'], $dir . $filename);
+                            $response['success']   = true;
+                            $response['updated'][] = 'thumb';
+                        } else {
+                            $response['warnings'][] = 'Upload thumb error';
+                        }
+                        break;
+                    }
+                    $tempFilename = $details['id'] . '_temp' . '.' . $ext['ext'];
+
+                    $props['thumb']['filePath']  = $dir . $filename;
+                    $props['thumb']['tFilePath'] = $dir . $tempFilename;
+                    
+                    if (move_uploaded_file($value['tmp_name'], $dir . $tempFilename)) {
+                        $params['thumb'] = 'uploads/thumbs/' . $filename;
+                    } else {
+                        $response['warnings'][] = 'Upload thumb error';
+                    }
+                break;
+            }
+        }
+        if (!empty($params)) {
+            $updQuery = "UPDATE videos SET " 
+            . implode(',', array_map(function($k) { return "{$k} = :{$k}"; }, 
+            array_keys($params))) . " WHERE id = :id";
+
+            $upd = $this->pdo->prepare($updQuery);
+            
+            $response['updated'] = array_merge($response['updated'], 
+            array_keys($params));
+
+            $params['id'] = $id;
+            $upd->execute($params);
+            $response['success'] = true;
+
+            if (isset($params['thumb'])) {
+                $oldThumb = $details['thumb'];
+
+                if ($oldThumb) {
+                    $oldThumbPath = __DIR__ . '/../' . $oldThumb;
+                    
+                    if (file_exists($oldThumbPath)) unlink($oldThumbPath);
+                    rename($props['thumb']['tFilePath'], $props['thumb']['filePath']);
+                }
+            }
+        }
+
+    
+        return $response;
+        } catch (PDOException $e) {
+            if (isset($props['thumb']) && !empty($props['thumb']['tempFilename'])) {
+                unlink($props['thumb']['tFilePath']);
+            }
+            return ['success' => false, 'message' => 'Unexpected error'];
+        }
+    }
+    public function delVideo(string $id): array {
         try {
         $uid = $_SESSION['uid'];
 
-        $sel = "SELECT video, thumb FROM videos WHERE id = :id AND uid = :uid";
-        $stmt = $this->pdo->prepare($sel);
+        $sel = $this->pdo->prepare("SELECT video, thumb 
+        FROM videos WHERE id = :id AND uid = :uid");
 
-        $stmt->bindValue(':id', $id);
-        $stmt->bindValue(':uid', $uid);
-
-        $stmt->execute();
-
-        $videoData = $stmt->fetch();
+        $sel->execute(['id' => $id, 'uid' => $uid]);
+        $videoData = $sel->fetch();
 
         if (empty($videoData)) {
             return [
@@ -153,15 +171,12 @@ class Video extends Database {
             ];
         }
 
-        $del = 'DELETE FROM videos WHERE id = :id AND uid = :uid';
-        $res = $this->pdo->prepare($del);
-        
-        $res->bindValue(':id', $id);
-        $res->bindValue(':uid', $_SESSION['uid']);
+        $del = $this->pdo->prepare("DELETE FROM videos 
+        WHERE id = :id AND uid = :uid");
 
-        $res->execute();
+        $del->execute(['id' => $id, 'uid' => $uid]);
         
-        if ($res->rowCount() > 0) {
+        if ($del->rowCount() > 0) {
             $path = __DIR__ . '/../';
             $videoFile = $path . $videoData['video'];
             $thumbFile = $path . $videoData['thumb'];
@@ -173,19 +188,134 @@ class Video extends Database {
                 'success' => true, 
                 'message' => 'Video deleted successfully, reloading...'
             ];
-        } else {
-            return [
-                'success' => false, 
-                'message' => 'Video not found or access denied'
-            ];
         }
-        } catch(PDOException $error) {
-            return [
-                'success' => false, 
-                'message' => 'Database error: ', $error->getMessage()
-            ];
+
+
+        return [
+            'success' => false, 
+            'message' => 'Video not found or access denied'
+        ];
+        } catch(PDOException $e) {
+            return ['success' => false, 'message' => 'Unexpected error'];
         }
     }
+
+    public function getVideo(string $id, array $params = []): array|bool {
+        try {
+        if (empty($id) || empty($params)) $params[] = 'standard';
+
+        $rename = [
+            'username' => 'uploader_name',
+            'login' => 'uploader_login', 
+            'avatar' => 'uloader_avatar'
+        ];
+        
+        $joinUsers = false;
+        $rows = [];
+        foreach ($params as $param) {
+            switch ($param) {
+                case 'standard':
+                    $rows[] = "
+                    v.id, v.thumb, v.video, v.title, v.views, v.duration, v.created, 
+                    u.username as uploader_name,
+                    u.login as uploader_login,
+                    u.avatar as uploader_avatar,
+                    (SELECT COUNT(*) FROM rate WHERE video_id = v.id AND type = 1) as likes,
+                    (SELECT COUNT(*) FROM rate WHERE video_id = v.id AND type = 0) as dislikes
+                    ";
+                    $joinUsers = true;
+                break;
+                case 'username':
+                case 'login':
+                case 'avatar':
+                    $rows[] = "u.{$param}" . " as {$rename[$param]}" ?? '';
+                    $joinUsers = true;
+                break;
+                case 'likes':
+                    $rows[] = "(SELECT COUNT(*) FROM rate WHERE video_id = v.id AND type = 1) as likes";
+                break;
+                case 'dislikes':
+                    $rows[] = "(SELECT COUNT(*) FROM rate WHERE video_id = v.id AND type = 0) as dislikes";
+                break;
+                default:
+                    $rows[] = "v.{$param}";
+                break;
+            }
+        }
+        if ($joinUsers) $joinUsers = "JOIN users u ON v.uid = u.id ";
+        $query = 'SELECT ' .
+        implode(', ', $rows) 
+        . ' FROM videos v ' . $joinUsers . 'WHERE v.id = :id';
+        $res = $this->pdo->prepare($query);
+
+        $res->execute(['id' => $id]);
+        $video = $res->fetch(PDO::FETCH_ASSOC);
+
+        return $video;
+        } catch (PDOException $e) {
+            return false;
+        } 
+    }
+    public function getVideos(?string $excludeId = null, ?string $playlistId = null): array {
+        // Optional takes exclude id and playlist id
+        try {
+        $params = [];
+        $query = 
+        "SELECT v.*, 
+        u.username as uploader_name,
+        u.login as uploader_link,
+        u.avatar as uploader_avatar
+        FROM videos v
+        JOIN users u ON v.uid = u.id";
+
+        $where = [];
+        if ($excludeId) {
+            $where[] = "v.id != :exclude_id";
+            $params['exclude_id'] = $excludeId;
+        }
+        if ($playlistId) {
+            $where[] = "v.id NOT IN 
+            (SELECT video_id FROM playlists_videos WHERE playlist_id = :p_id)";
+            $params['p_id'] = $playlistId;
+        }
+
+        if (!empty($where)) {
+            $query .= " WHERE " . implode(' AND ', $where);
+        }
+
+        $query .= " ORDER BY RAND()";
+
+        
+        $res = $this->pdo->prepare($query);
+        $res->execute($params);
+        $videos = $res->fetchAll(PDO::FETCH_ASSOC);
+
+        return $videos;
+        } catch (PDOException $e) {
+            return ['success' => false, 'message' => 'Unexpected error'];
+        }
+    }
+    public function getMyVideos() {
+        $query = 
+        "SELECT v.*, 
+        u.username as uploader_name,
+        u.login as uploader_link
+        FROM videos v
+        JOIN users u ON v.uid = u.id
+        WHERE v.uid = :uid
+        ORDER BY v.created DESC";
+
+
+        $res = $this->pdo->prepare($query);
+        $res->execute(['uid' => $_SESSION['uid']]);
+
+
+        $videos = $res->fetchAll(PDO::FETCH_ASSOC);
+
+        return $videos;
+    }
+
+
     public function rate(int $type, string $video_id): array {
         try {
         $uid = $_SESSION['uid'];
@@ -327,127 +457,5 @@ class Video extends Database {
             $this->pdo->rollBack();
             return;
         }
-    }
-    public function editVideo(string $id, array $data): array {
-        $props = [];
-
-        try {
-        $response = ['success' => false];
-
-        $uid = $_SESSION['uid'];
-
-        $details = $this->getVideoDetails($id, ['id', 'uid', 'title', 'thumb']);
-
-        if (!isset($details) || empty($details)) {
-            return ['success' => false, 'message' => 'Undefined video'];
-        }
-        if ($details['uid'] !== $uid) {
-            return ['success' => false, 'message' => 'Access denied'];
-        }
-
-        $params = [];
-
-        foreach ($data as $key => $value) {
-            switch ($key) {
-                case 'title':
-                    if ($value === $details['title']) {
-                        $response['warnings'][] = 'New title must not match with old';
-                        break;
-                    }
-                    if (mb_strlen($value) > 100) {
-                        $response['warnings'][] = 'Title is too long';
-                        break;
-                    }
-                    $params['title'] = $value;
-                break;
-                case 'thumb':
-                    $ext = $this->getMimeExt($value, 'image');
-
-                    if (!$ext['success']) {
-                        $props['warnings'][] = $ext['message'];
-                        break;
-                    }
-                    $dir = __DIR__ . '/../uploads/thumbs/';
-
-                    $oldThumb = $details['thumb'];
-                    $oldExt = pathinfo($oldThumb, PATHINFO_EXTENSION);
-
-                    $filename = $details['id'] . '.' . $ext['ext'];
-                    
-                    if ($oldThumb && ($oldExt === $ext['ext'])) {
-                        $oldThumbPath = __DIR__ . '/../' . $oldThumb;
-                        
-                        if (file_exists($oldThumbPath)) {
-                            unlink($oldThumbPath); 
-                            move_uploaded_file($value['tmp_name'], $dir . $filename);
-                            $response['success']   = true;
-                            $response['updated'][] = 'thumb';
-                        } else {
-                            $response['warnings'][] = 'Upload thumb error';
-                        }
-                        break;
-                    }
-                    $tempFilename = $details['id'] . '_temp' . '.' . $ext['ext'];
-
-                    $props['thumb']['filePath']  = $dir . $filename;
-                    $props['thumb']['tFilePath'] = $dir . $tempFilename;
-                    
-                    if (move_uploaded_file($value['tmp_name'], $dir . $tempFilename)) {
-                        $params['thumb'] = 'uploads/thumbs/' . $filename;
-                    } else {
-                        $response['warnings'][] = 'Upload thumb error';
-                    }
-                break;
-            }
-        }
-        if (!empty($params)) {
-            $updQuery = "UPDATE videos SET " 
-            . implode(',', array_map(function($k) { return "{$k} = :{$k}"; }, 
-            array_keys($params))) . " WHERE id = :id";
-
-            $upd = $this->pdo->prepare($updQuery);
-            
-            $response['updated'] = array_merge($response['updated'], 
-            array_keys($params));
-
-            $params['id'] = $id;
-            $upd->execute($params);
-            $response['success'] = true;
-
-            if (isset($params['thumb'])) {
-                $oldThumb = $details['thumb'];
-
-                if ($oldThumb) {
-                    $oldThumbPath = __DIR__ . '/../' . $oldThumb;
-                    
-                    if (file_exists($oldThumbPath)) unlink($oldThumbPath);
-                    rename($props['thumb']['tFilePath'], $props['thumb']['filePath']);
-                }
-            }
-        }
-
-    
-        return $response;
-        } catch (PDOException $e) {
-            if (isset($props['thumb']) && !empty($props['thumb']['tempFilename'])) {
-                unlink($props['thumb']['tFilePath']);
-            }
-            return ['success' => false, 'message' => 'Unexpected error'];
-        }
-    }
-
-
-    private function getVideoDetails(string $id, array $params): array|bool {
-        try {
-        $res = $this->pdo->prepare('SELECT '
-        . implode(', ', $params) . ' FROM videos WHERE id = :id');
-        $res->execute(['id' => $id]);
-
-        $video = $res->fetch(PDO::FETCH_ASSOC);
-        return $video;
-
-        } catch (PDOException $e) {
-            return false;
-        } 
     }
 }

@@ -25,7 +25,14 @@
         gap: 5px;
         input { padding: 10px; }
     }
+    &__thumb-container {
+        gap: 10px;
+        flex-wrap: wrap;
+    }
     &__thumb {
+        padding: 10px;
+        border-radius: 10px;
+        border: 1px solid var(--border-first);
         width: 300px;
         aspect-ratio: 16/9;
     }

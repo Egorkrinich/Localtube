@@ -41,22 +41,22 @@
   transition: opacity 0.2s;
   opacity: 0;
 }
-.preview--edit [data-edit-btn=moveUp],
-.preview--edit [data-edit-btn=moveDown] {
+.preview--edit [data-pl-edit-btn=moveUp],
+.preview--edit [data-pl-edit-btn=moveDown] {
   padding: 5px 10px;
   border-radius: 10px;
 }
-.preview--edit [data-edit-btn=moveDown] svg {
+.preview--edit [data-pl-edit-btn=moveDown] svg {
   -webkit-transform: rotateX(180deg);
           transform: rotateX(180deg);
 }
-.preview--edit [data-edit-btn=delete] {
+.preview--edit [data-pl-edit-btn=delete] {
   padding: 10px;
 }
-.preview--edit [data-edit-btn=delete] .delete-icon {
+.preview--edit [data-pl-edit-btn=delete] .delete-icon {
   display: block;
 }
-.preview--edit [data-edit-btn=delete] .deny-icon {
+.preview--edit [data-pl-edit-btn=delete] .deny-icon {
   display: none;
 }
 

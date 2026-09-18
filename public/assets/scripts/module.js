@@ -35,25 +35,31 @@ switch (cleanPath) {
     break;
 }
 async function initHomePage() {
-    const { RenderVideos } = await import('./modules/RenderVideos.js')
+    const { RenderVideos } = await import('./modules/videos/RenderVideos.js')
 
     new Context('global')
 
     new RenderVideos('video')
 }
 async function initWatchPage() {
-    const { RenderVideos } = await import('./modules/RenderVideos.js')
-    const { Player } = await import('./modules/Player.js')
-    const { Video } = await import('./modules/Video.js')
+    await import('./modules/videos/VideoReact.js')
+    const { RenderVideos } = await import('./modules/videos/RenderVideos.js')
+    const { Player } = await import('./modules/videos/Player.js')
+    const { Video } = await import('./modules/videos/Video.js')
     const { Playlist } = await import('./modules/Playlist.js')
-
+    const { VideoPlayback } = await import('./modules/videos/VideoPlayback.js')
 
     new Context('global')
-    
-    new Playlist('watch')
+
     new Player()
-    new RenderVideos('video', 'h')
-    new Video(VIDEO_DATA['likes'], VIDEO_DATA['dislikes'])
+    new Video()
+
+    const playlistObj = new Playlist('watch')
+    const videolistObj = new RenderVideos('video', 'h')
+
+    await Promise.all([playlistObj.ready, videolistObj.ready])
+    
+    new VideoPlayback(playlistObj.playlistRawVideos, videolistObj.videosRaw)
 }
 async function initManagerPage() {
     const { RenderVideos } = await import('./modules/RenderVideos.js')

@@ -87,7 +87,7 @@ export default class Context {
                 this.copyLink()
             }
             if (target.closest('.context__edit')) {
-                window.dispatchEvent(new CustomEvent('initEdit', {
+                window.dispatchEvent(new CustomEvent('initEditForm', {
                     detail: { id: this.id }
                 }))
                 this.closeMenu()

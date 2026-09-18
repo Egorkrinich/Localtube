@@ -42,15 +42,15 @@
     }
     
 
-    [data-edit-btn=moveUp],
-    [data-edit-btn=moveDown] {
+    [data-pl-edit-btn=moveUp],
+    [data-pl-edit-btn=moveDown] {
         padding: 5px 10px;
         border-radius: 10px;
     }
-    [data-edit-btn=moveDown] svg { 
+    [data-pl-edit-btn=moveDown] svg { 
         transform: rotateX(180deg); 
     }
-    [data-edit-btn=delete] {
+    [data-pl-edit-btn=delete] {
         padding: 10px;
         .delete-icon { display: block; }
         .deny-icon { display: none; }

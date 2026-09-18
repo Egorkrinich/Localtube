@@ -3,9 +3,9 @@ if (isset($_SESSION['uid'])) {
     $dbUser = new User();
     $data = $dbUser->getUserData(['avatar', 'username'], 'id');
 
-    $uid = $_SESSION['uid'];
-    $login = $_SESSION['login'];
-    $avatar = $data['avatar'];
+    $uid      = $_SESSION['uid'];
+    $login    = $_SESSION['login'];
+    $avatar   = $data['avatar'];
     $username = $data['username'];
 }
 ?>
@@ -27,8 +27,9 @@ if (isset($_SESSION['uid'])) {
         };
 
         <?php if (isset($pageData) && !empty($pageData)) : ?>
-            const <?php echo $pageData['name'] ?> =
-            <?php echo json_encode($pageData['meta'])?>
+            window.<?php echo $pageData['name'] ?> = 
+            <?php echo json_encode($pageData['meta'], 
+            JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT)?>
         <?php endif; ?>
 
     </script>

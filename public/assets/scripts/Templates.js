@@ -1,3 +1,5 @@
+import { htmlspecialchars, timeAgo } from "./modules/helper.js"
+
 export const Templates = {
     preview(data, isHorizontal) {
         return `
@@ -33,6 +35,22 @@ export const Templates = {
         </a> 
         `
     },
+    contextMenu(content) {
+        return `
+        <ul class="context__list">
+        ${
+            content.map((btn) => {
+            return `
+            <li class="context__item">
+                ${btn}
+            </li>`
+            }).join('')
+
+        }
+        </ul>
+        `
+    },
+
     playlistPreview(data) {
         return `
         <a class="preview" href="watch?v=${data.video_id}&playlist=${data.playlist_id}">
@@ -79,8 +97,8 @@ export const Templates = {
                             ${htmlspecialchars(data.uploader_name)}
                         </div>
                 </div>
-                <div class="preview__right f-column-between" data-edit-id="${data.id}">
-                    <button class="btn--secondary f-row-center playlist-menu__delete-btn" data-edit-btn="delete">
+                <div class="preview__right f-column-between" data-pl-edit-id="${data.id}">
+                    <button class="btn--secondary f-row-center playlist-menu__delete-btn" data-pl-edit-btn="delete">
                         <svg class="delete-icon" width="24px" height="24px" viewBox="0 -960 960 960">
                             <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/>
                         </svg>
@@ -89,12 +107,12 @@ export const Templates = {
                         </svg>
                     </button>
                     <div class="preview__move">
-                        <button class="btn--secondary" data-edit-btn="moveUp">
+                        <button class="btn--secondary" data-pl-edit-btn="moveUp">
                             <svg width="24px" height="24px" viewBox="0 -960 960 960">
                                 <path d="M480-528 296-344l-56-56 240-240 240 240-56 56-184-184Z"/>
                             </svg>
                         </button>
-                        <button class="btn--secondary" data-edit-btn="moveDown">
+                        <button class="btn--secondary" data-pl-edit-btn="moveDown">
                             <svg width="24px" height="24px" viewBox="0 -960 960 960">
                                 <path d="M480-528 296-344l-56-56 240-240 240 240-56 56-184-184Z"/>
                             </svg>
@@ -105,55 +123,58 @@ export const Templates = {
         </a> 
         `
     },
-    playlistWatch(info, videos) {
+    playlistWatch(details, videos) {
         return `
         <div class="watch-playlist">
             <div class="watch-playlist__header">
                 <h2 class="watch-playlist__title">
-                    ${htmlspecialchars(info['title'])}
+                    ${htmlspecialchars(details['title'])}
                 </h2>
-                <div class="watch-playlist__info">
+                <div class="watch-playlist__details">
                     <span class="watch-playlist__user">
-                        ${htmlspecialchars(info['username'])}
+                        ${htmlspecialchars(details['username'])}
                     </span>
                     <div class="watch-playlist__meta f-row-between">
                         <span class="watch-playlist__type f-row">
-                            ${typeIcon[info['type']] + info['type']}
+                            ${typeIcon[details['type']] + details['type']}
                         </span>
                         <span class="watch-playlist__amount">
-                            ${info['amount']}
+                            ${details['amount']}
                         </span>
                     </div>
                 </div>
             </div>
             <div class="watch-playlist__list f-column">
             ${
-                videos.map((video) => {
+            videos.map(({
+            id, thumb, uploader_avatar, title, uploader_name, views, created
+        }) => {
                     return `
-                    <a class="preview preview--horizontal" href="watch?v=${info['id']}">
+                    <a class="preview preview--horizontal" href="watch?v=${id}&playlist=${details['id']}">
                         <div class="preview__thumb">
-                            <img src="${BASE_URL + video['thumb']}" 
-                            alt="Thumb of ${htmlspecialchars(video['title'])}">
+                            <img src="${BASE_URL + thumb}" 
+                            alt="Thumb of ${htmlspecialchars(title)}">
                         </div>
                         <div class="preview__body f-row">
                             <div class="preview__left">
                                 <div class="avatar">
-                                    <img src="${BASE_URL + video['uploader_avatar']}" alt="avatar">
+                                    <img src="${BASE_URL + uploader_avatar}" 
+                                    alt="${uploader_name}'s avatar">
                                 </div>
                             </div>
                             <div class="preview__center">
                                 <h3 class="preview__title">
-                                    ${htmlspecialchars(video['title'])}
+                                    ${htmlspecialchars(title)}
                                 </h3>
                                 <div class="preview__uploader">
-                                    ${htmlspecialchars(video['uploader_name'])}
+                                    ${htmlspecialchars(uploader_name)}
                                 </div>
                                 <div class="preview__stats">
-                                    ${video['views'] + " views • " + timeAgo(video['created'])}
+                                    ${views + " views • " + timeAgo(created)}
                                 </div>
                             </div>
                             <div class="preview__right">
-                                <button class="context-btn" data-context-btn data-context-id="${video['id']}">
+                                <button class="context-btn" data-context-btn data-context-id="${id}">
                                     <svg height="24" viewBox="0 0 24 24" width="24">
                                         <path d="M12 4a2 2 0 100 4 2 2 0 000-4Zm0 6a2 2 0 100 4 2 2 0 000-4Zm0 6a2 2 0 100 4 2 2 0 000-4Z"></path>
                                     </svg>
@@ -168,59 +189,7 @@ export const Templates = {
         </div>
         `
     },
-    contextMenu(content) {
-        return `
-        <ul class="context__list">
-        ${
-            content.map((btn) => {
-            return `
-            <li class="context__item">
-                ${btn}
-            </li>`
-            }).join('')
 
-        }
-        </ul>
-        `
-    },
-
-}
-const htmlspecialchars = (str) => {
-    if (!str) return ""
-
-    return str.replace(/[&<>"']/g, (s) => ({
-        '&': '&amp;',
-        '<': '&lt;',
-        '>': '&gt;',
-        '"': '&quot;',
-        "'": '&#039;'
-    })[s]);
-};
-const timeAgo = (date) => {
-    const now = new Date()
-    const created = new Date(date);
-
-    const diff = Math.floor((now - created) / 1000)
-
-    if (diff < 60) return 'now';
-
-    const minutes = Math.floor(diff / 60)
-    if (minutes < 60) return `${minutes} min. ago`
-
-    const hours = Math.floor(minutes / 60);
-    if (hours < 24) return `${hours} h. ago`
-
-    const days = Math.floor(hours / 24);
-    if (days < 7) return `${days} d. ago`
-
-    const weeks = Math.floor(days / 7);
-    if (days < 30) return `${weeks} w. ago`
-
-    const months = Math.floor(days / 30.44);
-    if (months < 12) return `${months} mo. ago`
-
-    const years = Math.floor(months / 12);
-    return `${years} y. ago`
 }
 
 const typeIcon = {

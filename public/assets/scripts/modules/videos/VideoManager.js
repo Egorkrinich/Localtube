@@ -11,14 +11,17 @@ export class VideoManager {
         this.editForm = document.querySelector(`#edit`)
         // Elements
 
-        this.thumbContainer = this.editForm.querySelector('.m-edit__thumb-container')
-
+        this.form = null
+        this.thumbCont = null
         
         // Values
         this.videoId = null
         
         this.currentAction = null
         this.submitBtn = null
+
+        this.uploadThumbURL = null
+        this.editThumbURL = null
 
         this.initListeners()
         this.setStep(this.uploadForm, 1)
@@ -28,42 +31,63 @@ export class VideoManager {
         this.uploadForm.video.addEventListener('change', () => {
             this.setStep(this.uploadForm, 2)
         })
+        this.uploadForm.thumb.addEventListener('change', (e) => {
+            if (this.form !== this.uploadForm) {
+                this.form = this.uploadForm
+                this.thumbCont = this.uploadForm.querySelector('[data-manager-thumb-cont]')
+            }
+            const files = e.target.files
+            if (files.length > 0) {
+                const file = files[0];
+                if (this.uploadThumbURL) {
+                    this.thumbCont.firstElementChild.remove();
+                    URL.revokeObjectURL(this.uploadThumbURL)
+                }
+                this.uploadThumbURL = URL.createObjectURL(file)
+                
+                this.createThumb('afterbegin', this.uploadThumbURL, 'Selected thumb')
+            } 
+        })
         this.uploadForm.addEventListener('submit', (e) => {
             e.preventDefault()
 
             this.submitBtn = this.uploadForm.querySelector('button[type="submit"]')
             this.submitBtn.disabled = true
-            this.currentAction = 'upload'
-            
 
-            this.collectUpload(this.uploadForm, 'upload')
+            this.currentAction = 'upload'            
+
+            this.collectUpload()
         })
         // Edit 
-        window.addEventListener('initEdit', (e) => {
+        window.addEventListener('initEditForm', (e) => {
             const id = e.detail.id
-            if (this.videoId !== id) {
-                this.videoId = id
-                this.initEditForm(this.videoId) 
-            }
+            this.form = this.editForm
+            this.thumbCont = this.editForm.querySelector('[data-manager-thumb-cont]')
+            if (this.videoId === id) return;
+            
+            this.videoId = id
+            this.initEditForm() 
+        })
+        this.editForm.thumb.addEventListener('change', (e) => {
+            const files = e.target.files
+            if (files.length > 0) {
+                const file = files[0];
+                if (this.editThumbURL) {
+                    this.thumbCont.firstElementChild.remove();
+                    URL.revokeObjectURL(this.editThumbURL)
+                }
+                this.editThumbURL = URL.createObjectURL(file)
+                
+                this.createThumb('afterbegin', this.editThumbURL, 'Selected thumb')
+            } 
         })
         this.editForm.addEventListener('submit', (e) => {
             e.preventDefault()
-            this.submitBtn = this.uploadForm.querySelector('button[type="submit"]')
+            this.submitBtn = this.editForm.querySelector('button[type="submit"]')
             this.submitBtn.disabled = true
             this.currentAction = 'edit'
 
             this.collectEdit()
-        })
-        this.editForm.addEventListener('change', (e) => {
-            if (e.target.name !== 'thumb') return
-
-            const files = e.target.files
-            if (files.length > 0) {
-                const file = files[0];
-                this.newThumb = URL.createObjectURL(file)
-                
-                this.createThumb('afterbegin', this.newThumb, 'selected thumb')
-            } 
         })
         // Delete
         window.addEventListener('video:delete', (e) => {
@@ -75,13 +99,13 @@ export class VideoManager {
     }
 
     async collectUpload() {
-        const formData = new FormData(this.uploadForm)
-        const videoFile = formData.get('video');
+        const uploadData = new FormData(this.uploadForm)
+        const videoFile = uploadData.get('video');
 
         if (videoFile) {
             const duration = await this.getVideoDuration(videoFile)
-            formData.append('duration', duration)
-            this.sendData(formData, action)
+            uploadData.append('duration', duration)
+            this.sendData(uploadData, 'upload')
         }
     }
     collectEdit() {
@@ -114,14 +138,14 @@ export class VideoManager {
         })
         .then((res) => res.json())
         .then((res) => {
-            switch (this.currentAction) {
-                case 'edit':
+            switch (this.API[this.currentAction]) {
+                case this.API.edit:
                     let message = ''
-                    if (res.updated) {
+                    if (res.updated.length > 0) {
                         const verb = res.updated.length > 1 ? ' were ' : ' was '
                         message = res.updated.join(', ') + verb + 'updated'
                     }
-                    if (res.warnings) {
+                    if (res.warnings.length > 0) {
                         if (message.length > 0) {
                             message += ` but ` + res.warnings.join(', ')
                         } else {
@@ -134,7 +158,8 @@ export class VideoManager {
                             message: message,
                         }
                     }))
-                    setTimeout(() => { location.reload() }, 5000)
+                    
+                    setTimeout(() => { location.reload() }, 4000)
                 break;
                 default:
                     window.dispatchEvent(new CustomEvent('toast', {
@@ -146,10 +171,10 @@ export class VideoManager {
                     if (res.success) setTimeout(() => location.reload(), 2000)
                 break
             }
-        })
-        .finally(() => {
-            this.submitBtn.disabled = false
-            this.submitBtn = null
+            if (!res.success) {
+                this.submitBtn.disabled = false
+                this.submitBtn = null
+            }
         })
     }
     deleteVideo() {
@@ -161,19 +186,41 @@ export class VideoManager {
             body: data
         })
         .then((res) => res.json())
-        .then((data) => {
+        .then((res) => {
             window.dispatchEvent(new CustomEvent('toast', {
                 detail: {
-                    message: data.message,
-                    success: data.success
+                    message: res.message,
+                    success: res.success
                 }
             }))
-            if (data.success) {
-                setTimeout(() => location.reload(), 2000)
-            }
+            if (res.success) { setTimeout(() => location.reload(), 2000) }
         })
     }
     
+
+
+    initEditForm() {
+        fetch(`${BASE_URL}API/Videos/${this.API.get}?id=${this.videoId}`)
+        .then((res) => res.json())
+        .then((res) => {
+            this.editForm.title.value = res.title
+            this.editForm.title.defaultValue = res.title
+
+            this.thumbCont.innerHTML = ''
+
+            if (this.editThumbURL) { URL.revokeObjectURL(this.editThumbURL) }
+            this.createThumb('beforeend', BASE_URL + res.thumb, 'Current thumb')
+        })
+    }
+    createThumb(pos, src, alt) {
+        const html = `
+        <div class="m-edit__thumb">
+            ${alt}
+            <img src="${src}" alt="${alt}">
+        </div>
+        `
+        this.thumbCont.insertAdjacentHTML(pos, html)
+    }
 
     setStep(form, number) {
         form.setAttribute('data-step', number);
@@ -189,25 +236,5 @@ export class VideoManager {
                 res(Math.floor(video.duration));
             };
         });
-    }
-
-    initEditForm() {
-        fetch(`${BASE_URL}API/Videos/${this.API.get}?id=${this.videoId}`)
-        .then((res) => res.json())
-        .then((res) => {
-            this.editForm.title.value = res.title
-            this.editForm.title.defaultValue = res.title
-
-            this.thumbContainer.innerHTML = ''
-            if (this.newThumb) { URL.revokeObjectURL(this.newThumb) }
-            this.createThumb('beforeend', BASE_URL + res.thumb, res.title)
-        })
-    }
-    createThumb(pos, src, alt) {
-        const img = document.createElement('img')
-        img.classList.add('m-edit__thumb')
-        img.src = src
-        img.alt = alt
-        this.thumbContainer.insertAdjacentElement(pos, img)
     }
 }

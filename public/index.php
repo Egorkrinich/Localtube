@@ -172,9 +172,10 @@ if (str_starts_with($path, 'API')) {
                         ]);
                         exit;
                     }
-
-                    $action  = mb_strtolower(trim($_GET['action'] ?? ''));
-                    $videoId = trim($_GET['videoId'] ?? '');
+                    $raw    = json_decode(file_get_contents('php://input'), true);
+                    $id     = trim((string)($raw['id'] ?? ''));
+                    $action = (string) ($raw['action'] ?? '');
+                    $action = mb_strtolower(trim($action));
 
                     if (!isset($action) || empty($action)) {
                         echo json_encode([
@@ -190,7 +191,7 @@ if (str_starts_with($path, 'API')) {
                         ]);
                         exit;
                     }
-                    if (!isset($videoId) || empty($videoId)) {
+                    if (!isset($id) || empty($id)) {
                         echo json_encode([
                             'success' => false,
                             'message' => 'Needed video id for interact'
@@ -198,12 +199,13 @@ if (str_starts_with($path, 'API')) {
                         exit;
                     }
                     $type = $action === 'like' ? 1 : 0;
-                    $res = $dbVideo->rate($type, $videoId);
+                    $res = $dbVideo->rate($type, $id);
 
                     echo json_encode($res);
                 exit;
                 case 'addView':
-                    $id = trim($_GET['v'] ?? '');
+                    $raw = json_decode(file_get_contents('php://input'), true);
+                    $id = trim((string)($raw['id'] ?? ''));
                     $uid = $_SESSION['uid'] ?? '';
 
                     if (empty($id)) exit;
@@ -335,8 +337,9 @@ if (str_starts_with($path, 'API')) {
 
                 exit;
                 case 'addToPlaylist':
-                    $video_id = trim($_POST['video_id'] ?? '');
-                    $playlist_id = trim($_POST['playlist_id'] ?? '');
+                    $raw = json_decode(file_get_contents('php://input'), true);
+                    $video_id    = trim((string) ($raw['video_id'] ?? ''));
+                    $playlist_id = trim((string) ($raw['playlist_id'] ?? ''));
                     if (empty($playlist_id) || empty($video_id)) {
                         echo json_encode([
                             'success' => false,

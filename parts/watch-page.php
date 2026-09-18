@@ -11,10 +11,8 @@
     // Video data
     $pageData = [];
 
-    $pageData['name']             = 'VIDEO_DATA';
-    $pageData['meta']['likes']    = $video->likes ?? 0;
-    $pageData['meta']['dislikes'] = $video->dislikes ?? 0;
-    $pageData['meta']['duration'] = $video->duration ?? 0;
+    $pageData['name'] = 'VIDEO_DATA';
+    $pageData['meta'] = $video;
 
     // Playlists
     $myPlaylists = false;
@@ -35,14 +33,14 @@
 
         <div class="player" id="player">
             
-            <video class="player__video" id="player-video" 
-            src="<?php echo BASE_URL . $video->video; ?>"></video>
+            <video class="player__video" id="player-video" data-vreact="video"
+            src="<?php echo BASE_URL . $video['video']; ?>"></video>
             
             <div class="control f-column-between active" id="player-control">
 
                 <div class="control__header">
-                    <h3 class="control__title">
-                        <?php echo $video->title; ?>
+                    <h3 class="control__title" data-vreact="title">
+                        <?php echo htmlspecialchars($video['title']); ?>
                     </h3>
                 </div>
 
@@ -75,7 +73,7 @@
                             <div class="player__timer" id="timer"></div>
                         </div>
 
-                        <div class="control__right">
+                        <div class="control__right f-row">
                             <button class="player__btn" data-player-btn="toggle-full">
                                 <svg width="30px" height="30px" viewBox="0 -960 960 960">
                                     <path d="M200-120q-33 0-56.5-23.5T120-200v-160h80v160h160v80H200Zm400 0v-80h160v-160h80v160q0 33-23.5 56.5T760-120H600ZM120-600v-160q0-33 23.5-56.5T200-840h160v80H200v160h-80Zm640 0v-160H600v-80h160q33 0 56.5 23.5T840-760v160h-80Z"/>
@@ -87,7 +85,7 @@
                 </div>
             </div>
 
-            <div class="rewind f-row-between">
+            <div class="rewind f-row-between" id="rewind">
                 <div class="rewind-left f-row-center" 
                 data-player-rewind="left">
                     - 5s 
@@ -108,14 +106,19 @@
 
         <div class="video__body" id="video-body">
             <div class="video__meta">
-                <h1 class="video__title"><?php echo htmlspecialchars($video->title); ?></h1>
+                <h1 class="video__title" data-vreact="title">
+                    <?php echo htmlspecialchars($video['title']); ?>
+                </h1>
                 <div class="video__subheader f-row-between">
-                    <a class="video__uploader f-row" href="<?php echo BASE_URL . $video->uploader_link; ?>">
+                    <a href="<?php echo BASE_URL . $video['uploader_login']; ?>" 
+                    class="video__uploader f-row" data-vreact="uploader_login">
                         <div class="avatar">
-                            <img src="<?php echo BASE_URL . $video->uploader_avatar; ?>" alt="avatar">
+                            <img data-vreact="uploader_avatar" 
+                            src="<?php echo BASE_URL . $video['uploader_avatar']; ?>" 
+                            alt="avatar">
                         </div>
-                        <div class="video__uploader-name">
-                            <?php echo htmlspecialchars($video->uploader_name); ?>
+                        <div class="video__uploader-name" data-vreact="uploader_name">
+                            <?php echo htmlspecialchars($video['uploader_name']); ?>
                         </div>
                     </a>
 
@@ -126,7 +129,9 @@
                             <svg width="24px" height="24px" viewBox="0 -960 960 960">
                                 <path d="M720-120H280v-520l280-280 50 50q7 7 11.5 19t4.5 23v14l-44 174h258q32 0 56 24t24 56v80q0 7-2 15t-4 15L794-168q-9 20-30 34t-44 14Zm-360-80h360l120-280v-80H480l54-220-174 174v406Zm0-406v406-406Zm-80-34v80H160v360h120v80H80v-520h200Z"/>
                             </svg>
-                            <span data-video-btn-value><?php echo $pageData['meta']['likes']; ?></span>
+                            <span data-vreact="likes">
+                                <?php echo $pageData['meta']['likes']; ?>
+                            </span>
                         </button>
 
                         <button class="video__toolbar-btn btn--secondary f-row-center" 
@@ -134,7 +139,9 @@
                             <svg width="24px" height="24px" viewBox="0 -960 960 960">
                                 <path d="M240-840h440v520L400-40l-50-50q-7-7-11.5-19t-4.5-23v-14l44-174H120q-32 0-56-24t-24-56v-80q0-7 2-15t4-15l120-282q9-20 30-34t44-14Zm360 80H240L120-480v80h360l-54 220 174-174v-406Zm0 406v-406 406Zm80 34v-80h120v-360H680v-80h200v520H680Z"/>
                             </svg>
-                            <span data-video-btn-value><?php echo $pageData['meta']['dislikes']; ?></span>
+                            <span data-vreact="dislikes">
+                                <?php echo $pageData['meta']['dislikes']; ?>
+                            </span>
                         </button>
 
                         <button class="video__toolbar-btn btn--secondary" data-video-action="share">

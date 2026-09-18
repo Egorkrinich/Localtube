@@ -32,6 +32,7 @@
                 <label for="thumb">Video thumb</label>
                 <input name="thumb" class="m-upload__thumb" 
                 accept="image/*" type="file" required>
+                <div class="m-upload__thumb-container" data-manager-thumb-cont></div>
             </div>
 
         </div>
@@ -58,7 +59,7 @@
 
     <form class="m-edit page-menu" data-page-menu="edit" id="edit" enctype="multipart/form-data">
         <div class="m-edit__header page-menu__header f-row">
-            <button data-page-menu-btn="edit">
+            <button data-page-menu-btn="edit" type="button">
                 <svg width="24px" height="24px" viewBox="0 -960 960 960">
                     <path d="M400-240 160-480l240-240 56 58-142 142h486v80H314l142 142-56 58Z"/>
                 </svg>
@@ -76,7 +77,7 @@
             <div class="m-edit__field f-column">
                 <label for="thumb">Thumb</label>
                 <input name="thumb" type="file" accept="image/*">
-                <div class="m-edit__thumb-container"></div>
+                <div class="m-edit__thumb-container f-row" data-manager-thumb-cont></div>
             </div>
         </div>
     </form>

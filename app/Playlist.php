@@ -117,7 +117,7 @@ class Playlist extends Database {
             array_keys($updateParams))) . " WHERE id = :id";
 
             $upd = $this->pdo->prepare($updQuery);
-            $response['updatedFields'] = array_keys($updateParams);
+            $response['updated'] = array_keys($updateParams);
 
             $updateParams['id'] = $id;
             $upd->execute($updateParams);
@@ -187,10 +187,10 @@ class Playlist extends Database {
     
     public function getPlaylist(string $playlistId) {
         try {
-        $info = $this->getPlaylistAndUserInfo($playlistId, 
+        $details = $this->getPlaylistAndUserInfo($playlistId, 
         ['id', 'title', 'type', 'username', 'avatar' , 'amount']);
         
-        if (!$info) {
+        if (!$details) {
             return ['success' => false, 'message' => 'Undefined playlist'];
         }     
         $res = $this->pdo->prepare("SELECT
@@ -209,7 +209,7 @@ class Playlist extends Database {
         $res->execute(['p_id' => $playlistId]);
         $videos = $res->fetchAll(PDO::FETCH_ASSOC);
 
-        return ['info' => $info, 'videos' => $videos];
+        return ['details' => $details, 'videos' => $videos];
         } catch (PDOException $e) {
             return ['success' => false, 'message' => 'Unexpected error'];
         }
