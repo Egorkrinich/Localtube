@@ -9,7 +9,9 @@
   display: flex;
 }
 .m-upload[data-step="2"] .m-upload__step--2 {
-  display: block;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
 }
 .m-upload__step--1 .m-upload__body {
   -webkit-box-flex: 1;
@@ -18,6 +20,10 @@
 }
 .m-upload__step--2 .m-upload__body {
   gap: 10px;
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+  overflow-y: auto;
 }
 .m-upload__field {
   gap: 5px;
@@ -25,6 +31,29 @@
 }
 .m-upload__field input {
   padding: 10px;
+}
+.m-upload__footer {
+  max-height: 0;
+  margin-top: auto;
+  overflow: hidden;
+  -webkit-transition: max-height 0.3s;
+  transition: max-height 0.3s;
+}
+.m-upload__progress-bar {
+  width: 100%;
+  height: 5px;
+  margin-bottom: 10px;
+  margin-block: 10px;
+  border-radius: 5px;
+  background: rgb(48, 48, 48);
+  overflow: hidden;
+}
+.m-upload__progress-bar .m-upload__progress-line {
+  height: 100%;
+  width: 0%;
+  background: red;
+  -webkit-transition: width 0.3s;
+  transition: width 0.3s;
 }
 
 .m-edit__header, .m-edit__body {
@@ -50,11 +79,4 @@
   border: 1px solid var(--border-first);
   width: 300px;
   aspect-ratio: 16/9;
-}
-
-.manager {
-  padding: 0;
-}
-.manager__body {
-  gap: var(--gap-primary);
 }/*# sourceMappingURL=manager.css.map */

@@ -4,7 +4,7 @@
 
 ?>
 
-<main class="history content">
+<main class="history headered">
     <div class="history__header f-row">
         <h1 class="history__title">
             Watch history

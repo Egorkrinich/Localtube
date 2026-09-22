@@ -1,13 +1,1 @@
-.history {
-  padding: 0;
-}
-.history__header {
-  padding: 15px;
-  border-bottom: 1px solid var(--border-first);
-}
-.history__body {
-  padding: 15px;
-}
-.history__list {
-  gap: var(--gap-primary);
-}/*# sourceMappingURL=history.css.map */
+/*# sourceMappingURL=history.css.map */

@@ -11,6 +11,10 @@ export class VideoManager {
         this.editForm = document.querySelector(`#edit`)
         // Elements
 
+        this.uploadFooter = this.uploadForm.querySelector('.m-upload__footer')
+        this.uploadProgress = this.uploadFooter
+        .querySelector('.m-upload__progress-line')
+
         this.form = null
         this.thumbCont = null
         
@@ -56,7 +60,7 @@ export class VideoManager {
 
             this.currentAction = 'upload'            
 
-            this.collectUpload()
+            this.sendUpload()
         })
         // Edit 
         window.addEventListener('initEditForm', (e) => {
@@ -97,16 +101,65 @@ export class VideoManager {
             }
         })
     }
+    addXHRListeners(XHR) {
+        XHR.upload.addEventListener('progress', (e) => {
+            if (e.lengthComputable) {
+                const percent = Math.round((e.loaded / e.total) * 100)
+                this.uploadProgress.style.width = `${percent}%`
+            }
+        })
+        XHR.addEventListener('load', () => {
+            if (XHR.status !== 200) {
+                window.dispatchEvent(new CustomEvent('toast', {
+                    detail: {
+                        message: false,
+                        success: `Error status: ` + XHR.status
+                    }
+                }))
+                return
+            }
+            try {
+                const res = JSON.parse(XHR.responseText)
+                window.dispatchEvent(new CustomEvent('toast', {
+                    detail: {
+                        message: res.message,
+                        success: res.success
+                    }
+                }))
+                if (res.success) { setTimeout(() => location.reload(), 2000) }
+            } catch (e) {
+                window.dispatchEvent(new CustomEvent('toast', {
+                    detail: {
+                        message: false,
+                        success: XHR.responseText
+                    }
+                }))
+            }
+        })
+    }
 
-    async collectUpload() {
+    async sendUpload() {
         const uploadData = new FormData(this.uploadForm)
         const videoFile = uploadData.get('video');
 
-        if (videoFile) {
-            const duration = await this.getVideoDuration(videoFile)
-            uploadData.append('duration', duration)
-            this.sendData(uploadData, 'upload')
+        if (!videoFile) {
+            window.dispatchEvent(new CustomEvent('toast', {
+                detail: {
+                    success: false,
+                    message: "Video not found"
+                }
+            }))
         }
+        const duration = await this.getVideoDuration(videoFile)
+        uploadData.append('duration', duration)
+
+        this.uploadFooter.style.maxHeight = `${this.uploadFooter.scrollHeight}px`
+
+        const XHR = new XMLHttpRequest();
+        this.addXHRListeners(XHR)
+
+        XHR.open('POST', `${BASE_URL}API/Videos/${this.API.upload}`)
+        XHR.send(uploadData)
     }
     collectEdit() {
         const editData = new FormData()

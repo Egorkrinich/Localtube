@@ -3,17 +3,72 @@
   margin-left: var(--sidebar-width);
   padding: 15px;
 }
+@media (max-width: 800px) {
+  .content {
+    padding-bottom: calc(var(--sidebar-height) + 10px);
+    margin-left: 0;
+  }
+}
+@media (max-width: 500px) {
+  .content {
+    padding-inline: 10px;
+    padding-top: 10px;
+  }
+}
+
+.headered {
+  margin-top: var(--header-height);
+  margin-left: var(--sidebar-width);
+}
+.headered > :nth-child(1) {
+  padding: 15px;
+  border-bottom: 1px solid var(--border-first);
+}
+.headered > :nth-child(2) {
+  padding: 15px;
+  gap: var(--gap-primary);
+  container-type: inline-size;
+}
+.headered--menu {
+  display: none;
+  margin-top: 0;
+  margin-left: 0;
+}
+.headered--menu.active {
+  display: block;
+}
+@media (max-width: 800px) {
+  .headered {
+    margin-left: 0;
+  }
+  .headered > :nth-child(2) {
+    padding-bottom: calc(var(--sidebar-height) + 10px);
+  }
+}
+@media (max-width: 500px) {
+  .headered > :nth-child(1) {
+    padding: 5px 10px;
+  }
+  .headered > :nth-child(2) {
+    padding-inline: 10px;
+  }
+}
+
+.page-menu-container {
+  margin-top: var(--header-height);
+  margin-left: var(--sidebar-width);
+}
+@media (max-width: 800px) {
+  .page-menu-container {
+    margin-left: 0;
+  }
+}
 
 .content--grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: var(--gap-primary);
-}
-@media (max-width: 800px) {
-  .content--grid {
-    margin-left: 0;
-    padding-inline: 10px;
-  }
+  container-type: inline-size;
 }
 
 .burger-btn {
@@ -42,8 +97,12 @@
   opacity: 1;
 }
 
-.home {
-  padding: 50px 20px 80px;
+.headered .history__body {
+  container-type: normal;
+}
+.headered .history__list {
+  container-type: inline-size;
+  gap: var(--gap-primary);
 }
 
 .header {
@@ -222,6 +281,27 @@
 }
 .sidebar__link:hover {
   background: var(--bg-first-hover);
+}
+@media (max-width: 800px) {
+  .sidebar {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+    -ms-flex-pack: distribute;
+        justify-content: space-around;
+    top: auto;
+    left: auto;
+    width: 100%;
+    height: var(--sidebar-height);
+  }
+  .sidebar__link {
+    padding: 0 20px;
+    height: 100%;
+    width: 33.3%;
+  }
 }
 
 .user {

@@ -1,9 +1,9 @@
-import Menu from './modules/Menu.js';
-import Context from './modules/Context.js';
-import Toast from './modules/Toast.js';
+import Menu from     './modules/Menu.js';
+import Context from  './modules/Context.js';
+import Toast from    './modules/Toast.js';
 import Settings from './modules/Settings.js';
-import Search from './modules/Search.js';
-import Stage from './modules/Stage.js';
+import Search from   './modules/Search.js';
+import Stage from    './modules/Stage.js';
 
 const currentFullURL = window.location.origin + window.location.pathname
 let cleanPath = currentFullURL.replace(BASE_URL, '') || 'home'
@@ -35,48 +35,49 @@ switch (cleanPath) {
     break;
 }
 async function initHomePage() {
-    const { RenderVideos } = await import('./modules/videos/RenderVideos.js')
+    const { VideoFeed } = await import('./modules/VideoFeed.js')
 
     new Context('global')
 
-    new RenderVideos('video')
+    new VideoFeed('video')
 }
 async function initWatchPage() {
-    await import('./modules/videos/VideoReact.js')
-    const { RenderVideos } = await import('./modules/videos/RenderVideos.js')
-    const { Player } = await import('./modules/videos/Player.js')
-    const { Video } = await import('./modules/videos/Video.js')
-    const { Playlist } = await import('./modules/Playlist.js')
-    const { VideoPlayback } = await import('./modules/videos/VideoPlayback.js')
+    await import('./modules/watch/VideoReact.js')
+    const { VideoFeed }   = await import('./modules/VideoFeed.js')
+    const { Player }      = await import('./modules/watch/Player.js')
+    const { Video }       = await import('./modules/watch/Video.js')
+    const { Playlist }    = await import('./modules/Playlist.js')
+    const { PlayAdvance } = await import('./modules/watch/PlayAdvance.js')
 
     new Context('global')
+
 
     new Player()
     new Video()
 
-    const playlistObj = new Playlist('watch')
-    const videolistObj = new RenderVideos('video', 'h')
+    const playlistOBJ = new Playlist('watch')
+    const videoFeedOBJ = new VideoFeed('video', 'h')
 
-    await Promise.all([playlistObj.ready, videolistObj.ready])
+    await Promise.all([playlistOBJ.ready, videoFeedOBJ.ready])
     
-    new VideoPlayback(playlistObj.playlistRawVideos, videolistObj.videosRaw)
+    new PlayAdvance(playlistOBJ.rawVideos, videoFeedOBJ.rawVideos)
 }
 async function initManagerPage() {
-    const { RenderVideos } = await import('./modules/RenderVideos.js')
+    const { VideoFeed }    = await import('./modules/VideoFeed.js')
     const { VideoManager } = await import('./modules/VideoManager.js')
     
     new Context('manager')
     new Stage()
     
     new VideoManager()
-    new RenderVideos('manager', 'h')
+    new VideoFeed('manager', 'h')
 }
 async function initHistoryPage() {
-    const { RenderVideos } = await import('./modules/RenderVideos.js')
+    const { VideoFeed } = await import('./modules/VideoFeed.js')
 
     new Context('global')
 
-    new RenderVideos('history', 'h')
+    new VideoFeed('history', 'h')
 }
 async function initPlaylistsPage() {
     const { Playlist } = await import('./modules/Playlist.js')

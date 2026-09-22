@@ -77,7 +77,7 @@ id="edit-playlist" data-menu="edit">
     <div class="playlist-menu__list f-column"></div>
 </form>
 
-<main class="playlists content">  
+<main class="playlists headered">  
     <div class="playlists__header f-row-between">
         <h1 class="playlists__title">
             Playlists

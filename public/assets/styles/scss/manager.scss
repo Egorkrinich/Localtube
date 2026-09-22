@@ -1,19 +1,48 @@
 .m-upload {
+    // display: block;
     &__step {
         display: none;
         width: 100%;
         height: 100%;
     }
     &[data-step="1"] &__step--1 { display: flex; }
-    &[data-step="2"] &__step--2 { display: block; }
+    &[data-step="2"] &__step--2 { display: flex; }
 
     &__step--1 &__body { flex: 1; }
-    &__step--2 &__body { gap: 10px; }
+    &__step--2 &__body { 
+        gap: 10px; 
+        flex: 1;
+        overflow-y: auto;
+    }
 
     &__field {
         gap: 5px;
         width: 100%;
         input { padding: 10px; }
+    }
+
+    &__footer {
+        max-height: 0;
+        margin-top: auto;
+        overflow: hidden;
+        transition: max-height 0.3s;
+    }
+    &__progress-bar {
+        width: 100%;
+        height: 5px;
+        margin-bottom: 10px;
+        margin-block: 10px;
+
+        border-radius: 5px;
+        background: rgb(48, 48, 48);
+        overflow: hidden;
+        
+        .m-upload__progress-line {
+            height: 100%;
+            width: 0%;
+            background: red;
+            transition: width 0.3s;
+        }
     }
 }
 
@@ -38,7 +67,9 @@
     }
 }
 
-.manager {
-    padding: 0;
-    &__body { gap: var(--gap-primary); }
-}
+// .manager {
+//     &__body { 
+//         gap: var(--gap-primary);
+//         container-type: inline-size;
+//     }
+// }

@@ -3,19 +3,60 @@
     margin-top: var(--header-height);
     margin-left: var(--sidebar-width);
     padding: 15px;
+    
+    @media (max-width: 800px) {
+        padding-bottom: calc(var(--sidebar-height) + 10px); 
+        margin-left: 0;
+    }
+    @media (max-width: 500px) {
+        padding-inline: 10px;
+        padding-top: 10px;
+    }
+}
+.headered {
+    margin-top: var(--header-height);
+    margin-left: var(--sidebar-width);
+
+    & > :nth-child(1) {
+        padding: 15px;
+        border-bottom: 1px solid var(--border-first);
+    }
+    & > :nth-child(2) { 
+        padding: 15px;
+        gap: var(--gap-primary);
+        container-type: inline-size;
+    }
+
+    &--menu {
+        display: none;
+        margin-top: 0;
+        margin-left: 0;
+        &.active { display: block;}
+    }
+
+    @media (max-width: 800px) {
+        margin-left: 0;
+        & > :nth-child(2) { 
+            padding-bottom: calc(var(--sidebar-height) + 10px);
+        }
+    }
+    @media (max-width: 500px) {
+        & > :nth-child(1) { padding: 5px 10px; }
+        & > :nth-child(2) { padding-inline: 10px; }
+    }
+}
+.page-menu-container {
+    margin-top: var(--header-height);
+    margin-left: var(--sidebar-width);
+    
+    @media (max-width: 800px) { margin-left: 0; }
 }
 // Main grid
 .content--grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: var(--gap-primary);
-
-    @media (max-width: 800px) {
-        & {
-            margin-left: 0;
-            padding-inline: 10px;
-        }
-    }
+    container-type: inline-size;
 }
 
 
@@ -47,6 +88,12 @@
 
 // -- Micro-page styles --
 
-// Home page
-
-.home { padding: 50px 20px 80px; }
+.headered .history {
+    &__body {
+        container-type: normal;
+    }
+    &__list {
+        container-type: inline-size;
+        gap: var(--gap-primary);
+    }
+}

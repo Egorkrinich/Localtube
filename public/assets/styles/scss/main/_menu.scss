@@ -73,21 +73,26 @@
         padding-block: 20px;
         border-radius: 20px;
 
-        &:hover {
-            background: var(--bg-first-hover);
-        }
+        &:hover { background: var(--bg-first-hover); }
     }
 
-    // @media (max-width: 800px) {
-    //     & {
-    //         display: flex;
-    //         align-items: center;
-    //         justify-content: space-around;
-    //         bottom: 0;
-    //         width: 100%;
-    //         height: var(--header-height);
-    //     }
-    // }
+    @media (max-width: 800px) {
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        
+        top: auto;
+        left: auto;
+        width: 100%;
+        height: var(--sidebar-height);
+
+        &__link {
+            padding: 0 20px;
+            height: 100%;
+            width: 33.3%;
+        }
+        
+    }
 }
 .user {
     display: none;

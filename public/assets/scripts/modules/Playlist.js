@@ -29,8 +29,9 @@ export class Playlist {
 
         this._playlistLoaded = 
         this.renderPlaylistWatch('general-container')
-        this.playlistRawVideos = []
 
+        this.rawVideos = []
+        
         }
 
         this.submitBtn = null
@@ -193,8 +194,16 @@ export class Playlist {
         const playlist = Templates.playlistWatch(details, videos)
         container.insertAdjacentHTML("afterbegin", playlist)
 
-        videos.forEach(({id, thumb, title, duration}) => {
-            this.playlistRawVideos.push({id, thumb, title, duration})
+        videos.forEach((
+            {
+                id, thumb, title, duration, 
+                uploader_avatar, views, created
+            }) => {
+            this.rawVideos.push(
+                {
+                    id, thumb, title, duration,
+                    uploader_avatar, views, created
+                })
         })
 
         return;

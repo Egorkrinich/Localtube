@@ -2,9 +2,10 @@ import { formatTime, ops } from "../helper.js"
 
 export class Player {
     controlBtns = {
-        togglePlay:  document.querySelector('[data-player-btn="toggle-play"]'),
-        toggleSound: document.querySelector('[data-player-btn="toggle-sound"]'),
-        toggleFull:  document.querySelector('[data-player-btn="toggle-full"]')
+        togglePlay:    document.querySelector('[data-player-btn="toggle-play"]'),
+        toggleSound:   document.querySelector('[data-player-btn="toggle-sound"]'),
+        toggleFull:    document.querySelector('[data-player-btn="toggle-full"]'),
+        toggleAdvance: document.querySelector('[data-player-btn="toggle-advance"]')
     }
 
     constructor() {
@@ -28,9 +29,15 @@ export class Player {
         
         // Temporary states
         this.controlHideTimeout = null
+        this.resumeTimeTimeout = null
         this.lastTapTime = null
-        
 
+        // details
+        this.settings = {};
+
+        
+        
+        this.getSettings()
         this.initListeners()
         this.updateProgress()
         if (!USER_CONFIG.isMobile) { this.initHotkeys() }
@@ -49,7 +56,9 @@ export class Player {
         this.video.addEventListener('ended', () => { 
             this.controlBtns.togglePlay.classList.remove('active')
             this.isPaused = true
-            window.dispatchEvent(new CustomEvent('video:ended'))
+            if (this.settings.playAdvance) {
+                window.dispatchEvent(new CustomEvent('video:ended'))
+            }
         })
 
         this.control.addEventListener('pointerdown', (e) => {
@@ -74,11 +83,16 @@ export class Player {
                     this.togglePlay()
                 break;
                 case 'toggle-sound':
+                    this.updatePlayerSetting('muted')
                     this.toggleSound()
                 break;
                 case 'toggle-full':
                     this.toggleFull()
-                break
+                break;
+                case 'toggle-advance':
+                    this.updatePlayerSetting('playAdvance')
+                    this.togglePlayAdvance()
+                break;
             }
         })
         this.progressBar.addEventListener('pointerdown', (e) => {
@@ -133,6 +147,7 @@ export class Player {
                 break;
                 case 'KeyM':
                     this.toggleSound()
+                    this.updatePlayerSetting('muted')
                 break;
                 case 'KeyF':
                     this.toggleFull()
@@ -191,6 +206,11 @@ export class Player {
             }
         }
     }
+    togglePlayAdvance() {
+        this.controlBtns.toggleAdvance.classList
+        .toggle('active', this.settings['playAdvance'])
+    }
+
     showControl(forceVisibility = null) {
         if (this.controlHideTimeout) clearTimeout(this.controlHideTimeout)
 
@@ -210,6 +230,7 @@ export class Player {
             this.isControlShowed = false
         }, this.controlDuration)
     }
+
     scrub(e) {
         const scrubTime = (e.offsetX / this.progressBar.offsetWidth) * this.duration;
         this.video.currentTime = scrubTime;
@@ -222,7 +243,43 @@ export class Player {
         setTimeout(() => {this.rewind.classList.remove(rewindClass)}, 500)
     }
 
+    getSettings() {
+        const playerResume = JSON.parse(localStorage.getItem('player_resume_state'))
+        if (playerResume && playerResume.id === VIDEO_DATA.id) {
+            this.video.currentTime = playerResume.seconds
+        }
 
+        const settings = JSON.parse(localStorage.getItem('player_settings'))
+        if (!settings) {
+            const defaultSettings = {
+                'muted': false,
+                'playAdvance': false,
+            }
+            localStorage.setItem('player_settings', JSON.stringify(defaultSettings))
+            return
+        }
+        this.settings = settings
+        for (const [key, value] of Object.entries(settings)) {
+            if (value == true) {
+                switch (key) {
+                    case 'muted':
+                        this.toggleSound();
+                    break;
+                    case 'playAdvance':
+                        this.togglePlayAdvance()
+                    break;
+                }
+            }
+        }
+    }
+    
+
+    updatePlayerSetting(key) {
+        const settings = JSON.parse(localStorage.getItem('player_settings'))
+        settings[key] = !settings[key]
+        localStorage.setItem('player_settings', JSON.stringify(settings))
+        this.settings = settings
+    }
     updateProgress() {
         const current = this.video.currentTime
 
@@ -237,6 +294,16 @@ export class Player {
                 this.isViewed = true
                 window.dispatchEvent(new CustomEvent('video:viewed'))
             }
+        }
+        if (!this.resumeTimeTimeout) {
+            this.resumeTimeTimeout = setTimeout(() => {
+                const resume = {
+                    id: VIDEO_DATA.id,
+                    seconds: this.video.currentTime
+                }
+                localStorage.setItem('player_resume_state', JSON.stringify(resume))
+                this.resumeTimeTimeout = null
+            }, 5000)
         }
     }
 }

@@ -21,7 +21,7 @@
             </button>
         </div>
         
-        <div class="m-upload__body f-column">
+        <div class="m-upload__body f-column ">
             <div class="m-upload__field f-column">
                 <label for="title">Video title</label>
                 <input name="title" class="input--primary" type="text"
@@ -36,13 +36,18 @@
             </div>
 
         </div>
+        <div class="m-upload__footer">
+            <div class="m-upload__progress-bar">
+                <div class="m-upload__progress-line"></div>
+            </div>
+        </div>
     </div>
 </form>
 
-<main class="manager content" data-page>
+<main class="manager page-menu-container" data-page>
     <!-- General page menu -->
 
-    <div class="manager__page page-menu" data-page-menu="default">
+    <div class="manager__page headered headered--menu" data-page-menu="default">
         <div class="manager__header f-row-between">
             <h1 class="manager__title">
                 Video manager
@@ -57,7 +62,7 @@
 
     <!-- Secondary page menu -->
 
-    <form class="m-edit page-menu" data-page-menu="edit" id="edit" enctype="multipart/form-data">
+    <form class="m-edit headered headered--menu" data-page-menu="edit" id="edit" enctype="multipart/form-data">
         <div class="m-edit__header page-menu__header f-row">
             <button data-page-menu-btn="edit" type="button">
                 <svg width="24px" height="24px" viewBox="0 -960 960 960">

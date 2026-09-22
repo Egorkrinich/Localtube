@@ -1,11 +1,19 @@
-.content--watch {
+.watch {
     display: grid;
-    grid-template-columns: minmax(320px, calc((100vh - 150px) * 1.77)) clamp(300px, 25vw, 550px);
-    gap: 20px;
+    grid-template-columns: 
+    minmax(320px, calc((100vh - 150px) * 1.77)) clamp(335px, 27.5vw, 550px);
+    justify-content: center;
+    gap: var(--gap-primary);
 
     max-width: 2000px;
+    width: 100%;
+    padding-top: 10px;
     margin-inline: auto;
-    justify-content: center;
+
+    @media (max-width: 1150px) {
+        grid-template-columns: 1fr;
+        padding: 0;
+    }
 }
 
 // -- Video section --
@@ -16,6 +24,7 @@
 
     width: auto;
     max-height: 90vh;
+    margin-inline: auto;
     
     border-radius: 10px;
     background: #000;
@@ -29,10 +38,12 @@
         object-fit: contain;
     }
 
-    .control {
+    .control, .rewind, .advance {
         position: absolute;
         inset: 0;
+    }
 
+    .control {
         opacity: 0;
         transition: opacity 0.3s;
         z-index: 1;
@@ -99,14 +110,33 @@
             }
         }
 
+        .player__advance {
+            position: relative;
+            width: 35px;
+            height: 17.5px;
+            border-radius: 20px;
+            border: 1px solid var(--border-first);
+
+            &::before {
+                content: '';
+                position: absolute;
+                height: 100%;
+                width: 50%;
+                top: 0;
+                left: 0;
+                background: #fff;
+                border-radius: 50%;
+                transition: transform 0.3s;
+                pointer-events: none;
+            }
+            &.active::before { transform: translateX(100%); }
+        }
+
 
         &.active { opacity: 1; }
         &.hide-instantly { display: none;}
     }
     .rewind {
-        position: absolute;
-
-        inset: 0;
         padding: 0 10%;
 
         font-weight: 600;
@@ -128,20 +158,22 @@
             transition: transform 0.3s;
         }
 
-
-
-        &.active--left &-left {
+        &.active--left [data-player-rewind=left] {
             opacity: 1;
-            .rewind-svg {
-                transform: translateX(10px);
-            }
+            .rewind-svg { transform: translateX(10px); }
         }
-        &.active--right &-right {
+        &.active--right [data-player-rewind=right] {
             opacity: 1;
-            .rewind-svg {
-                transform: translateX(10px);
-            }
+            .rewind-svg { transform: translateX(10px); }
         }
+    }
+    .advance {
+        display: none;
+        .preview { 
+            max-width: 70%; 
+            background: var(--bg-first);
+        }
+        &.active { display: flex; }
     }
 }
 
@@ -152,6 +184,10 @@
         margin: 12px 0;
     }
 
+    &__subheader {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
     &__uploader {
         .avatar {
             width: 40px;
@@ -200,6 +236,12 @@
             display: block;
         }
     }
+
+    @media (max-width: 1150px) {
+        &__body {
+            padding-inline: 10px;
+        }
+    }
 }
 
 // -- List section --
@@ -207,6 +249,24 @@
 .media__videos {
     align-items: stretch;
     gap: var(--gap-primary);
+
+    @media (max-width: 1150px) {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: var(--gap-primary);
+        padding: 0 10px;
+
+        .preview--horizontal {
+            display: block;
+            aspect-ratio: 16/9;
+            min-width: 300px;
+
+            .preview__thumb { max-width: none; }
+            .preview__body { padding: 10px 0; }
+            .preview__left { display: block; }
+            .preview__title { -webkit-line-clamp: 2; }
+        }
+    }
 }
 
 // Playlist
@@ -215,7 +275,7 @@
     border-radius: 20px;
     background: var(--bg-first);
     border: 1px solid var(--border-first);
-    margin-bottom: 14px;
+    margin-bottom: var(--gap-primary);
 
 
     // Header
@@ -234,6 +294,16 @@
     // List
     &__list {
         padding: 5px;
-        gap: 14px;
+        gap: var(--gap-primary);
+    }
+    .preview {
+        max-width: none;
+    }
+    
+    @media (max-width: 1150px) {
+        &__list {
+            align-items: center;
+        }
     }
 }
+

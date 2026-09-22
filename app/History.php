@@ -16,19 +16,21 @@ class History extends Database {
 
         $res->execute();
     }
-    public function getHistory(int $limit, int $offset): array {
+    public function getHistory(): array {
         $query = 
-        "SELECT v.id, v.thumb, v.title, v.views, v.created, h.viewed_at
+        "SELECT v.*,
+        u.username as uploader_name,
+        u.login as uploader_link,
+        u.avatar as uploader_avatar
         FROM history h
-        JOIN videos v ON h.video_id = v.id
+        JOIN videos v ON v.id = h.video_id
+        JOIN users u ON u.id = v.uid
         WHERE h.uid = :uid
-        ORDER BY h.viewed_at DESC
-        LIMIT :limit OFFSET :offset";
+        ORDER BY h.viewed_at DESC";
+
         $res = $this->pdo->prepare($query);
 
         $res->bindValue(':uid', $_SESSION['uid']);
-        $res->bindValue(':limit', $limit, PDO::PARAM_INT);
-        $res->bindValue(':offset', $offset, PDO::PARAM_INT);
 
         $res->execute();
 

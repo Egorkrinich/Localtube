@@ -49,6 +49,6 @@ export function formatTime(timeInSeconds) {
     return `${minutes}:${paddedSeconds}`;
 }
 export const ops = {
-        '+': (a, b) => a + b, 
-        '-': (a, b) => a - b 
+    '+': (a, b) => a + b, 
+    '-': (a, b) => a - b 
 }

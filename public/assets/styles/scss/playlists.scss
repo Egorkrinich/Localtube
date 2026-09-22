@@ -8,6 +8,7 @@
         gap: 15px;  
         height: 300px;
         padding: 10px;
+        container-type: inline-size;
 
         overflow-y: auto;
         overflow-x: hidden;
@@ -63,16 +64,4 @@
     }
     .delete-icon { display: none; }
     .deny-icon { display: block; }
-}
-
-.playlists {
-    padding: 0;
-
-    &__header {
-        padding: 15px;
-        border-bottom: 1px solid var(--border-first);
-    }
-    &__body {
-        padding: 15px;
-    }
 }

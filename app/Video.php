@@ -299,7 +299,8 @@ class Video extends Database {
         $query = 
         "SELECT v.*, 
         u.username as uploader_name,
-        u.login as uploader_link
+        u.login as uploader_link,
+        u.avatar as uploader_avatar
         FROM videos v
         JOIN users u ON v.uid = u.id
         WHERE v.uid = :uid
