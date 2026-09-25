@@ -3,14 +3,15 @@ import { Templates } from "../Templates.js"
 export class Playlist {
     API = {
         create: 'createPlaylist',
-        add: 'addToPlaylist',
-        edit: 'editPlaylist',
+        addTo:  'addToPlaylist',
+        edit:   'editPlaylist',
         delete: 'deletePlaylist',
-        get: 'getPlaylist'
+        get:    'getPlaylist'
     }
     editAttr = {
         btn: 'data-pl-edit-btn',
-        id: 'data-pl-edit-id'
+        id: 'data-pl-edit-id',
+        list: 'data-pl-edit="list"'
     }
 
     constructor(page) {
@@ -22,13 +23,13 @@ export class Playlist {
         this.createForm = document.querySelector('#create-playlist')
 
         this.editForm = document.querySelector('#edit-playlist')
-        this.editList = this.editForm.querySelector('.playlist-menu__list')
+        this.editList = this.editForm.querySelector(`[${this.editAttr.list}]`)
 
         } else if (page === "watch") {
         if (!this.playlistId) return
 
         this._playlistLoaded = 
-        this.renderPlaylistWatch('general-container')
+        this.renderPlaylistView('general-container')
 
         this.rawVideos = []
         
@@ -187,11 +188,11 @@ export class Playlist {
 
     // -- Watch page methods --
     
-    async renderPlaylistWatch(containerID) {
+    async renderPlaylistView(containerID) {
         const {details, videos} = await this.getPlaylist()
 
         const container = document.querySelector(`#${containerID}`)
-        const playlist = Templates.playlistWatch(details, videos)
+        const playlist = Templates.playlistView(details, videos)
         container.insertAdjacentHTML("afterbegin", playlist)
 
         videos.forEach((

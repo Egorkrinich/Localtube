@@ -1,5 +1,4 @@
 .m-upload {
-    // display: block;
     &__step {
         display: none;
         width: 100%;
@@ -8,12 +7,7 @@
     &[data-step="1"] &__step--1 { display: flex; }
     &[data-step="2"] &__step--2 { display: flex; }
 
-    &__step--1 &__body { flex: 1; }
-    &__step--2 &__body { 
-        gap: 10px; 
-        flex: 1;
-        overflow-y: auto;
-    }
+    &__step--2 &__body { gap: 10px; }
 
     &__field {
         gap: 5px;
@@ -23,7 +17,6 @@
 
     &__footer {
         max-height: 0;
-        margin-top: auto;
         overflow: hidden;
         transition: max-height 0.3s;
     }
@@ -44,6 +37,7 @@
             transition: width 0.3s;
         }
     }
+    &__submit { margin-left: auto;}
 }
 
 .m-edit {
@@ -66,10 +60,3 @@
         aspect-ratio: 16/9;
     }
 }
-
-// .manager {
-//     &__body { 
-//         gap: var(--gap-primary);
-//         container-type: inline-size;
-//     }
-// }

@@ -1,35 +1,62 @@
-.playlist-menu__field {
-  gap: 5px;
-  margin-bottom: 5px;
+.pl-create {
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  height: -webkit-fit-content;
+  height: -moz-fit-content;
+  height: fit-content;
   max-width: 250px;
+  max-height: 400px;
+  border-radius: 10px;
+  text-align: center;
 }
-.playlist-menu__list {
-  gap: 15px;
-  height: 300px;
-  padding: 10px;
-  container-type: inline-size;
-  overflow-y: auto;
-  overflow-x: hidden;
+.pl-create__body {
+  gap: 10px;
 }
-.playlist-menu select {
+.pl-create__submit {
+  margin-top: auto;
+}
+.pl-create.active {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.pl-edit__field {
+  gap: 5px;
+  margin-bottom: 10px;
+}
+.pl-edit__select {
   width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
 }
-.playlist-menu__delete-btn {
+.pl-edit__delete {
   color: red;
   fill: red;
 }
-
-.edit-playlist {
-  padding: 20px 0;
+.pl-edit__body {
+  -webkit-box-flex: 0;
+      -ms-flex: 0;
+          flex: 0;
+  overflow: visible;
 }
-.edit-playlist .playlist-menu__header,
-.edit-playlist .playlist-menu__body {
-  padding-inline: 0 20px;
+.pl-edit__list {
+  gap: 15px;
+  padding: 5px 10px;
+  margin-bottom: 10px;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
-
-.preview--edit::after {
+.pl-edit .preview {
+  content-visibility: visible;
+  contain-intrinsic-size: none;
+}
+.pl-edit .preview__thumb {
+  height: 110px;
+  width: auto;
+}
+.pl-edit .preview::after {
   content: "";
   position: absolute;
   inset: 0;
@@ -42,31 +69,40 @@
   transition: opacity 0.2s;
   opacity: 0;
 }
-.preview--edit [data-pl-edit-btn=moveUp],
-.preview--edit [data-pl-edit-btn=moveDown] {
-  padding: 5px 10px;
+.pl-edit .preview [data-pl-edit-btn] {
+  padding: 5px;
+  width: 30px;
+  height: 30px;
+}
+.pl-edit .preview [data-pl-edit-btn=moveUp],
+.pl-edit .preview [data-pl-edit-btn=moveDown] {
   border-radius: 10px;
 }
-.preview--edit [data-pl-edit-btn=moveDown] svg {
+.pl-edit .preview [data-pl-edit-btn=moveDown] svg {
   -webkit-transform: rotateX(180deg);
           transform: rotateX(180deg);
 }
-.preview--edit [data-pl-edit-btn=delete] {
-  padding: 10px;
+.pl-edit .preview [data-pl-edit-btn=delete] {
+  margin-bottom: 10px;
+  fill: #ff0000;
 }
-.preview--edit [data-pl-edit-btn=delete] .delete-icon {
+.pl-edit .preview [data-pl-edit-btn=delete] .pl-edit__delete--inactive {
   display: block;
 }
-.preview--edit [data-pl-edit-btn=delete] .deny-icon {
+.pl-edit .preview [data-pl-edit-btn=delete] .pl-edit__delete--active {
   display: none;
 }
-
-.preview.deleted::after {
+.pl-edit .preview.deleted::after {
   opacity: 1;
 }
-.preview.deleted .delete-icon {
+.pl-edit .preview.deleted .pl-edit__delete--inactive {
   display: none;
 }
-.preview.deleted .deny-icon {
+.pl-edit .preview.deleted .pl-edit__delete--active {
   display: block;
+}
+.pl-edit.active {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
 }/*# sourceMappingURL=playlists.css.map */

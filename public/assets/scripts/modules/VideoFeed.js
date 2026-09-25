@@ -7,7 +7,7 @@ export class VideoFeed {
         manager: 'Videos/getMyVideos'
     }
     constructor(link, previewType) {
-        this.container = document.querySelector("#preview-container")
+        this.container = document.querySelector("#video-feed-container")
         this.isHorizontal = previewType === 'h' ? true : false 
 
         this.link = this.API[link]

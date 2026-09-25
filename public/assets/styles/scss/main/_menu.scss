@@ -91,7 +91,6 @@
             height: 100%;
             width: 33.3%;
         }
-        
     }
 }
 .user {
@@ -138,14 +137,9 @@
         }
     }
 
-    &.active {
-        display: block;
-    }
+    &.active { display: block; }
 }
 .auth {
-    &__title {
-        margin-bottom: 10px;
-    }
     &__form {
         position: absolute;
         opacity: 0;
@@ -161,14 +155,15 @@
         opacity: 1;
         pointer-events: all;
     }
+    &__header { position: relative; }
     
     &__field {
         gap: 5px;
         margin-bottom: 10px;
 
-        input {
-            border-radius: 10px;
-        }
+        label { padding: 0 10px; }
+        input { padding: 5px; }
+        
         &-error {
             display: flex;
             flex-direction: column;
@@ -178,13 +173,26 @@
             color: red;
         }
     }
-
+    &__body {
+        flex: 0;
+    }
     &__submit {
         margin-block: 10px;
     }
     &__switch {
         font-size: 0.8em;
         color: var(--text-link);
+    }
+    &__close {
+        position: absolute;
+        left: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    @media (max-width: 500px) {
+        height: fit-content;
+        border-radius: 10px;
     }
 }
 #context-menu {
@@ -235,29 +243,20 @@
         transform: translateX(0);
     }
 }
-.settings {
-    overflow-y: auto;
-
+.settings { 
     &__field {
         max-width: 300px;
-        margin-bottom: 10px;
+        margin-bottom: 15px;
 
         label {
             margin-bottom: 5px;
             padding: 0 10px;
         }
-        input {
-            border-radius: 10px;
-            padding-block: 5px;
-        }
+        input { padding-block: 5px; }
     }
-    
-    &__actions { margin-top: auto; }
     &__logout { color: #ff0000; }
 
-    &.active {
-        display: flex;
-    }
+    &.active { display: flex; }
 }
 
 #overlay {

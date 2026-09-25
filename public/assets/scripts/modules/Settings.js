@@ -13,8 +13,8 @@ export default class Settings {
             this.submitBtn.disabled = true
         })
         this.form.addEventListener('click', (e) => {
-            const logoutBtn = e.target.closest('#logout')
-            if (logoutBtn) {
+            const logout = e.target.closest('.settings__logout')
+            if (logout) {
                 e.preventDefault()
                 this.logout()
             }

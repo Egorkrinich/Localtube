@@ -87,7 +87,8 @@ class Playlist extends Database {
             return ['success' => false, 'message' => 'Undefined playlist'];
         }
         if ($info['uid'] !== $_SESSION['uid']) {
-            return ['success' => false, 'message' => 'Access denied'];
+            $response['warnings'][] = 'Access denied';
+            return $response;
         }
 
         $this->pdo->beginTransaction(); 

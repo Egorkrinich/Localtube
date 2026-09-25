@@ -1,14 +1,13 @@
-export class Video {
-    attrSelector = {
-        btn: 'data-video-action',
-        btnValue: 'data-video-btn-value',
-        playlistId: 'data-video-playlist-id'
+export class VideoDeck {
+    attr = {
+        btn: 'data-vd-action',
+        playlist: 'data-vd-playlist'
 
     }
     get selector() {
         return {
-            like: this.cont.querySelector(`[${this.attrSelector.btn}="like"]`),
-            dislike: this.cont.querySelector(`[${this.attrSelector.btn}="dislike"]`)
+            like: this.cont.querySelector(`[${this.attr.btn}="like"]`),
+            dislike: this.cont.querySelector(`[${this.attr.btn}="dislike"]`)
         }
     }
     constructor() {
@@ -28,9 +27,9 @@ export class Video {
             e.preventDefault()
             if (this.countdown) return
             
-            const btn = e.target.closest(`[${this.attrSelector.btn}]`)
+            const btn = e.target.closest(`[${this.attr.btn}]`)
             if (!btn) return 
-            const attr = btn.getAttribute(`${this.attrSelector.btn}`)
+            const attr = btn.getAttribute(`${this.attr.btn}`)
 
             
             
@@ -53,7 +52,7 @@ export class Video {
                 break;
                 case 'addToPlaylist':
                     const playlistId = 
-                    btn.getAttribute(`${this.attrSelector.playlistId}`)
+                    btn.getAttribute(`${this.attr.playlistId}`)
                     // window.dispatchEvent(new CustomEvent('playlist:add', {
                     //     detail: {
                     //         'playlistId': playlistId,

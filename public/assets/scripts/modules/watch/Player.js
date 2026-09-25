@@ -1,23 +1,32 @@
 import { formatTime, ops } from "../helper.js"
 
 export class Player {
-    controlBtns = {
-        togglePlay:    document.querySelector('[data-player-btn="toggle-play"]'),
-        toggleSound:   document.querySelector('[data-player-btn="toggle-sound"]'),
-        toggleFull:    document.querySelector('[data-player-btn="toggle-full"]'),
-        toggleAdvance: document.querySelector('[data-player-btn="toggle-advance"]')
+    attr = {
+        action: 'data-player-action'
+    }
+    actions = {
+        play:    'toggle-play',
+        sound:   'toggle-sound',
+        full:    'toggle-full',
+        advance: 'toggle-advance'
+    }
+    actionBtns = {
+        play:    document.querySelector(`[${this.attr.action}="${this.actions.play}"]`),
+        sound:   document.querySelector(`[${this.attr.action}="${this.actions.sound}"]`),
+        full:    document.querySelector(`[${this.attr.action}="${this.actions.full}}"]`),
+        advance: document.querySelector(`[${this.attr.action}="${this.actions.advance}"]`)
     }
 
     constructor() {
         // -- Elements --
-        this.player = document.querySelector('#player')
-        this.video = this.player.querySelector('#player-video')
+        this.player  = document.querySelector('#player')
+        this.video   = this.player.querySelector('#player-video')
         this.control = this.player.querySelector('#player-control')
-        this.rewind = this.player.querySelector('#rewind')
+        this.rewind  = this.player.querySelector('#player-rewind')
 
-        this.progressBar = this.player.querySelector('#progress-bar')
-        this.progressLine = this.progressBar.querySelector('#progress-line')
-        this.timer = this.control.querySelector('#timer')
+        this.progressBar = this.control.querySelector('.control__progress-bar')
+        this.progressLine = this.progressBar.querySelector('.control__progress-line')
+        this.timer = this.control.querySelector('.control__timer')
 
         // -- State & Flags
         this.isPaused = true
@@ -54,16 +63,16 @@ export class Player {
         // Global Listeners
         this.video.addEventListener('timeupdate', () => this.updateProgress())
         this.video.addEventListener('ended', () => { 
-            this.controlBtns.togglePlay.classList.remove('active')
+            this.actionBtns.play.classList.remove('active')
             this.isPaused = true
-            if (this.settings.playAdvance) {
+            if (this.settings.advance) {
                 window.dispatchEvent(new CustomEvent('video:ended'))
             }
         })
 
         this.control.addEventListener('pointerdown', (e) => {
             if (e.button !== 0) return;
-            const btn = e.target.closest(`[data-player-btn]`)
+            const btn = e.target.closest(`[${this.attr.action}]`)
             if (!btn) {
                 if (!this.isControlShowed && USER_CONFIG.isMobile) {
                     this.showControl()
@@ -76,34 +85,24 @@ export class Player {
                 }
                 return
             }
-            const attrValue = btn.getAttribute(`data-player-btn`)
+            const attrValue = btn.getAttribute(`${this.attr.action}`)
 
             switch (attrValue) {
-                case 'toggle-play': 
+                case this.actions.play: 
                     this.togglePlay()
                 break;
-                case 'toggle-sound':
+                case this.actions.sound:
                     this.updatePlayerSetting('muted')
                     this.toggleSound()
                 break;
-                case 'toggle-full':
+                case this.actions.full:
                     this.toggleFull()
                 break;
-                case 'toggle-advance':
-                    this.updatePlayerSetting('playAdvance')
-                    this.togglePlayAdvance()
+                case this.actions.advance:
+                    this.updatePlayerSetting('advance')
+                    this.toggleAdvance()
                 break;
             }
-        })
-        this.progressBar.addEventListener('pointerdown', (e) => {
-            this.scrub(e)
-            const onMouseMove = (e) => this.scrub(e)
-
-            window.addEventListener('pointermove', onMouseMove)
-
-            window.addEventListener('pointerup', () => {
-                window.removeEventListener('pointermove', onMouseMove)
-            }, {once: true})
         })
 
         // Mobile
@@ -133,6 +132,16 @@ export class Player {
             this.control.addEventListener('mousemove', () => {
                 if (this.isPaused) return;
                 this.showControl()
+            })
+            this.progressBar.addEventListener('pointerdown', (e) => {
+                this.scrub(e)
+                const onMouseMove = (e) => this.scrub(e)
+
+                window.addEventListener('pointermove', onMouseMove)
+
+                window.addEventListener('pointerup', () => {
+                    window.removeEventListener('pointermove', onMouseMove)
+                }, {once: true})
             })
         }
     }
@@ -166,10 +175,10 @@ export class Player {
         if (this.video.paused || dblclick) {
             this.isPaused = false
             this.video.play()
-            this.controlBtns.togglePlay.classList.add('active')
+            this.actionBtns.play.classList.add('active')
             if (dblclick) {
                 this.control.classList.add('hide-instantly')
-                setTimeout(() => {this.showControl(false)}, 100)
+                setTimeout(() => { this.showControl(false) }, 100)
                 setTimeout(() => { 
                     this.control.classList.remove('hide-instantly')
                 }, 500)
@@ -180,17 +189,17 @@ export class Player {
         } else {
             this.isPaused = true
             this.video.pause()
-            this.controlBtns.togglePlay.classList.remove('active')
+            this.actionBtns.play.classList.remove('active')
             this.showControl(true)
         }
     }
     toggleSound() {
         if (this.video.muted) {
             this.video.muted = false
-            this.controlBtns.toggleSound.classList.remove('active')
+            this.actionBtns.sound.classList.remove('active')
         } else {
             this.video.muted = true
-            this.controlBtns.toggleSound.classList.add('active')
+            this.actionBtns.sound.classList.add('active')
         }
     }
     toggleFull() {
@@ -206,9 +215,9 @@ export class Player {
             }
         }
     }
-    togglePlayAdvance() {
-        this.controlBtns.toggleAdvance.classList
-        .toggle('active', this.settings['playAdvance'])
+    toggleAdvance() {
+        this.actionBtns.advance.classList
+        .toggle('active', this.settings['advance'])
     }
 
     showControl(forceVisibility = null) {
@@ -253,7 +262,7 @@ export class Player {
         if (!settings) {
             const defaultSettings = {
                 'muted': false,
-                'playAdvance': false,
+                'advance': false,
             }
             localStorage.setItem('player_settings', JSON.stringify(defaultSettings))
             return
@@ -265,8 +274,8 @@ export class Player {
                     case 'muted':
                         this.toggleSound();
                     break;
-                    case 'playAdvance':
-                        this.togglePlayAdvance()
+                    case 'advance':
+                        this.toggleAdvance()
                     break;
                 }
             }

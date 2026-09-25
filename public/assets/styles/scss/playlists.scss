@@ -1,67 +1,90 @@
-.playlist-menu {
+.pl-create {
+    width: fit-content;
+    height: fit-content;
+    max-width: 250px;
+    max-height: 400px;
+    border-radius: 10px;
+    text-align: center;
+    
+    &__body { gap: 10px; }
+    &__submit { margin-top: auto; }
+
+    &.active { display: flex; }
+}
+.pl-edit {
     &__field {
         gap: 5px;
-        margin-bottom: 5px;
-        max-width: 250px;
+        margin-bottom: 10px;
     }
+    &__select { width: fit-content; }
+    &__delete {
+        color: red;
+        fill: red;
+    }
+    &__body {
+        flex: 0;
+        overflow: visible;
+    }
+
     &__list {
-        gap: 15px;  
-        height: 300px;
-        padding: 10px;
-        container-type: inline-size;
+        gap: 15px;
+        
+        padding: 5px 10px;
+        margin-bottom: 10px;
 
         overflow-y: auto;
         overflow-x: hidden;
     }
-    select {
-        width: fit-content;
-    }
-    &__delete-btn {
-        color: red;
-        fill: red;
-    }
-}
-.edit-playlist {
-    padding: 20px 0;
-    .playlist-menu__header,
-    .playlist-menu__body {
-        padding-inline: 0 20px;
-    }
-}
-// changed preview for edit menu
-.preview--edit {
-    &::after {
-        content: '';
-        position: absolute;
-        inset: 0;
-        transform: scale(1.1);
-        border-radius: inherit;
-        pointer-events: none;
-        background-color: rgba($color: #ff0000, $alpha: 0.1);
-        transition: opacity 0.2s;
-        opacity: 0;
-    }
-    
+    & .preview {
+        content-visibility: visible;
+        contain-intrinsic-size: none;
 
-    [data-pl-edit-btn=moveUp],
-    [data-pl-edit-btn=moveDown] {
-        padding: 5px 10px;
-        border-radius: 10px;
+        &__thumb {
+            height: 110px;
+            width: auto;
+        }
+        &::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            transform: scale(1.1);
+            border-radius: inherit;
+            pointer-events: none;
+            background-color: rgba($color: #ff0000, $alpha: 0.1);
+            transition: opacity 0.2s;
+            opacity: 0;
+        }
+        [data-pl-edit-btn] {
+            padding: 5px;
+            width: 30px;
+            height: 30px;
+        }
+
+
+        [data-pl-edit-btn=moveUp], 
+        [data-pl-edit-btn=moveDown] {
+            border-radius: 10px;
+        }
+        [data-pl-edit-btn=moveDown] svg { 
+            transform: rotateX(180deg); 
+        }
+        [data-pl-edit-btn=delete] {
+            margin-bottom: 10px;
+            fill: #ff0000;
+            .pl-edit__delete--inactive { display: block; }
+            .pl-edit__delete--active { display: none; }
+        }
+
+        &.deleted {
+            &::after { opacity: 1; }
+
+            .pl-edit__delete--inactive { display: none; }
+            .pl-edit__delete--active { display: block; }
+        }
+
     }
-    [data-pl-edit-btn=moveDown] svg { 
-        transform: rotateX(180deg); 
-    }
-    [data-pl-edit-btn=delete] {
-        padding: 10px;
-        .delete-icon { display: block; }
-        .deny-icon { display: none; }
-    }
-    
+
+    &.active { display: flex; }
 }
-.preview.deleted {
-    &::after {
-        opacity: 1;
-    }
-    .delete-icon { display: none; }
-    .deny-icon { display: block; }
-}
+
+// changed preview for edit menu

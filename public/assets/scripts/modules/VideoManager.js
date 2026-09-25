@@ -7,7 +7,7 @@ export class VideoManager {
     }
     constructor() {
         // Forms
-        this.uploadForm = document?.querySelector(`#upload`)
+        this.uploadForm = document?.querySelector(`#manager-upload`)
         this.editForm = document.querySelector(`#edit`)
         // Elements
 

@@ -45,7 +45,7 @@ async function initWatchPage() {
     await import('./modules/watch/VideoReact.js')
     const { VideoFeed }   = await import('./modules/VideoFeed.js')
     const { Player }      = await import('./modules/watch/Player.js')
-    const { Video }       = await import('./modules/watch/Video.js')
+    const { VideoDeck }   = await import('./modules/watch/VideoDeck.js')
     const { Playlist }    = await import('./modules/Playlist.js')
     const { PlayAdvance } = await import('./modules/watch/PlayAdvance.js')
 
@@ -53,7 +53,7 @@ async function initWatchPage() {
 
 
     new Player()
-    new Video()
+    new VideoDeck()
 
     const playlistOBJ = new Playlist('watch')
     const videoFeedOBJ = new VideoFeed('video', 'h')
@@ -88,7 +88,7 @@ async function initPlaylistsPage() {
     new Context('playlists')
     // new Stage()
 
-    playlist.renderPlaylists('preview-container')
+    playlist.renderPlaylists('video-feed-container')
 }
 
 async function initAuth() {

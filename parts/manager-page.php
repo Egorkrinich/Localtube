@@ -2,26 +2,46 @@
     require_once 'general/header.php';
     require_once 'general/sidebar.php';
 ?>
-<form class="m-upload modal-menu" enctype="multipart/form-data" id="upload" data-menu="upload">
+<form class="m-upload modal" enctype="multipart/form-data" 
+    id="manager-upload" data-menu="manager-upload">
+
     <div class="m-upload__step m-upload__step--1 f-column">
-        <div class="m-upload__header modal-menu__header">
-            <h3 class="m-upload__title">Select video</h3>
+
+        <div class="m-upload__header modal__header f-row">
+            <button class="modal__close" data-menu-btn="manager-upload" type="button">
+                <svg width="24px" height="24px" viewBox="0 -960 960 960">
+                    <path d="M400-240 160-480l240-240 56 58-142 142h486v80H314l142 142-56 58Z"/>
+                </svg>
+            </button>
+            <h3 class="m-upload__title">
+                Select video
+            </h3>
         </div>
 
-        <div class="m-upload__body f-row-center">
+        <div class="m-upload__body modal__body f-row-center">
             <input type="file" name="video" accept="video/mp4" required>
         </div>
+        
     </div>
     
     <div class="m-upload__step m-upload__step--2 f-column">
-        <div class="m-upload__header f-row-between modal-menu__header">
-            <h3 class="m-upload__title">Title and thumb</h3>
+
+        <div class="m-upload__header modal__header f-row">
+            <button class="modal__close" data-menu-btn="manager-upload" type="button">
+                <svg width="24px" height="24px" viewBox="0 -960 960 960">
+                    <path d="M400-240 160-480l240-240 56 58-142 142h486v80H314l142 142-56 58Z"/>
+                </svg>
+            </button>
+            <h3 class="m-upload__title">
+                Title and thumb
+            </h3>
             <button class="m-upload__submit btn--primary" type="submit">
                 Upload
             </button>
         </div>
         
-        <div class="m-upload__body f-column ">
+        <div class="m-upload__body modal__body f-column">
+
             <div class="m-upload__field f-column">
                 <label for="title">Video title</label>
                 <input name="title" class="input--primary" type="text"
@@ -36,12 +56,15 @@
             </div>
 
         </div>
+
         <div class="m-upload__footer">
             <div class="m-upload__progress-bar">
                 <div class="m-upload__progress-line"></div>
             </div>
         </div>
+
     </div>
+
 </form>
 
 <main class="manager page-menu-container" data-page>
@@ -52,12 +75,12 @@
             <h1 class="manager__title">
                 Video manager
             </h1>
-            <button class="manager__button btn--secondary" data-menu-btn="upload">
+            <button class="manager__button btn--secondary" data-menu-btn="manager-upload">
                 Add video
             </button>
         </div>
 
-        <div class="manager__body f-column" id="preview-container"></div>
+        <div class="manager__body f-column" id="video-feed-container"></div>
     </div>
 
     <!-- Secondary page menu -->

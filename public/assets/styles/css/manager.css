@@ -13,17 +13,8 @@
   display: -ms-flexbox;
   display: flex;
 }
-.m-upload__step--1 .m-upload__body {
-  -webkit-box-flex: 1;
-      -ms-flex: 1;
-          flex: 1;
-}
 .m-upload__step--2 .m-upload__body {
   gap: 10px;
-  -webkit-box-flex: 1;
-      -ms-flex: 1;
-          flex: 1;
-  overflow-y: auto;
 }
 .m-upload__field {
   gap: 5px;
@@ -34,7 +25,6 @@
 }
 .m-upload__footer {
   max-height: 0;
-  margin-top: auto;
   overflow: hidden;
   -webkit-transition: max-height 0.3s;
   transition: max-height 0.3s;
@@ -54,6 +44,9 @@
   background: red;
   -webkit-transition: width 0.3s;
   transition: width 0.3s;
+}
+.m-upload__submit {
+  margin-left: auto;
 }
 
 .m-edit__header, .m-edit__body {
