@@ -13,8 +13,21 @@ export class Player {
     actionBtns = {
         play:    document.querySelector(`[${this.attr.action}="${this.actions.play}"]`),
         sound:   document.querySelector(`[${this.attr.action}="${this.actions.sound}"]`),
-        full:    document.querySelector(`[${this.attr.action}="${this.actions.full}}"]`),
+        full:    document.querySelector(`[${this.attr.action}="${this.actions.full}"]`),
         advance: document.querySelector(`[${this.attr.action}="${this.actions.advance}"]`)
+    }
+    handlers = {
+        onPointerMove: (e) => {
+            if (!this.isPaused) this.togglePlay(false) 
+            this.scrub(e.offsetX)
+        },
+        onPointerUp: (e) => {
+            window.removeEventListener('pointermove', this.handlers.onPointerMove)
+            this.showControl(false)
+
+            const exactX = e.clientX - this.PBarRect.left;
+            this.scrub(exactX, 0)
+        } 
     }
 
     constructor() {
@@ -28,50 +41,48 @@ export class Player {
         this.progressLine = this.progressBar.querySelector('.control__progress-line')
         this.timer = this.control.querySelector('.control__timer')
 
-        // -- State & Flags
+        // -- State & Flags --
         this.isPaused = true
         this.isControlShowed = true
         
         this.duration = VIDEO_DATA.duration || 0
         
-        this.controlDuration = USER_CONFIG.isMobile ? 5000 : 2000
         
-        // Temporary states
-        this.controlHideTimeout = null
-        this.resumeTimeTimeout = null
-        this.lastTapTime = null
+        this.playerRect = null
+        this.PBarRect   = null
+        
+        this.controlDuration = USER_CONFIG.isMobile ? 5000 : 2000
 
-        // details
+        // -- Temporary states --
+        this.controlTimeout = null
+        this.resumeTimeout  = null
+
+        this.lastTapTime    = null
+        this.hasDoubleTap   = false
+        this.wasPaused      = null
+        
+        // Progress bar states
+        this.PBarTimeout     = null
+        this.watchingPercent = 0
+
+
+        // -- Details --
         this.settings = {};
 
         
-        
         this.getSettings()
-        this.initListeners()
         this.updateProgress()
-        if (!USER_CONFIG.isMobile) { this.initHotkeys() }
+        this.initListeners()
+        if (USER_CONFIG.isMobile) {
+            this.initMobileListeners()
+        } else {
+            this.initDesktopListeners()
+        }
     }
     initListeners() {
-        window.addEventListener('video:toggled', () => {
-            setTimeout(() => {
-                this.duration = VIDEO_DATA.duration
-                this.video.currentTime = 0
-                this.updateProgress()
-                this.togglePlay()
-            }, 0)
-        })
-        // Global Listeners
-        this.video.addEventListener('timeupdate', () => this.updateProgress())
-        this.video.addEventListener('ended', () => { 
-            this.actionBtns.play.classList.remove('active')
-            this.isPaused = true
-            if (this.settings.advance) {
-                window.dispatchEvent(new CustomEvent('video:ended'))
-            }
-        })
-
-        this.control.addEventListener('pointerdown', (e) => {
+        this.control.addEventListener('pointerup', (e) => {
             if (e.button !== 0) return;
+
             const btn = e.target.closest(`[${this.attr.action}]`)
             if (!btn) {
                 if (!this.isControlShowed && USER_CONFIG.isMobile) {
@@ -79,12 +90,18 @@ export class Player {
                     return
                 }
 
-                if (!e.target.closest('.control__header') && 
-                    !e.target.closest('.control__body')) {
+                if (!e.target.closest('.control__header, .control__body')) {
+                    if (this.hasDoubleTap) {
+                        this.togglePlay(!this.wasPaused)
+                        this.hasDoubleTap = false
+                        return
+                    }
                     this.togglePlay()
                 }
+
                 return
             }
+
             const attrValue = btn.getAttribute(`${this.attr.action}`)
 
             switch (attrValue) {
@@ -104,48 +121,84 @@ export class Player {
                 break;
             }
         })
+        
+        this.progressBar.addEventListener('pointerdown', (e) => {
+            if (!this.PBarRect) {
+                this.PBarRect = this.progressBar.getBoundingClientRect();
+            }
+            this.showControl(true)
+            this.togglePlay(false)
+            this.scrub(e.offsetX)
 
-        // Mobile
-        if (USER_CONFIG.isMobile) {
-            this.control.addEventListener('touchstart', (e) => {
-                if (e.touches.length > 1) return;
+            window.addEventListener('pointermove', this.handlers.onPointerMove)
+            window.addEventListener('pointerup', 
+                this.handlers.onPointerUp, {once: true})
+        })
+
+
+        // -- System Listeners --
+        this.video.addEventListener('timeupdate', () => this.updateProgress())
+        this.video.addEventListener('ended', () => {
+            this.togglePlay(false)
+            if (this.settings.advance) {
+                window.dispatchEvent(new CustomEvent('video:ended'))
+            }
+        })
+        window.addEventListener('video:toggled', () => {
+            setTimeout(() => {
+                this.duration = VIDEO_DATA.duration
+                this.video.currentTime = 0
+                this.updateProgress()
+                this.togglePlay(true)
+            }, 0)
+        })
+        window.addEventListener('resize', () => {
+            this.playerRect = this.player.getBoundingClientRect()
+            this.PBarRect   = this.progressBar.getBoundingClientRect()
+        })
+    }
+    initMobileListeners() {
+        this.control.addEventListener('touchstart', (e) => {
+            if (e.touches.length > 1) return;
                 
-                const currentTime = performance.now();
-                const tapDelay = currentTime - this.lastTapTime;
+            const currentTime = performance.now();
+            const tapDelay = currentTime - this.lastTapTime;
 
-                if (tapDelay < 300 && tapDelay > 0) {
-                    const touchX = e.touches[0].clientX
-                    const videoWidth = this.player.clientWidth;
-
-                    if (touchX < videoWidth / 2) {
-                        this.skipTime('-')
-                    } else {
-                        this.skipTime('+')
-                    }
-                    this.togglePlay(true)
+            if (tapDelay < 300 && tapDelay > 0) {
+                if (!this.playerRect) {
+                    this.playerRect = this.player.getBoundingClientRect()
                 }
-                this.lastTapTime = currentTime;
-            });
-        }
-        // PC
-        if (!USER_CONFIG.isMobile) {
-            this.control.addEventListener('mousemove', () => {
+
+                const touchX = e.touches[0].clientX - this.playerRect.left
+                this.hasDoubleTap = true
+
+                const partWidth = this.playerRect['width'] / 3
+                if (touchX < partWidth) {
+                    this.skipTime('-')
+                } else if (touchX > partWidth * 2) {
+                    this.skipTime('+')
+                }
+
+                if (!this.wasPaused) {
+                    this.control.classList.add('hide-instantly')
+                    setTimeout(() => { this.showControl(false) }, 100)
+                    setTimeout(() => { 
+                        this.control.classList.remove('hide-instantly')
+                    }, 500)
+                }
+                    
+            } else { 
+                this.wasPaused = this.isPaused 
+            }
+
+            this.lastTapTime = currentTime;
+        });
+    }
+    initDesktopListeners() {
+        this.control.addEventListener('mousemove', () => {
                 if (this.isPaused) return;
                 this.showControl()
-            })
-            this.progressBar.addEventListener('pointerdown', (e) => {
-                this.scrub(e)
-                const onMouseMove = (e) => this.scrub(e)
-
-                window.addEventListener('pointermove', onMouseMove)
-
-                window.addEventListener('pointerup', () => {
-                    window.removeEventListener('pointermove', onMouseMove)
-                }, {once: true})
-            })
-        }
-    }
-    initHotkeys() {
+        })
         window.addEventListener('keydown', (e) => {
             if (e.target.tagName === 'INPUT') return;
 
@@ -170,26 +223,28 @@ export class Player {
             }
         })
     }
-    
-    togglePlay(dblclick = false) {
-        if (this.video.paused || dblclick) {
+
+    togglePlay(forcePlay = null) {
+        if (forcePlay !== null) {
+            this.isPaused = !forcePlay
+            forcePlay ? this.video.play() : this.video.pause()
+            this.actionBtns.play.classList.toggle('active', forcePlay)
+            this.startProgress()
+
+            return
+        }
+        if (this.video.paused) {
             this.isPaused = false
             this.video.play()
             this.actionBtns.play.classList.add('active')
-            if (dblclick) {
-                this.control.classList.add('hide-instantly')
-                setTimeout(() => { this.showControl(false) }, 100)
-                setTimeout(() => { 
-                    this.control.classList.remove('hide-instantly')
-                }, 500)
-                return
-            }
 
             this.showControl()
+            this.startProgress()
         } else {
             this.isPaused = true
             this.video.pause()
             this.actionBtns.play.classList.remove('active')
+
             this.showControl(true)
         }
     }
@@ -219,9 +274,8 @@ export class Player {
         this.actionBtns.advance.classList
         .toggle('active', this.settings['advance'])
     }
-
     showControl(forceVisibility = null) {
-        if (this.controlHideTimeout) clearTimeout(this.controlHideTimeout)
+        if (this.controlTimeout) clearTimeout(this.controlTimeout)
 
         if (forceVisibility !== null) {
             this.control.classList.toggle('active', forceVisibility)
@@ -232,7 +286,7 @@ export class Player {
         this.control.classList.add('active')
         this.isControlShowed = true
         
-        this.controlHideTimeout = setTimeout(() => { 
+        this.controlTimeout = setTimeout(() => { 
             if (this.isPaused) return
 
             this.control.classList.remove('active')
@@ -240,9 +294,20 @@ export class Player {
         }, this.controlDuration)
     }
 
-    scrub(e) {
-        const scrubTime = (e.offsetX / this.progressBar.offsetWidth) * this.duration;
-        this.video.currentTime = scrubTime;
+    scrub(offsetX, time = 1500) {
+        clearTimeout(this.PBarTimeout)
+
+        let progressRatio = offsetX / this.PBarRect.width
+        progressRatio = Math.max(0, Math.min(1, progressRatio))
+
+        const scrubProgress = progressRatio * 100
+        this.progressLine.style.width = `${scrubProgress}%`
+
+        this.PBarTimeout = setTimeout(() => {
+            const scrubTime = progressRatio * this.duration;
+            this.video.currentTime = scrubTime;
+            this.togglePlay(true)  
+        }, time)
     }
     skipTime(action) {
         const rewindClass = action === "+" ? 'active--right' : 'active--left'
@@ -251,6 +316,8 @@ export class Player {
         this.rewind.classList.add(rewindClass)
         setTimeout(() => {this.rewind.classList.remove(rewindClass)}, 500)
     }
+
+
 
     getSettings() {
         const playerResume = JSON.parse(localStorage.getItem('player_resume_state'))
@@ -281,13 +348,26 @@ export class Player {
             }
         }
     }
-    
 
+    // Utility Methods
     updatePlayerSetting(key) {
         const settings = JSON.parse(localStorage.getItem('player_settings'))
         settings[key] = !settings[key]
         localStorage.setItem('player_settings', JSON.stringify(settings))
         this.settings = settings
+    }
+    startProgress() {
+        const loop = () => {
+            if (!this.isPaused) {
+                if (this.duration > 0) {
+                    const current = this.video.currentTime
+                    this.watchingPercent = (current / this.duration) * 100;
+                    this.progressLine.style.width = `${this.watchingPercent}%`;
+                }
+                requestAnimationFrame(loop);
+            }
+        };
+        requestAnimationFrame(loop);
     }
     updateProgress() {
         const current = this.video.currentTime
@@ -296,22 +376,19 @@ export class Player {
         ${formatTime(current)} / ${formatTime(this.duration)}
         `
 
-        if (this.progressLine) {
-            const percent = (current / this.duration) * 100;
-            this.progressLine.style.width = `${percent}%`;
-            if (percent >= 70 && !this.isViewed) {
-                this.isViewed = true
-                window.dispatchEvent(new CustomEvent('video:viewed'))
-            }
+        if (this.watchingPercent >= 70 && !this.isViewed) {
+            this.isViewed = true
+            window.dispatchEvent(new CustomEvent('video:viewed'))
         }
-        if (!this.resumeTimeTimeout) {
-            this.resumeTimeTimeout = setTimeout(() => {
+
+        if (!this.resumeTimeout) {
+            this.resumeTimeout = setTimeout(() => {
                 const resume = {
                     id: VIDEO_DATA.id,
                     seconds: this.video.currentTime
                 }
                 localStorage.setItem('player_resume_state', JSON.stringify(resume))
-                this.resumeTimeTimeout = null
+                this.resumeTimeout = null
             }, 5000)
         }
     }

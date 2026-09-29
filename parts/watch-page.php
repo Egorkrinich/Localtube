@@ -2,12 +2,7 @@
     $dbVideo = new Video();
     $video_id = $_GET['v'];
     $video = $dbVideo->getVideo($video_id);
-
-    // echo '<pre>';
-    // print_r($video);
-    // echo '</pre>';
-    // exit;
-
+    
     if (!$video) {
         header("Location: ". BASE_URL);
         exit;

@@ -1,6 +1,5 @@
 <?php
     require_once 'general/header.php';
-    require_once 'general/sidebar.php';
 ?>
 <form class="pl-create modal f-column" id="create-playlist" data-menu="playlist-create">
 

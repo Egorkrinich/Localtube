@@ -3,15 +3,8 @@
     $searchQuery = $_GET['search'];
 
     $res = $dbVideo->search($searchQuery);
-
-    // echo '<pre>';
-    // print_r($res);
-    // print_r($searchQuery);
-    // echo '</pre>';
-
-    // exit;
+    
     require_once 'general/header.php';
-    require_once 'general/sidebar.php';  
 ?>
 
 <main class="search content">  

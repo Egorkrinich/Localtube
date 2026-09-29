@@ -376,14 +376,17 @@ h1, h2, h3 {
   inset: 0;
 }
 .player .control {
-  opacity: 0;
   -webkit-transition: opacity 0.3s;
   transition: opacity 0.3s;
   z-index: 1;
   cursor: pointer;
 }
 .player .control__header, .player .control__body {
+  opacity: 0;
+  pointer-events: none;
   cursor: default;
+  -webkit-transition: opacity 0.3s;
+  transition: opacity 0.3s;
 }
 .player .control__header {
   padding: 15px 20px;
@@ -422,13 +425,13 @@ h1, h2, h3 {
   background: rgba(1, 1, 1, 0.5);
   overflow: hidden;
   cursor: pointer;
+  -ms-touch-action: none;
+      touch-action: none;
 }
 .player .control__progress-bar .control__progress-line {
   height: 100%;
   width: 0%;
   background: red;
-  -webkit-transition: width 0.3s;
-  transition: width 0.3s;
 }
 .player .control__btn {
   fill: #fff;
@@ -483,7 +486,8 @@ h1, h2, h3 {
   -webkit-transform: translateX(100%);
           transform: translateX(100%);
 }
-.player .control.active {
+.player .control.active .control__header, .player .control.active .control__body {
+  pointer-events: all;
   opacity: 1;
 }
 .player .control.hide-instantly {
@@ -531,10 +535,24 @@ h1, h2, h3 {
 }
 .player .advance {
   display: none;
+  z-index: 2;
+  background: rgba(0, 0, 0, 0.5);
 }
 .player .advance .preview {
   max-width: 70%;
   background: var(--bg-first);
+}
+.player .advance .preview::before {
+  content: "";
+  display: block;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  width: 0%;
+  background: #ff0000;
+  -webkit-animation: fillTimer 4s linear forwards;
+          animation: fillTimer 4s linear forwards;
 }
 .player .advance.active {
   display: -webkit-box;
@@ -718,5 +736,23 @@ h1, h2, h3 {
   }
   .modal__close {
     display: block;
+  }
+}
+
+@-webkit-keyframes fillTimer {
+  0% {
+    width: 0%;
+  }
+  100% {
+    width: 100%;
+  }
+}
+
+@keyframes fillTimer {
+  0% {
+    width: 0%;
+  }
+  100% {
+    width: 100%;
   }
 }/*# sourceMappingURL=core.css.map */

@@ -14,7 +14,6 @@ export class PlayAdvance {
         
 
         
-
         this.currentIndex = this.hasPlaylist ? this.currentList
         .findIndex(({id}) => id === this.videoId) : 0
 

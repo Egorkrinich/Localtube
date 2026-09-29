@@ -1,12 +1,14 @@
 <?php
-if (isset($_SESSION['uid'])) {
-    $dbUser = new User();
-    $data = $dbUser->getUserData(['avatar', 'username'], 'id');
+$uData = $_SESSION ?? [];
 
-    $uid      = $_SESSION['uid'];
-    $login    = $_SESSION['login'];
-    $avatar   = $data['avatar'];
-    $username = $data['username'];
+if (isset($uData) && !empty($uData['uid'])) {
+    $dbUser = new User();
+    $extData = $dbUser->getUserData(['avatar', 'username'], 'id');
+
+    $uid      = $uData['uid'];
+    $login    = $uData['login'];
+    $avatar   = $extData['avatar'];
+    $username = $extData['username'];
 }
 ?>
 
@@ -16,20 +18,27 @@ if (isset($_SESSION['uid'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <?php foreach ($styles as $style) : ?>
-        <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/styles/css/<?php echo $style?>">
-    <?php endforeach ?>
+    <?php 
+    if (isset($styles) && !empty($styles)) :
+        foreach ($styles as $style) : 
+    ?>
+    <link rel="stylesheet" href="<?= BASE_URL; ?>assets/styles/css/<?= $style?>">
+
+    <?php endforeach; endif; ?>
+
     <script>
-        const BASE_URL = '<?php echo BASE_URL; ?>';
+        const BASE_URL = '<?= BASE_URL; ?>';
+
         const USER_CONFIG = {
-            isLoggedIn: <?php echo isset($uid) ? 'true' : 'false' ?>,
+            isLoggedIn: <?= isset($uid) ? 'true' : 'false' ?>,
             isMobile: window.matchMedia("(pointer: coarse)").matches,
         };
 
         <?php if (isset($pageData) && !empty($pageData)) : ?>
-            window.<?php echo $pageData['name'] ?> = 
-            <?php echo json_encode($pageData['meta'], 
-            JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT)?>
+            window.<?= $pageData['name'] ?> = 
+            <?= json_encode($pageData['meta'], 
+            JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT)
+            ?>
         <?php endif; ?>
 
     </script>
@@ -40,6 +49,7 @@ if (isset($_SESSION['uid'])) {
     <div class="f-column-center" id="toast"></div>
     <?php
         require_once 'burger.php'; 
+        require_once 'sidebar.php';
 
         if (isset($uid)) {
 

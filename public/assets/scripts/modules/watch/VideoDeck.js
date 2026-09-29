@@ -24,7 +24,7 @@ export class VideoDeck {
     }
     initListeners() {
         this.cont.addEventListener('pointerdown', (e) => {
-            e.preventDefault()
+            // e.preventDefault()
             if (this.countdown) return
             
             const btn = e.target.closest(`[${this.attr.btn}]`)
@@ -51,8 +51,7 @@ export class VideoDeck {
                     btn.disabled = false;
                 break;
                 case 'addToPlaylist':
-                    const playlistId = 
-                    btn.getAttribute(`${this.attr.playlistId}`)
+                    const playlistId = btn.getAttribute(`${this.attr.playlist}`)
                     // window.dispatchEvent(new CustomEvent('playlist:add', {
                     //     detail: {
                     //         'playlistId': playlistId,
@@ -110,7 +109,7 @@ export class VideoDeck {
             this.countdown = setTimeout(() => this.countdown = null, 1000)
         })
     }
-    addToPlaylist(playlistId) {       
+    addToPlaylist(playlistId) {
         fetch(`${BASE_URL}API/Playlist/addToPlaylist`, {
             method: 'POST',
             body: JSON.stringify({

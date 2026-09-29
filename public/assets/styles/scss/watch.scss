@@ -35,13 +35,10 @@
 // Video body
 .v-core {
 
-    &__details {
-        margin-block: 12px;
-    }
+    &__details { margin-block: 12px; }
+    &__title   { margin-bottom: 12px; }
 
-    &__title { margin-bottom: 12px; }
     &__subheader {
-        flex-wrap: wrap;
         gap: 10px;
     }
     &__uploader {
@@ -52,11 +49,10 @@
             min-height: 40px;
             margin-right: 10px;
         }
-        &--name {
-            font-weight: 600;
-        }
+        &--name { font-weight: 600; }
     }
     &__actions {
+        flex-wrap: wrap;
         gap: 10px;
         position: relative;
 
@@ -64,9 +60,7 @@
             padding: 10px;
             height: 40px;
             border-radius: 10px;
-            svg {
-                margin-right: 5px;
-            }
+            svg { margin-right: 5px; }
         }
         .v-core__pl-save {
             display: none;
@@ -83,10 +77,13 @@
             background: var(--bg-second);
             z-index: var(--over-content);
 
-            & > * {
+            [data-vd-action] {
                 padding: 10px 5px;
+                width: 100%;
+                text-align: left;
                 &:hover { background: var(--bg-first-hover); }
             }
+            
             &.active { display: block; }
         }
     }
@@ -99,10 +96,7 @@
             flex-direction: column;
             align-items: stretch;
         }
-        &__actions  {
-            order: 1; 
-            flex-wrap: wrap;
-        }
+        &__actions  { order: 1; }
         &__uploader { order: 2; }
     }
 }
@@ -121,15 +115,11 @@
 
 }
 
-
-
 .pl-view {
     border-radius: 10px;
     background: var(--bg-first);
     border: 1px solid var(--border-first);
     margin-bottom: var(--gap-first);
-    // overflow: hidden;
-
 
     // Header
     &__header {
@@ -191,3 +181,8 @@
 }
 
 // Page modificators
+
+.sidebar {
+    display: none;
+    @media (max-width: 800px) { display: flex; }
+}

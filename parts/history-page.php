@@ -1,13 +1,11 @@
 <?php
     require_once 'general/header.php';
-    require_once 'general/sidebar.php';
-
 ?>
 
 <main class="history headered">
     <div class="history__header f-row">
         <h1 class="history__title">
-            Watch history
+            History
         </h1>
     </div>
     <div class="history__body">

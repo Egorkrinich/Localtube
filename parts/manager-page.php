@@ -1,6 +1,5 @@
 <?php
     require_once 'general/header.php';
-    require_once 'general/sidebar.php';
 ?>
 <form class="m-upload modal" enctype="multipart/form-data" 
     id="manager-upload" data-menu="manager-upload">

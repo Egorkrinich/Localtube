@@ -48,7 +48,10 @@
 }
 @media (max-width: 500px) {
   .headered > :nth-child(1) {
-    padding: 5px 10px;
+    padding: 10px 15px;
+  }
+  .headered > :nth-child(1) h1 {
+    font-size: 1.5em;
   }
   .headered > :nth-child(2) {
     padding-inline: 5px;
