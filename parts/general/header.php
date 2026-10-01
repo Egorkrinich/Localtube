@@ -1,15 +1,15 @@
 <?php
-$uData = $_SESSION ?? [];
+    $uData = $_SESSION ?? [];
 
-if (isset($uData) && !empty($uData['uid'])) {
-    $dbUser = new User();
-    $extData = $dbUser->getUserData(['avatar', 'username'], 'id');
+    if (isset($uData) && !empty($uData['uid'])) {
+        $dbUser = new User();
+        $extData = $dbUser->getUserData(['avatar', 'username'], 'id');
 
-    $uid      = $uData['uid'];
-    $login    = $uData['login'];
-    $avatar   = $extData['avatar'];
-    $username = $extData['username'];
-}
+        $uid      = $uData['uid'];
+        $login    = $uData['login'];
+        $avatar   = $extData['avatar'];
+        $username = $extData['username'];
+    }
 ?>
 
 <!DOCTYPE html>
@@ -22,7 +22,7 @@ if (isset($uData) && !empty($uData['uid'])) {
     if (isset($styles) && !empty($styles)) :
         foreach ($styles as $style) : 
     ?>
-    <link rel="stylesheet" href="<?= BASE_URL; ?>assets/styles/css/<?= $style?>">
+    <link rel="stylesheet" href="assets/styles/css/<?= $style?>">
 
     <?php endforeach; endif; ?>
 
@@ -55,7 +55,7 @@ if (isset($uData) && !empty($uData['uid'])) {
 
             require_once 'user.php';
             require_once 'settings.php';
-
+            
         } else {
 
             require_once 'auth.php';

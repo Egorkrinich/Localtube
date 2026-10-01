@@ -91,6 +91,19 @@ h1, h2, h3 {
   }
 }
 :root {
+  --header-height: 55px;
+  --sidebar-width: 70px;
+  --burger-width: 250px;
+  --page-header-height: 75px;
+  --radius-first: 10px;
+  --sidebar-height: 55px;
+  --gap-first: 15px;
+  --over-content: 100;
+  --menus: 150;
+  --overlay: 145;
+}
+
+:root[data-theme=dark] {
   --bg-first: #0f0f0f;
   --bg-second: #222222;
   --bg-third: #151515;
@@ -107,16 +120,25 @@ h1, h2, h3 {
   --text-first-inverse: #000;
   --border-first: #505050;
   --border-colored: #0084ff;
-  --header-height: 55px;
-  --sidebar-width: 70px;
-  --burger-width: 250px;
-  --page-header-height: 75px;
-  --radius-first: 10px;
-  --sidebar-height: 55px;
-  --gap-first: 15px;
-  --over-content: 100;
-  --menus: 150;
-  --overlay: 145;
+}
+
+:root[data-theme=light] {
+  --bg-first: #ececec;
+  --bg-second: #d1d0d0;
+  --bg-third: #dddcdc;
+  --bg-fourth: #dbdbe0;
+  --bg-first-inverse: #070707;
+  --bg-first-effect: rgba(0, 0, 0, 0.1);
+  --bg-first-effect-inverse: rgba(252, 252, 252, 0.4);
+  --bg-first-hover: rgba(0, 0, 0, 0.2);
+  --bg-first-hover-inverse: rgba(255, 255, 255, 0.4);
+  --text-first: #1d1d1d;
+  --text-second: #6b6b6b;
+  --text-third: #616161;
+  --text-link: #1572fc;
+  --text-first-inverse: #e4e4e4;
+  --border-first: #868686;
+  --border-colored: #0084ff;
 }
 
 .f-row, .f-row-around, .f-row-between, .f-row-center {
@@ -380,6 +402,7 @@ h1, h2, h3 {
   transition: opacity 0.3s;
   z-index: 1;
   cursor: pointer;
+  color: #f1f1f1;
 }
 .player .control__header, .player .control__body {
   opacity: 0;
@@ -396,6 +419,7 @@ h1, h2, h3 {
   width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
+  color: #fff;
   line-height: 1.3;
   -webkit-line-clamp: 1;
   font-size: 1.1em;
@@ -410,7 +434,7 @@ h1, h2, h3 {
 .player .control__left, .player .control__right {
   gap: 10px;
   border-radius: 10px;
-  background: var(--bg-first-effect-inverse);
+  background: rgba(0, 0, 0, 0.4);
   padding-block: 5px;
   padding-inline: 10px 20px;
 }
@@ -465,7 +489,7 @@ h1, h2, h3 {
   width: 35px;
   height: 17.5px;
   border-radius: 20px;
-  border: 1px solid var(--border-first);
+  border: 1px solid #505050;
 }
 .player .control__btn--advance::before {
   content: "";
@@ -495,6 +519,8 @@ h1, h2, h3 {
 }
 .player .rewind {
   padding: 0 10%;
+  color: #f1f1f1;
+  fill: #f1f1f1;
   font-weight: 600;
   pointer-events: none;
 }

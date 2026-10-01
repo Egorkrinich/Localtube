@@ -1,9 +1,10 @@
-import Menu from     './modules/Menu.js';
-import Context from  './modules/Context.js';
-import Toast from    './modules/Toast.js';
+import Menu     from './modules/Menu.js';
+import Context  from './modules/Context.js';
+import Toast    from './modules/Toast.js';
 import Settings from './modules/Settings.js';
-import Search from   './modules/Search.js';
-import Stage from    './modules/Stage.js';
+import Search   from './modules/Search.js';
+import Stage    from './modules/Stage.js';
+import Theme    from './modules/Theme.js';
 
 const currentFullURL = window.location.origin + window.location.pathname
 let cleanPath = currentFullURL.replace(BASE_URL, '') || 'home'
@@ -12,6 +13,7 @@ cleanPath = (cleanPath.endsWith('/') ? cleanPath.slice(0, -1) : cleanPath) || 'h
 new Menu()
 new Toast()
 new Search()
+new Theme()
 
 if (!USER_CONFIG.isLoggedIn) { initAuth() } else { new Settings() }
 

@@ -9,9 +9,7 @@ spl_autoload_register(function ($class_name) {
 require_once '../config.php';
 session_start();
 
-
-$path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-$path = str_replace('/Localtube/', '', $path);
+$path = $_GET['route'];
 
 if (str_starts_with($path, 'API')) {
     header('Content-Type: application/json');
