@@ -20,7 +20,7 @@ export const Templates = {
                     <button class="context-btn" data-context-btn data-context-id="${data.id}">
                         ${icons['dots']}
                     </button>
-                    <div class="preview__lalala">
+                    <div class="preview__details">
                         <div class="preview__uploader">
                             ${htmlspecialchars(data.uploader_name)}
                         </div>
@@ -89,7 +89,7 @@ export const Templates = {
                     <h3 class="preview__title">
                         ${htmlspecialchars(data.title)}
                     </h3>
-                    <div class="preview__lalala">
+                    <div class="preview__details">
                         <div class="preview__uploader">
                             ${htmlspecialchars(data.uploader_name)}
                         </div>
@@ -135,7 +135,7 @@ export const Templates = {
                         <span class="pl-view__type f-row">
                             ${icons[details['type']] + details['type']}
                         </span>
-                        <span class="pl-viewt__amount">
+                        <span class="pl-view__amount" data-vreact="pl-position">
                             ${details['amount']}
                         </span>
                     </div>
@@ -162,7 +162,7 @@ export const Templates = {
                         <button class="context-btn" data-context-btn data-context-id="${data.id}">
                             ${icons['dots']}
                         </button>
-                        <div class="preview__lalala">
+                        <div class="preview__details">
                             <div class="preview__uploader">
                                 ${htmlspecialchars(data.uploader_name)}
                             </div>

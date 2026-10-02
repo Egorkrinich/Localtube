@@ -1,5 +1,3 @@
-import { formatTime, ops } from "../helper.js";
-
 const elementCache = new Map();
 
 window.videoState = new Proxy(window.VIDEO_DATA, {
@@ -32,10 +30,7 @@ window.videoState = new Proxy(window.VIDEO_DATA, {
 				if (element.tagName !== 'A') break;
 				element.href = BASE_URL + value
 			break;
-			// case 'like':
-			// case 'dislike':
-			// 	element.textContent = target[key]
-			// break;
+
 			default:
 				if (exclude.includes(key)) break;
 				element.textContent = value

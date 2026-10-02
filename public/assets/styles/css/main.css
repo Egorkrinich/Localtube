@@ -188,6 +188,13 @@
   min-width: 35px;
   min-height: 35px;
 }
+@supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+  .header {
+    backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px);
+    background: color-mix(in srgb, var(--bg-first) 80%, transparent);
+  }
+}
 @media (max-width: 700px) {
   .header {
     -webkit-box-pack: start;
@@ -516,8 +523,9 @@
 #overlay {
   display: none;
   position: fixed;
-  background: rgba(0, 0, 0, 0.2);
   inset: 0;
+  background: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(5px);
   z-index: var(--overlay);
 }
 #overlay.active {

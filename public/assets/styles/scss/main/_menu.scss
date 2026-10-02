@@ -291,11 +291,12 @@
 #overlay {
     display: none;
     position: fixed;
-    background: rgb(0, 0, 0, 0.2);
     inset: 0;
+    
+    background: rgb(0, 0, 0, 0.2);
+    -webkit-backdrop-filter: blur(5px);
+    backdrop-filter: blur(5px);
     z-index: var(--overlay);
     
-    &.active {
-        display: block;
-    }
+    &.active { display: block; }
 }

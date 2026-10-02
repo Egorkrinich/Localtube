@@ -2,7 +2,7 @@ import { Templates } from "../../Templates.js"
 
 export class PlayAdvance {
     constructor(playlist, videolist) {
-        this.PAContainer = document.querySelector('#player-advance')
+        this.advanceCont = document.querySelector('#player-advance')
 
         this.hasPlaylist = playlist?.length > 0
         this.currentList = this.hasPlaylist ? playlist : videolist
@@ -30,8 +30,8 @@ export class PlayAdvance {
 
         const nextVideoId = this.currentList[this.currentIndex].id
         
-        this.PAContainer.classList.add('active')
-        this.PAContainer.innerHTML = 
+        this.advanceCont.classList.add('active')
+        this.advanceCont.innerHTML = 
         Templates.preview(this.currentList[this.currentIndex])
 
         fetch(`${BASE_URL}API/Videos/getVideo?id=${nextVideoId}`)
@@ -42,8 +42,8 @@ export class PlayAdvance {
                 '&playlist=' + this.playlistId : ''
 
                 Object.assign(window.videoState, nextVideo)
-                this.PAContainer.classList.remove('active')
-                this.PAContainer.innerHTML = ''
+                this.advanceCont.classList.remove('active')
+                this.advanceCont.innerHTML = ''
 
                 history.pushState(null, '', 
                     BASE_URL + `watch?v=${nextVideoId}${playlistURL}`

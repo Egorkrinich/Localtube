@@ -18,30 +18,33 @@ export class Playlist {
         this.URLParams = new URLSearchParams(window.location.search)
         this.playlistId = this.URLParams.get('playlist') ?? null
 
-        if (page === "playlists") {
-
-        this.createForm = document.querySelector('#create-playlist')
-
-        this.editForm = document.querySelector('#edit-playlist')
-        this.editList = this.editForm.querySelector(`[${this.editAttr.list}]`)
-
-        } else if (page === "watch") {
         if (!this.playlistId) return
 
-        this._playlistLoaded = 
-        this.renderPlaylistView('general-container')
+        switch (page) {
+            case 'playlist':
+                this.createForm = document.querySelector('#create-playlist')
+                
+                this.editForm = document.querySelector('#edit-playlist')
+                this.editList = 
+                this.editForm.querySelector(`[${this.editAttr.list}]`)
 
-        this.rawVideos = []
-        
+                this.videos = []
+                this.isVideosChanged = false
+                this.submitBtn = null
+
+                this.initPlaylistsListeners() 
+            break;
+            case 'watch':
+
+                this._playlistLoaded = 
+                this.renderPlaylistView('general-container')
+
+                this.details = []
+                this.rawVideos = []
+
+                this.initWatchListeners()
+            break;
         }
-
-        this.submitBtn = null
-        
-        this.isVideosChanged = false
-        this.videos = []
-
-        if (page === "playlists") this.initPlaylistsListeners() 
-        else if (page === "watch") this.initWatchListeners()
     }
     initPlaylistsListeners() {
         // Create new playlist listener
@@ -113,6 +116,7 @@ export class Playlist {
         // window.addEventListener('playlist:add', (e) => {
         //     const {playlistId, videoId} = e.detail
         // })
+        window.addEventListener('video:toggled', () => this.updatePosition())
     }
 
     // -- Playlists page methods --
@@ -184,28 +188,23 @@ export class Playlist {
         }
     }
 
-    // Create form
 
     // -- Watch page methods --
     
     async renderPlaylistView(containerID) {
         const {details, videos} = await this.getPlaylist()
+        this.details = details
 
         const container = document.querySelector(`#${containerID}`)
         const playlist = Templates.playlistView(details, videos)
         container.insertAdjacentHTML("afterbegin", playlist)
 
-        videos.forEach((
-            {
-                id, thumb, title, duration, 
-                uploader_avatar, views, created
-            }) => {
-            this.rawVideos.push(
-                {
-                    id, thumb, title, duration,
-                    uploader_avatar, views, created
-                })
+        videos.forEach(({id, thumb, title, duration, 
+            uploader_avatar, views, created}) => {
+            this.rawVideos.push({id, thumb, title, duration, 
+                uploader_avatar, views, created})
         })
+        this.updatePosition()
 
         return;
     }
@@ -287,6 +286,13 @@ export class Playlist {
 
         this.videos.splice(newIndex, 0, video)
         this.renderEditVideos()
+    }
+    updatePosition() {
+        const videoId = new URLSearchParams(window.location.search).get('v')
+        const pos = this.rawVideos.findIndex(({id}) => id === videoId) + 1
+        
+        
+        window.videoState['pl-position'] = `${pos}/${this.details.amount}`
     }
 
     get ready() { return this._playlistLoaded }

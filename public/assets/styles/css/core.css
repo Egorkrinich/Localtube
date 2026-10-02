@@ -91,13 +91,12 @@ h1, h2, h3 {
   }
 }
 :root {
-  --header-height: 55px;
+  --header-height: 50px;
   --sidebar-width: 70px;
   --burger-width: 250px;
-  --page-header-height: 75px;
   --radius-first: 10px;
   --sidebar-height: 55px;
-  --gap-first: 15px;
+  --gap-first: 10px;
   --over-content: 100;
   --menus: 150;
   --overlay: 145;
@@ -198,13 +197,13 @@ h1, h2, h3 {
 }
 
 .avatar {
-  width: 25px;
-  height: 25px;
-  min-width: 25px;
-  min-height: 25px;
+  width: 30px;
+  height: 30px;
+  min-width: 30px;
+  min-height: 30px;
   border-radius: 50%;
   overflow: hidden;
-  background: var(--bg-first);
+  background: var(--bg-first-inverse);
   -webkit-user-select: none;
      -moz-user-select: none;
       -ms-user-select: none;
@@ -309,17 +308,17 @@ h1, h2, h3 {
   overflow-wrap: break-word;
   word-break: break-word;
 }
-.preview .context-btn {
-  margin-inline: 5px;
-}
-.preview__lalala {
+.preview__details {
   color: var(--text-second);
   fill: var(--text-second);
   font-size: 0.85em;
 }
+.preview .context-btn {
+  margin-inline: 5px;
+}
 .preview:hover {
-  -webkit-transform: scale(0.95);
-          transform: scale(0.95);
+  -webkit-transform: scale(0.97);
+          transform: scale(0.97);
 }
 .preview--horizontal {
   display: -webkit-box;
@@ -352,7 +351,7 @@ h1, h2, h3 {
   -webkit-line-clamp: 3;
   font-size: 1em;
 }
-.preview--horizontal .preview__lalala {
+.preview--horizontal .preview__details {
   font-size: 0.85em;
 }
 .preview--horizontal .preview__left {
@@ -602,6 +601,36 @@ h1, h2, h3 {
   }
 }
 
+.context-btn {
+  position: relative;
+  isolation: isolate;
+  width: 24px;
+  height: 24px;
+  fill: var(--text-first);
+  color: var(--text-first);
+}
+.context-btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--bg-first-hover);
+  border-radius: 50%;
+  pointer-events: none;
+  -webkit-transform: scale(0.8);
+          transform: scale(0.8);
+  -webkit-transition: opacity 0.3s, -webkit-transform 0.3s;
+  transition: opacity 0.3s, -webkit-transform 0.3s;
+  transition: transform 0.3s, opacity 0.3s;
+  transition: transform 0.3s, opacity 0.3s, -webkit-transform 0.3s;
+  opacity: 0;
+  z-index: -1;
+}
+.context-btn:hover::before {
+  -webkit-transform: scale(1.3);
+          transform: scale(1.3);
+  opacity: 1;
+}
+
 .btn--primary, .btn--secondary {
   position: relative;
   isolation: isolate;
@@ -682,36 +711,6 @@ h1, h2, h3 {
 }
 .input--primary:hover {
   background: var(--bg-first);
-}
-
-.context-btn {
-  position: relative;
-  isolation: isolate;
-  width: 24px;
-  height: 24px;
-  fill: var(--text-first);
-  color: var(--text-first-inverse);
-}
-.context-btn::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  background: var(--bg-first-hover);
-  pointer-events: none;
-  -webkit-transform: scale(0.8);
-          transform: scale(0.8);
-  -webkit-transition: opacity 0.3s, -webkit-transform 0.3s;
-  transition: opacity 0.3s, -webkit-transform 0.3s;
-  transition: transform 0.3s, opacity 0.3s;
-  transition: transform 0.3s, opacity 0.3s, -webkit-transform 0.3s;
-  opacity: 0;
-  z-index: -1;
-}
-.context-btn:hover::before {
-  -webkit-transform: scale(1.3);
-          transform: scale(1.3);
-  opacity: 1;
 }
 
 .modal {

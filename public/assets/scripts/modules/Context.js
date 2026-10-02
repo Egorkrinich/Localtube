@@ -97,13 +97,13 @@ export default class Context {
     MenuPosition(btn) {
         const rect = btn.getBoundingClientRect();
         
-        let top = rect.bottom  + 5
+        let top = rect.bottom + 5
         let left = rect.left
 
-        if (left + this.menuWidth > window.innerWidth) {
+        if (left + this.menuWidth > document.documentElement.clientWidth) {
             left = rect.right - this.menuWidth;
         }
-        if (rect.bottom + this.menuHeight > window.innerHeight) {
+        if (rect.bottom + this.menuHeight > document.documentElement.clientHeight) {
             top = rect.top - this.menuHeight;
         }
 

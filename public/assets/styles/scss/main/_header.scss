@@ -9,6 +9,7 @@
     padding-inline: 15px;
     
     background: var(--bg-first);
+
     z-index: var(--over-content);
 
     // Left side
@@ -76,6 +77,13 @@
         min-height: 35px;
     }
 
+
+    @supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+        backdrop-filter: blur(30px);
+        -webkit-backdrop-filter: blur(30px);
+
+        background: color-mix(in srgb, var(--bg-first) 80%, transparent);
+    }
     @media (max-width: 700px) {
         justify-content: flex-start;
         
@@ -89,11 +97,7 @@
         }
     }
     @media (max-width: 500px) {
-        &__left {
-            flex-shrink: 1;
-        }
-        &__logo {
-            display: none;
-        }
+        &__left { flex-shrink: 1; }
+        &__logo { display: none; }
     }
 }

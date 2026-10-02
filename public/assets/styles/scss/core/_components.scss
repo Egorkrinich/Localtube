@@ -1,12 +1,14 @@
+// General components
+
 .avatar {
-    width: 25px;
-    height: 25px;
-    min-width: 25px;
-    min-height: 25px;
+    width: 30px;
+    height: 30px;
+    min-width: 30px;
+    min-height: 30px;
 
     border-radius: 50%;
     overflow: hidden;
-    background: var(--bg-first);
+    background: var(--bg-first-inverse);
     user-select: none;
 
     img {
@@ -98,14 +100,14 @@
         overflow-wrap: break-word;
         word-break: break-word;
     }
-    & .context-btn { margin-inline: 5px; }
-    &__lalala {
+    &__details {
         color: var(--text-second);
         fill: var(--text-second);
         font-size: 0.85em;
     }
+    & .context-btn { margin-inline: 5px; }
 
-    &:hover { transform: scale(0.95); }
+    &:hover { transform: scale(0.97); }
 
     &--horizontal {
         display: flex;
@@ -113,11 +115,10 @@
 
         .preview__thumb {
             flex-shrink: 1;
-
             min-width: 200px;
             min-height: 110px;
-
             aspect-ratio: 16/9;
+
             img {
                 width: 100%;
                 height: 100%;
@@ -135,7 +136,7 @@
             -webkit-line-clamp: 3;
             font-size: 1em;
         }
-        .preview__lalala {
+        .preview__details {
             font-size: 0.85em
         }
 
@@ -371,6 +372,35 @@
     }
 }
 
+.context-btn {
+    position: relative;
+    isolation: isolate;
+
+    width: 24px;
+    height: 24px;
+
+    fill: var(--text-first);
+    color: var(--text-first);
+    
+    &::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+
+        background: var(--bg-first-hover);
+        border-radius: 50%;
+        pointer-events: none;
+        transform: scale(0.8);
+        transition: transform 0.3s, opacity 0.3s;
+        opacity: 0;
+        z-index: -1;
+    }
+    &:hover::before {
+        transform: scale(1.3);
+        opacity: 1;
+    }  
+}
+
 // Buttons types
 
 .btn--primary {
@@ -450,38 +480,7 @@
     }
 }
 
-// Preview & Player context button
-
-.context-btn {
-    position: relative;
-    isolation: isolate;
-
-    width: 24px;
-    height: 24px;
-
-    fill: var(--text-first);
-    color: var(--text-first-inverse);
-    
-    &::before {
-        content: '';
-        position: absolute;
-        inset: 0;
-
-        border-radius: 50%;
-        background: var(--bg-first-hover);
-        pointer-events: none;
-        transform: scale(0.8);
-        transition: transform 0.3s, opacity 0.3s;
-        opacity: 0;
-        z-index: -1;
-    }
-    &:hover::before {
-        transform: scale(1.3);
-        opacity: 1;
-    }  
-}
-
-// general menu styles 
+// General modal menu
 .modal {
     display: none;
     position: fixed;
@@ -532,7 +531,9 @@
     }
 }
 
+
+
 @keyframes fillTimer {
-    0% { width: 0%; }
+    0%   { width: 0%; }
     100% { width: 100%; }
 }

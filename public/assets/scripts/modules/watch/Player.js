@@ -8,13 +8,15 @@ export class Player {
         play:    'toggle-play',
         sound:   'toggle-sound',
         full:    'toggle-full',
-        advance: 'toggle-advance'
+        advance: 'toggle-advance',
+        pip:     'toggle-pip'
     }
     actionBtns = {
         play:    document.querySelector(`[${this.attr.action}="${this.actions.play}"]`),
         sound:   document.querySelector(`[${this.attr.action}="${this.actions.sound}"]`),
         full:    document.querySelector(`[${this.attr.action}="${this.actions.full}"]`),
-        advance: document.querySelector(`[${this.attr.action}="${this.actions.advance}"]`)
+        advance: document.querySelector(`[${this.attr.action}="${this.actions.advance}"]`),
+        pip:     document.querySelector(`[${this.attr.action}="${this.actions.pip}"]`)
     }
     handlers = {
         onPointerMove: (e) => {
@@ -68,6 +70,7 @@ export class Player {
 
         // -- Details --
         this.settings = {};
+        this.pipEnabled = document.pictureInPictureEnabled
 
         
         this.getSettings()
@@ -78,6 +81,10 @@ export class Player {
         } else {
             this.initDesktopListeners()
         }
+        if (!this.pipEnabled && this.actionBtns.pip) {
+           this.actionBtns.pip.style.display = 'none'; 
+        }
+
     }
     initListeners() {
         this.control.addEventListener('pointerup', (e) => {
@@ -119,6 +126,9 @@ export class Player {
                     this.updatePlayerSetting('advance')
                     this.toggleAdvance()
                 break;
+                case this.actions.pip:
+                    this.togglePip()
+                break;
             }
         })
         
@@ -137,6 +147,11 @@ export class Player {
 
 
         // -- System Listeners --
+        if (this.pipEnabled) {
+            this.video.addEventListener('leavepictureinpicture', () => {
+                this.actionBtns.pip.classList.remove('active')
+            })
+        }
         this.video.addEventListener('timeupdate', () => this.updateProgress())
         this.video.addEventListener('ended', () => {
             this.togglePlay(false)
@@ -273,6 +288,18 @@ export class Player {
     toggleAdvance() {
         this.actionBtns.advance.classList
         .toggle('active', this.settings['advance'])
+    }
+    togglePip() {
+        if (document.pictureInPictureEnabled) {
+            if (document.pictureInPictureElement) {
+                document.exitPictureInPicture();
+                this.actionBtns.pip.classList.remove('active')
+            } else {
+                this.video.requestPictureInPicture()
+                .catch((e) => console.error("PiP error:", e));
+                this.actionBtns.pip.classList.add('active')
+            }
+        }
     }
     showControl(forceVisibility = null) {
         if (this.controlTimeout) clearTimeout(this.controlTimeout)
