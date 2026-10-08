@@ -37,7 +37,13 @@ class User extends Database {
                             'message' => 'Login is too long'
                         ];
                     }
-                    // Check for Latin chars
+                    if (!preg_match('/^[a-zA-Z0-9\-_][a-zA-Z0-9\-_\.]+(?<!\.)$/',
+                        $value)) {
+                        return [
+                            'success' => false,
+                            'message' => 'Login has not latin chars or not allowed symbols'
+                        ];
+                    }
 
                     $fields['login'] = mb_strtolower($value);
 
@@ -104,9 +110,10 @@ class User extends Database {
 
         $res->execute();
 
-
+        session_start();
         $_SESSION['uid']   = $id;
         $_SESSION['login'] = $fields['login'];
+        session_write_close();
 
         return ['success' => true, 'message' => 'Successful registration, reloading...'];
 
@@ -122,7 +129,7 @@ class User extends Database {
         $password = $data['password'];
 
         $res = $this->getUserData(
-            ['id', 'username', 'avatar', 'login', 'hash'],
+            ['id', 'login', 'hash'],
             'login', $login
         );
 
@@ -135,9 +142,10 @@ class User extends Database {
             ];
         }
 
-            
+        session_start();
         $_SESSION['uid']   = $res['id'];
         $_SESSION['login'] = $res['login'];
+        session_write_close();
         
         return ['success' => true, 'message' => 'Login successful, reloading...'];
     }

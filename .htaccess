@@ -1,14 +1,20 @@
 RewriteEngine On
 
 RewriteBase /Localtube/
+RewriteRule ^ - [E=SITE_BASE:/Localtube/]
+
 
 RewriteRule ^(app|parts|config\.php|LICENSE|README\.md|.htaccess) - [F,L]
 
+RewriteCond %{REQUEST_URI} /public/ [NC]
+RewriteRule ^ - [L]
+
 RewriteRule ^uploads/ - [L]
-RewriteCond %{DOCUMENT_ROOT}/Localtube/public/$1 -f
+
+RewriteCond %{DOCUMENT_ROOT}%{ENV:SITE_BASE}public/$1 -f
 RewriteRule ^(.*)$ public/$1 [L]
 
-RewriteCond %{REQUEST_URI} !^/Localtube/public/
+RewriteCond %{REQUEST_URI} !^%{ENV:SITE_BASE}public/
 RewriteRule ^(.*)$ public/index.php?route=$1 [L,QSA]
 
 

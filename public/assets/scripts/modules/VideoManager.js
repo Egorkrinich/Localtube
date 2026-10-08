@@ -96,8 +96,12 @@ export class VideoManager {
         // Delete
         window.addEventListener('video:delete', (e) => {
             if (confirm('Are you sure?')) {
+                this.currentAction = 'delete'
                 this.videoId = e.detail.id
-                this.deleteVideo(this.videoId);
+                const data = new FormData()
+                data.append('id', this.videoId)
+
+                this.sendData(data);
             }
         })
     }
@@ -159,6 +163,7 @@ export class VideoManager {
         this.addXHRListeners(XHR)
 
         XHR.open('POST', `${BASE_URL}API/Videos/${this.API.upload}`)
+        XHR.setRequestHeader("CSRF-TOKEN", window.USER_CONFIG['csrf_token'])
         XHR.send(uploadData)
     }
     collectEdit() {
@@ -186,6 +191,9 @@ export class VideoManager {
     sendData(data) {
         const API = this.API[this.currentAction]
         fetch(`${BASE_URL}API/Videos/${API}`, {
+            headers: {
+                "CSRF-TOKEN": window.USER_CONFIG['csrf_token']
+            },
             method: 'POST',
             body: data
         })
@@ -230,28 +238,7 @@ export class VideoManager {
             }
         })
     }
-    deleteVideo() {
-        const data = new FormData()
-        data.append('id', this.videoId)
-
-        fetch(`${BASE_URL}API/Videos/${this.API.delete}`, {
-            method: 'POST',
-            body: data
-        })
-        .then((res) => res.json())
-        .then((res) => {
-            window.dispatchEvent(new CustomEvent('toast', {
-                detail: {
-                    message: res.message,
-                    success: res.success
-                }
-            }))
-            if (res.success) { setTimeout(() => location.reload(), 2000) }
-        })
-    }
     
-
-
     initEditForm() {
         fetch(`${BASE_URL}API/Videos/${this.API.get}?id=${this.videoId}`)
         .then((res) => res.json())

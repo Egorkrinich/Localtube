@@ -1,5 +1,5 @@
 <aside class="sidebar">
-    <a href="<?php echo BASE_URL; ?>" class="sidebar__link f-column-center">
+    <a href="<?= BASE_URL; ?>" class="sidebar__link f-column-center">
         <svg width="24px" height="24px" viewBox="0 -960 960 960">
             <path d="M240-200h120v-240h240v240h120v-360L480-740 240-560v360Zm-80 80v-480l320-240 320 240v480H520v-240h-80v240H160Zm320-350Z"/>
         </svg>
@@ -15,9 +15,9 @@
             Followed
         </span>
     </a>
-    <a href="<?php echo BASE_URL; ?>manager" class="sidebar__link f-column-center">
+    <a href="<?= BASE_URL; ?>manager" class="sidebar__link f-column-center">
         <div class="avatar">
-            <img src="<?php echo $avatar ?? DEFAULT_AVATAR; ?>" alt="">
+            <img src="<?= $avatar ?? DEFAULT_AVATAR; ?>" alt="">
         </div>
         <span class="sidebar__text">
             Uploaded

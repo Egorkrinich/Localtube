@@ -1,7 +1,7 @@
 <?php
-    $dbVideo = new Video();
+    $dbVideo  = new Video();
     $video_id = $_GET['v'];
-    $video = $dbVideo->getVideo($video_id);
+    $video    = $dbVideo->getVideo($video_id);
     
     if (!$video) {
         header("Location: ". BASE_URL);
@@ -11,8 +11,9 @@
     // Video data
     $pageData = [];
 
-    $pageData['name'] = 'VIDEO_DATA';
-    $pageData['meta'] = $video;
+    $pageData['title'] = $video['title'];
+    $pageData['name-js']  = 'VIDEO_DATA';
+    $pageData['meta-js']  = $video;
 
     // Playlists
     $myPlaylists = false;

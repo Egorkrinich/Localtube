@@ -140,6 +140,9 @@ export class Auth {
 
         fetch(`${BASE_URL}API/Users/${link}`, {
             method: 'POST',
+            headers: {
+                "CSRF-TOKEN": window.USER_CONFIG['csrf_token']
+            },
             body: formData
         })
         .then((res) => res.json())

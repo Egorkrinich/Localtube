@@ -50,6 +50,9 @@ export default class Settings {
     sendData(settingsData) {
         fetch(`${BASE_URL}API/Users/update`, {
             method: 'POST',
+            headers: {
+                "CSRF-TOKEN": window.USER_CONFIG['csrf_token']
+            },
             body: settingsData
         })
         .then((res) => res.json())

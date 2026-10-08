@@ -113,9 +113,6 @@ export class Playlist {
         })
     }
     initWatchListeners() {
-        // window.addEventListener('playlist:add', (e) => {
-        //     const {playlistId, videoId} = e.detail
-        // })
         window.addEventListener('video:toggled', () => this.updatePosition())
     }
 
@@ -223,6 +220,9 @@ export class Playlist {
     sendData(data, API) {
         fetch(`${BASE_URL}API/Playlist/${API}`, {
             method: 'POST',
+            headers: {
+                "CSRF-TOKEN": window.USER_CONFIG['csrf_token']
+            },
             body: data
         })
         .then((res) => res.json())

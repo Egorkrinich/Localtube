@@ -24,7 +24,6 @@ export class VideoDeck {
     }
     initListeners() {
         this.cont.addEventListener('pointerdown', (e) => {
-            // e.preventDefault()
             if (this.countdown) return
             
             const btn = e.target.closest(`[${this.attr.btn}]`)

@@ -30,25 +30,15 @@
         margin-inline: 50px;
         gap: 10px;
 
-        .search__wrapper {
-            width: 100%;
-        }
-        .search__input {
-            height: 40px;
-        }
+        .search__wrapper { width: 100%; }
+        .search__input { height: 40px; }
+
         .search__btn {
             flex-shrink: 0;
             width: 35px;
             height: 35px;
             border-radius: 50%;
             padding: 0;
-
-            &::before {
-                transform: scale(0.5);
-            }
-            &:hover::before {
-                transform: scale(1);
-            }
         }
     }
 
@@ -93,6 +83,16 @@
 
             .search__wrapper {
                 display: none;
+                position: fixed;
+                top: var(--header-height);
+                left: 0;
+                right: 0;
+
+                padding: 5px 0;
+                &.active { display: block; }
+            }
+            .search__input {
+                max-width: none;
             }
         }
     }

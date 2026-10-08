@@ -202,7 +202,8 @@ class Video extends Database {
 
     public function getVideo(string $id, array $params = []): array|bool {
         try {
-        if (empty($id) || empty($params)) $params[] = 'standard';
+        if (empty($id)) return false;
+        if (empty($params)) $params[] = 'standard';
 
         $rename = [
             'username' => 'uploader_name',

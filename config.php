@@ -10,7 +10,7 @@ session_set_cookie_params([
 ini_set('session.gc_maxlifetime', 30 * 24 * 60 * 60);
 
 
-define('BASE_URL', "http://" . $_SERVER['HTTP_HOST'] . "/Localtube/");
+define('BASE_URL', "http://" . $_SERVER['HTTP_HOST'] . '/Localtube/');
 
 define('DB_HOST', 'localhost');
 define('DB_NAME', 'localtube');

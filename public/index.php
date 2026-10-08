@@ -5,18 +5,50 @@ spl_autoload_register(function ($class_name) {
         require_once $file;
     }
 });
+function is_csrf_token_valid(string $received_token): array {
+    $session_token = $_SESSION['csrf-token'];
+    
+    if (empty($session_token) || empty($received_token) 
+        || !hash_equals($session_token, $received_token)) {
+        return [
+            'success' => false,
+            'message' => 'Invalid security token'
+        ];
+    }
+    return ['success' => true];
+}
 
 require_once '../config.php';
+
 session_start();
+
+    if (!isset($_SESSION['csrf-token']) || empty($_SESSION['csrf-token'])) {
+        $_SESSION['csrf-token'] = bin2hex(random_bytes(32));
+    }
+
+session_write_close();
+
 
 $path = $_GET['route'];
 
 if (str_starts_with($path, 'API')) {
+    if ($_SERVER['HTTP_SEC_FETCH_DEST'] === 'document') {
+        header('Location: ' . BASE_URL);
+    }
     header('Content-Type: application/json');
-
+    
     $parts = explode('/', str_replace('API/', '', $path));
     $group = $parts[0] ?? '';
     $action = $parts[1] ?? '';
+
+    if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
+        $header_token  = $_SERVER['HTTP_CSRF_TOKEN'] ?? '';
+        $csrf_result = is_csrf_token_valid($header_token);
+        if (!$csrf_result['success']) {
+            echo json_encode($csrf_result);
+            exit;
+        }
+    }
 
     switch ($group) {
         case 'Videos':
@@ -102,6 +134,7 @@ if (str_starts_with($path, 'API')) {
                         ]);
                         exit;
                     }
+
                     $data = [];
 
                     if (!empty($title)) { $data['title'] = $title; }
@@ -115,11 +148,17 @@ if (str_starts_with($path, 'API')) {
                 exit;
                 case 'delVideo':
                     if (!isset($_SESSION['uid']) || empty($_SESSION['uid'])) {
-                        echo json_encode(['success' => false, 'message' => 'Unathorized']);
+                        echo json_encode([
+                            'success' => false, 
+                            'message' => 'Unathorized'
+                        ]);
                         exit;
-                    }
+                    }             
                     if (empty($_POST['id'])) {
-                        echo json_encode(['success' => false, 'message' => 'Please send video id']);
+                        echo json_encode([
+                            'success' => false, 
+                            'message' => 'Undefined video id'
+                        ]);
                         exit;
                     }
                     
@@ -132,6 +171,7 @@ if (str_starts_with($path, 'API')) {
                     $id = $_GET['id'];
 
                     $res = $dbVideo->getVideo($id);
+
                     echo json_encode($res);
                 exit;
                 case 'getVideos':
@@ -192,11 +232,12 @@ if (str_starts_with($path, 'API')) {
                     if (!isset($id) || empty($id)) {
                         echo json_encode([
                             'success' => false,
-                            'message' => 'Needed video id for interact'
+                            'message' => 'Need video id for interact'
                         ]);
                         exit;
                     }
                     $type = $action === 'like' ? 1 : 0;
+
                     $res = $dbVideo->rate($type, $id);
 
                     echo json_encode($res);
@@ -207,7 +248,7 @@ if (str_starts_with($path, 'API')) {
                     $uid = $_SESSION['uid'] ?? '';
 
                     if (empty($id)) exit;
-                    if (!ALLOW_GUEST_VIEWS && empty($_SESSION['uid'])) exit;
+                    if (!ALLOW_GUEST_VIEWS && empty($uid)) exit;
                         
 
                     $dbVideo->addView($id, $uid);
@@ -231,7 +272,7 @@ if (str_starts_with($path, 'API')) {
                         if (empty($value)) {
                             echo json_encode([
                                 'success' => false,
-                                'message' => 'Required field are missing or empty' 
+                                'message' => 'Required fields are missing or empty' 
                             ]);
                             exit;
                         }

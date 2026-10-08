@@ -7,11 +7,12 @@ export default class Search {
     initListener() {
         this.form.addEventListener("submit", (e) => {
             e.preventDefault()
-            this.sendQuery()
+            const value = this.form.search.value.trim()
+            if (value !== '') this.sendQuery(value)
         })
     }
-    sendQuery() {
-        const query = encodeURIComponent(this.form.search.value)
+    sendQuery(value) {
+        const query = encodeURIComponent(value)
         window.location.href = `${BASE_URL}search?search=${query}`
     }
 }

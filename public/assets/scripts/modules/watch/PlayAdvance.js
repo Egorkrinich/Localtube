@@ -42,6 +42,9 @@ export class PlayAdvance {
                 '&playlist=' + this.playlistId : ''
 
                 Object.assign(window.videoState, nextVideo)
+
+                document.title = nextVideo.title
+
                 this.advanceCont.classList.remove('active')
                 this.advanceCont.innerHTML = ''
 

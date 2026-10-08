@@ -1,12 +1,10 @@
 <?php
-    $uData = $_SESSION ?? [];
-
-    if (isset($uData) && !empty($uData['uid'])) {
-        $dbUser = new User();
+    if (isset($_SESSION) && !empty($_SESSION['uid'])) {
+        $dbUser  = new User();
         $extData = $dbUser->getUserData(['avatar', 'username'], 'id');
 
-        $uid      = $uData['uid'];
-        $login    = $uData['login'];
+        $uid      = $_SESSION['uid'];
+        $login    = $_SESSION['login'];
         $avatar   = $extData['avatar'];
         $username = $extData['username'];
     }
@@ -17,27 +15,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <?php 
-    if (isset($styles) && !empty($styles)) :
-        foreach ($styles as $style) : 
-    ?>
-    <link rel="stylesheet" href="assets/styles/css/<?= $style?>">
 
-    <?php endforeach; endif; ?>
+    <title>
+    <?php
+        if (isset($pageData) && !empty($pageData)) {
+            echo $pageData['title']; 
+        }
+    ?>
+    </title>
+
+    <!-- Styles -->
+
+    <?php 
+        if (isset($styles) && !empty($styles)) :
+            foreach ($styles as $style) : 
+    ?>
+        <link rel="stylesheet" href="assets/styles/css/<?= $style?>">
+    <?php 
+        endforeach; 
+        endif; 
+    ?>
+
+    <!-- Global data -->
 
     <script>
-        const BASE_URL = '<?= BASE_URL; ?>';
+        window.BASE_URL = '<?= BASE_URL; ?>';
 
-        const USER_CONFIG = {
+        window.USER_CONFIG = {
             isLoggedIn: <?= isset($uid) ? 'true' : 'false' ?>,
             isMobile: window.matchMedia("(pointer: coarse)").matches,
+            csrf_token: "<?= $_SESSION['csrf-token']; ?>"
         };
 
-        <?php if (isset($pageData) && !empty($pageData)) : ?>
-            window.<?= $pageData['name'] ?> = 
-            <?= json_encode($pageData['meta'], 
-            JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT)
+        <?php 
+            if (isset($pageData['name-js'], $pageData['meta-js']) && 
+            (!empty($pageData['name-js']) && !empty($pageData['meta-js']))) : 
+        ?>
+            window.<?= $pageData['name-js'] ?> = 
+            <?= 
+                json_encode($pageData['meta-js'], 
+                JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT); 
             ?>
         <?php endif; ?>
 
@@ -69,17 +86,18 @@
                 <span></span>
                 <span></span>
             </button>
-            <a class="header__logo" href="/Localtube">
+            <a class="header__logo" href="<?= BASE_URL; ?>">
                 <div class="header__logo f-row">
                     <span>Localtube</span>
                 </div>
             </a>
         </div>
         <form id="search-form" class="header__search f-row-center">
-            <div class="search__wrapper">
+            <div class="search__wrapper" data-menu="search">
                 <input name="search" type="text" class="search__input input--primary" placeholder="Search...">
             </div>
-            <button type="submit" class="search__btn f-row-center btn--secondary">
+            <button class="search__btn f-row-center btn--secondary" 
+                data-menu-btn="search" data-no-overlay type="submit">
                 <svg width="24px" height="24px" viewBox="0 -960 960 960">
                     <path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"/>
                 </svg>
