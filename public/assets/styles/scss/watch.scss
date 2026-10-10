@@ -36,7 +36,10 @@
 .v-core {
 
     &__details { margin-block: 12px; }
-    &__title   { margin-bottom: 12px; }
+    &__title   { 
+        margin-bottom: 12px;
+        font-size: 1.3em;
+    }
 
     &__subheader {
         gap: 10px;

@@ -450,6 +450,19 @@ if (str_starts_with($path, 'API')) {
             }
 
         exit;
+        case 'Search':
+            $dbSearch = new Search();
+
+            switch ($action) {
+                case 'getResult':
+                    $query = $_GET['s'];
+
+                    $res = $dbSearch->search($query);
+
+                    echo json_encode($res);
+                exit;
+            }
+        exit;
     }
 }
 
@@ -500,8 +513,8 @@ switch ($path) {
         require_once '../parts/playlists-page.php';
     exit;
     case 'search':
-        if (!isset($_GET['search']) || empty($_GET['search'])) {
-            header("Location: /Localtube/");
+        if (!isset($_GET['s']) || empty($_GET['s'])) {
+            header("Location: " . BASE_URL);
             exit;
         }
         $styles = ASSETS[$path];
